@@ -2,7 +2,7 @@ __author__ = 'asia'
 
 from eve import Eve
 
-app =  Eve ()
+app = Eve()
 
-if __name__ ==  '__main()__':
+if __name__ == '__main__':
     app.run()
