@@ -151,7 +151,7 @@ def _insertCard(card, lane):
 
     c.active = card.active
     c.assigned_user_id = card.assigned_user_id
-    # c.assigned_user_ids = ListField(LongField())
+    c.assigned_user_ids = card.assigned_user_ids
     c.assigned_user_name = card.assigned_user_name
     # c.assigned_users = card.
     c.attachments_count = card.attachments_count
@@ -179,7 +179,7 @@ def _insertCard(card, lane):
     c.priority_text = card.priority_text
     c.size = card.size
     c.start_date = _getCorrectDate(card.start_date)
-    # c.tags = card.tags
+    c.tags = [t for t in card.tags.split(',')]
     c.taskboard_completed_card_count = card.task_board_completed_card_count
     c.taskboard_completed_card_size = card.task_board_completed_card_size
     c.taskboard_completion_percent = card.task_board_completion_percent
@@ -249,7 +249,7 @@ if __name__ == '__main__':
     print("Getting board '%s'..." % board_name)
     board = kanban.getBoard(title=board_name)
     # _insertMasterLanes(board.root_lane.child_lanes, board.id)
-    _insertAllCardsForBoard(board.root_lane.child_lanes, 'Current development plan')
+    _insertAllCardsForBoard(board.root_lane.child_lanes, '')
     # _insertAllTeamsForBoard(board)
     # board.printLanes(True, "Current development plan")
     # board.generateReport(report, "Current development plan")

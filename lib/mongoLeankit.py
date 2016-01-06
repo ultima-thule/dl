@@ -104,12 +104,15 @@ class Card(Document):
 class Sponsor(Document):
     sponsor_id = LongField(primary_key=True)
     name = StringField()
+    bo_name = StringField()
 
 
 class Team(Document):
     name = StringField(primary_key=True)
     location_name = StringField()
     sponsor_ref = ReferenceField(Sponsor)
+    type_name = StringField() # platform, content
+    pmo_name= StringField # PMO1, PMO2
 
 
 class MasterLane(Document):

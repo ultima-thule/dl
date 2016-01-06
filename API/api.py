@@ -1,8 +1,8 @@
 __author__ = 'asia'
 
-from eve import Eve
+import eve
 
-app = Eve()
+app = eve.Eve()
 
 if __name__ == '__main__':
     app.run()

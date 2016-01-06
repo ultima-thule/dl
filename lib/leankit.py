@@ -212,12 +212,12 @@ class LeankitCard(Converter):
         self.comments = []
 
         global globalFetchComments
-        if (self.type.name ==  'Progress: Risk identified' or self.type.name ==  'Progress: High risk'):
-            print ("Fetching comments for card " + self.title)
-            self.fetchComments()
-        # if globalFetchComments is True:
+        # if (self.type.name ==  'Progress: Risk identified' or self.type.name ==  'Progress: High risk'):
         #     print ("Fetching comments for card " + self.title)
         #     self.fetchComments()
+        if globalFetchComments is True:
+            print ("Fetching comments for card " + self.title)
+            self.fetchComments()
 
     @property
     def is_new(self):
