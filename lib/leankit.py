@@ -17,7 +17,7 @@ import lib.excel
 
 ANNOTATION_REGEX = re.compile('^\s*{.*}\s*$', re.MULTILINE|re.DOTALL)
 
-globalFetchComments = True
+globalFetchComments = False
 
 class Record(dict):
     """A little dict subclass that adds attribute access to values."""
@@ -175,6 +175,8 @@ class Converter(object):
             self.dirty_attrs.add(attr)
         self.direct_setattr(attr, value)
 
+class LeankitBoardUpdate(Converter):
+    attributes = ['HasUpdates', 'CurrentBoardVersion']
 
 class LeankitUser(Converter):
     attributes = ['UserName', 'FullName', 'EmailAddress', 'Id', 'Enabled', 'Role', 'RoleName']
@@ -203,11 +205,12 @@ class LeankitCard(Converter):
     def __init__(self, card_dict, lane):
         super(LeankitCard, self).__init__(card_dict)
 
-        self.lane = lane
-        self.tags_list = set([tag.strip() for tag in self.tags.split(',')])
-        if '' in self.tags_list:
-            self.tags_list.remove('')
-        self.type = lane.board.cardtypes[self.type_id]
+        if lane is not None:
+            self.lane = lane
+            self.tags_list = set([tag.strip() for tag in self.tags.split(',')])
+            if '' in self.tags_list:
+                self.tags_list.remove('')
+            self.type = lane.board.cardtypes[self.type_id]
         self._description_annotations = None
         self.comments = []
 
@@ -413,6 +416,7 @@ class LeankitCard(Converter):
     #
     #     #self._write_cell ("", None, True)
 
+
 class LeanKitComment (Converter):
     attributes = ['Id', 'Text', 'PostDate', 'PostedById', 'PostedByFullName']
     optional_attributes = ['TaggedUsers', 'PostedByGravatarLink', 'Editable']
@@ -547,6 +551,19 @@ class LeankitBoard(Converter):
         self._populateLanes(
             self.details['Lanes'] + archive_lanes + self._backlog)
         self._classifyCards()
+
+    def fetchCardDetails(self, card_id):
+        resp_data = self.connector.get(
+            "/board/{0}/GetCard/{1}".format(self.id, card_id)).ReplyData[0]
+        card = LeankitCard (resp_data, None)
+        return card
+
+    def hasUpdates(self):
+        # upd = LeankitBoardUpdate(self.connector.get(
+        #     'board/{0}/boardversion/{1}/CheckForUpdates'.format(self.id, self.version)).ReplyData[0])
+        # if upd.version != self.version:
+        #     return True
+        return False
 
     def _classifyCards(self):
         """Classify the cards into buckets for lookups later."""
@@ -758,6 +775,13 @@ class LeankitKanban(object):
         return board
 
 
+    def getSingleCard(self, board_title=None, card_id=None):
+        board = self._findBoard(None, board_title)
+        card = None
+        if board is not None:
+            card = board.fetchCardDetails(card_id)
+        return card
+
 
 if __name__ == '__main__':
     kanban = LeankitKanban('dreamlab',
@@ -766,17 +790,19 @@ if __name__ == '__main__':
     report = lib.excel.ExcelReport(datetime.datetime.now().strftime("Status_%Y-%m-%d-%H-%M-%S.xlsx"),
                          "Portfolio DreamLab")
 
-    # print ("Active boards:")
-    # boards = kanban.getBoards()
-    # for board in boards:
-    #     print (" * %s (%d)" % (board.title, board.id))
+    print("Active boards:")
+    boards = kanban.getBoards()
+    for board in boards:
+        print(board.hasUpdates())
+        # if board.title == 'PMO Portfolio Kanban Teams':
+        #     card = board.fetchCardDetails("275535052")
 
     # Get a board by the title.
-    board_name = 'PMO Portfolio Kanban Teams'
-    print ("Getting board '%s'..." % board_name)
-    board = kanban.getBoard(title=board_name)
-    board.printLanes(True, "Current development plan")
-    board.generateReport(report, "Current development plan")
+    # board_name = 'PMO Portfolio Kanban Teams'
+    # print ("Getting board '%s'..." % board_name)
+    # board = kanban.getBoard(title=board_name)
+    # board.printLanes(True, "Current development plan")
+    # board.generateReport(report, "Current development plan")
 
     # Print all users.
     # print (board.users)

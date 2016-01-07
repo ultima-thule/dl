@@ -19,12 +19,29 @@ class User(Document):
     user_name = StringField()
     board_id = LongField()
 
+
 class Comment (EmbeddedDocument):
     comment_id = LongField(primary_key=True)
     text = StringField()
     post_date = DateTimeField()
     posted_by_id = LongField ()
     posted_by_full_name = StringField()
+
+
+class Sponsor(Document):
+    sponsor_id = LongField(primary_key=True)
+    name = StringField()
+    bo_name = StringField()
+
+
+class CardExtend(EmbeddedDocument):
+    sponsor_name = StringField()
+    sponsor_ref = ReferenceField(Sponsor)
+
+    budget_status_name = StringField()
+    release_status_name = StringField()
+    category_name = StringField() # IT platform, business
+    initiative_type_name = StringField() # NBV, Improvement, BAU, Support
 
 
 class Card(Document):
@@ -95,24 +112,21 @@ class Card(Document):
     board_masterlane_id = LongField()
     board_masterlane_title = StringField()
 
-    # additional fields for team aggregation
+    # additional fields for team
     team_name = StringField()
-    # additional fields for workflow status
-    status_name = StringField()
+    workflow_status_name = StringField()
+
+    extended_data = EmbeddedDocumentField(CardExtend)
 
 
-class Sponsor(Document):
-    sponsor_id = LongField(primary_key=True)
-    name = StringField()
-    bo_name = StringField()
 
 
 class Team(Document):
     name = StringField(primary_key=True)
     location_name = StringField()
     sponsor_ref = ReferenceField(Sponsor)
-    type_name = StringField() # platform, content
-    pmo_name= StringField # PMO1, PMO2
+    default_category_name = StringField() # IT platform, business
+    pmo_name = StringField ()# PMO1, PMO2
 
 
 class MasterLane(Document):
@@ -121,3 +135,8 @@ class MasterLane(Document):
     index = IntField()
     lane_type = IntField()
     board_id = LongField()
+
+
+class SystemSettings(Document):
+    setting_key = StringField(primary_key=True)
+    setting_value = StringField()

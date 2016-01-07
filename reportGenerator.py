@@ -17,6 +17,7 @@ if __name__ == '__main__':
 
     teams = lib.mongoLeankit.Team.objects().order_by('location_name', 'name')
     for team in teams:
+
         cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
                                       & Q(board_masterlane_title='Current development plan')
                                       & Q(team_name=team.name)).order_by('title')
