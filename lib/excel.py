@@ -121,12 +121,12 @@ class ExcelReport (object):
             self._write_cell(card.title, self._format_wrap)
             self._write_cell(str(card.taskboard_completed_card_size), self._format_wrap)
             self._write_cell(str(card.taskboard_total_size), self._format_wrap)
-            self._write_cell("") #budget status
+            self._write_cell(card.extended_data.budget_status_name) #budget status
             if card.due_date is not None:
                 self._write_cell(card.due_date.strftime("%Y/%m/%d"))
             else:
                 self._write_cell("")
-            self._write_cell("") #release status
+            self._write_cell(card.extended_data.release_status_name) #release status
 
             if card.is_blocked:
                 self._write_cell(card.block_reason, self._format_risk_high)
