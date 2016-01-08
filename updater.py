@@ -206,7 +206,7 @@ def _getBudgetStatusName(done, planned):
 def _getReleaseStatusName(workflow_step, due_date):
     if workflow_step == "Recently Done":
         return "released"
-    if workflow_step == "Todo" or (due_date is not None and due_date > datetime.datetime.today()):
+    if workflow_step == "Todo" or (due_date is not None and due_date + datetime.timedelta(days=10) >= datetime.datetime.today()):
         return "in plan"
     return "term exceeded"
 
@@ -246,18 +246,18 @@ if __name__ == '__main__':
 
     # print("Active boards:")
     # boards = kanban.getBoards()
-    # #_insertBoards(boards)
+    # _insertBoards(boards)
     #
     # # Get a board by the title.
     board_name = 'PMO Portfolio Kanban Teams'
     print("Getting board '%s'..." % board_name)
     board = kanban.getBoard(title=board_name)
-    # # _insertMasterLanes(board.root_lane.child_lanes, board.id)
-    _insertAllCardsForBoard(board.root_lane.child_lanes, 'Current development plan')
+    # _insertMasterLanes(board.root_lane.child_lanes, board.id)
+    _insertAllCardsForBoard(board.root_lane.child_lanes, '')
     # _insertAllTeamsForBoard(board)
     # board.printLanes(True, "Current development plan")
     # board.generateReport(report, "Current development plan")
 
     # Print all users.
-    #_insertUsers(board.users, board.id)
+    # _insertUsers(board.users, board.id)
 

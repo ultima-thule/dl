@@ -119,8 +119,6 @@ class Card(Document):
     extended_data = EmbeddedDocumentField(CardExtend)
 
 
-
-
 class Team(Document):
     name = StringField(primary_key=True)
     location_name = StringField()

@@ -2,6 +2,7 @@ __author__ = 'asia'
 
 
 import xlsxwriter
+import datetime
 
 class ExcelReport (object):
 
@@ -18,6 +19,7 @@ class ExcelReport (object):
         self._configure_wrap_format()
         self._configure_risk_format()
         self._configure_header_format()
+        self._configure_currency_format()
 
 
     def __enter__(self):
@@ -49,7 +51,11 @@ class ExcelReport (object):
         self._format_header = self.workbook.add_format()
         self._format_header.set_bg_color('black')
         self._format_header.set_font_color('white')
-        self._format_header.set_font_size (16)
+        self._format_header.set_font_size (12)
+
+    def _configure_currency_format (self):
+        self._format_currency = self.workbook.add_format()
+        self._format_currency.set_num_format('#,##0')
 
     def _reset_cnt (self, lastCell=False):
         if lastCell == True:
@@ -68,7 +74,10 @@ class ExcelReport (object):
 
 
     def _write_cell(self, text, cell_format=None, lastCell=False):
-        self.worksheet.write_string(self.write_to_row, self.write_to_col, text, cell_format)
+        if text.isdigit():
+            self.worksheet.write_number(self.write_to_row, self.write_to_col, int(text), cell_format)
+        else:
+            self.worksheet.write_string(self.write_to_row, self.write_to_col, text, cell_format)
         self._reset_cnt (lastCell)
 
 
@@ -116,17 +125,40 @@ class ExcelReport (object):
     def writeTeam (self, team):
         self._write_merged_cell (team.name, 8, self._format_lane, True)
 
+    def getBudgetStatusName(self, card):
+        if card.taskboard_completed_card_size is None or card.taskboard_total_size is None:
+            return ""
+        if card.taskboard_completed_card_size <= card.taskboard_total_size:
+            return "in budget"
+        return "budget exceeded"
+
+
+    def getReleaseStatusName(self, card):
+        if card.workflow_status_name == "Recently Done":
+            return "released"
+        if card.workflow_status_name == "Todo":
+            return "not started"
+        if card.due_date is not None and card.due_date + datetime.timedelta(days=1) >= datetime.datetime.today():
+            return "in plan"
+        return "term exceeded"
+
+    def getInCurrency(self, value):
+        if value is not None:
+            return value * 107
+        return None
+
+
     def writeCard (self, card):
             self._write_cell("") #type
             self._write_cell(card.title, self._format_wrap)
-            self._write_cell(str(card.taskboard_completed_card_size), self._format_wrap)
-            self._write_cell(str(card.taskboard_total_size), self._format_wrap)
-            self._write_cell(card.extended_data.budget_status_name) #budget status
+            self._write_cell(str(self.getInCurrency(card.taskboard_completed_card_size)), self._format_currency)
+            self._write_cell(str(self.getInCurrency(card.taskboard_total_size)), self._format_currency)
+            self._write_cell(self.getBudgetStatusName(card)) #budget status
             if card.due_date is not None:
                 self._write_cell(card.due_date.strftime("%Y/%m/%d"))
             else:
                 self._write_cell("")
-            self._write_cell(card.extended_data.release_status_name) #release status
+            self._write_cell(self.getReleaseStatusName(card)) #release status
 
             if card.is_blocked:
                 self._write_cell(card.block_reason, self._format_risk_high)
@@ -134,10 +166,9 @@ class ExcelReport (object):
                 comments = card.comments
                 if (len(comments) > 0):
                     if card.type_name ==  'Progress: Risk identified':
-                        riskFormat = self._format_risk_medium
+                        self._write_cell(card.comments[0].text, self._format_risk_medium)
                     elif card.type_name ==  'Progress: High risk':
-                        riskFormat = self._format_risk_high
-                    self._write_cell(card.comments[0].text, riskFormat)
+                        self._write_cell(card.comments[0].text, self._format_risk_high)
                 else:
                     self._write_cell("")
             self._write_cell("", None, True)
