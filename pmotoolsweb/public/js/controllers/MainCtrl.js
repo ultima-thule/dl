@@ -24,8 +24,8 @@ app.controller('MainController', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdD
           icon: 'group'
         },
         {
-          link : '/teams',
-          title: 'Messages',
+          link : '/cards',
+          title: 'Initiatives',
           icon: 'message'
         }
     ];

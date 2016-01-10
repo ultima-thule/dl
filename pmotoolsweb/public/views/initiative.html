@@ -1,4 +1,4 @@
-<!-- public/views/card.html -->
+<!-- public/views/initiative.html -->
 <!--upper toolbar -->
 <md-toolbar>
     <div class="md-toolbar-tools">
@@ -16,8 +16,8 @@
         <md-list-item class="md-3-line" ng-repeat="item in cards" ng-click="showDialog('R', element, $event)">
             <div class="md-list-item-text">
                 <h3>{{item.title}}</h3>
-                <h4>{{item.extended_data.category_name}}</h4>
-                <p>{{item.extended_data.sponsor_name}}</p>
+                <h4>{{item.team_name}}</h4>
+                <p>{{item.workflow_status_name}}</p>
             </div>
             <md-icon aria-label="Edit initiative" class="md-secondary" ng-click="showDialog('UD', element, $event)">edit</md-icon>
             <md-divider></md-divider>

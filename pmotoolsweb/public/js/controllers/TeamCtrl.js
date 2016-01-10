@@ -5,6 +5,8 @@ angular.module('TeamCtrl', [])
 
     $scope.formData = {};
 
+    $scope.title = "Teams configuration";
+
     $scope.categories = ('IT Platforms;Business').split(';').map(function(category) {
             return {name: category};
     });
@@ -41,5 +43,39 @@ angular.module('TeamCtrl', [])
                 console.log('Error: ' + data);
             });
     };
+
+    function mostrarDialogo(operation, data, event) {
+        var tempData = undefined;
+        if (data === undefined) {
+            tempData = {};
+        } else {
+            tempData = {
+                id: data.id,
+                name: data.name,
+                lastname: data.lastname,
+                email: data.email,
+                direction: data.direction
+
+            };
+        }
+        $mdDialog.show({
+            templateUrl: 'editor.html',
+            targetEvent: event,
+            locals: {
+                selectedItem: tempData,
+                dataTable: $scope.view.dataTable,
+                operation: operation
+            },
+            bindToController: true,
+            controller: DialogController,
+            parent: angular.element(document.body)
+        })
+        .then(
+            function (result) {
+                // mostrarError(result);
+            }
+        );
+    }
+
 });
 

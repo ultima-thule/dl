@@ -15,17 +15,26 @@ if __name__ == '__main__':
                          "Portfolio DreamLab")
     excelReport.initReport()
 
-    teams = lib.mongoLeankit.Team.objects().order_by('location', 'name')
-    for team in teams:
+    last_sponsor = "Not defined"
+    sum_in_progress = 0
+    sum_total = 0
+    # teams = lib.mongoLeankit.Team.objects().order_by('location', 'name')
+    # for team in teams:
 
-        cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
-                                      & Q(board_masterlane_title='Current development plan')
-                                      & Q(team_name=team.name)).order_by('title')
-        if len(cards) > 0:
-            excelReport.writeTeam(team)
-            for card in cards:
-                excelReport.writeCard(card)
-            excelReport.laneBreak()
+    cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
+                                  & Q(board_masterlane_title='Current development plan')).order_by('extended_data__sponsor_name')
+    if len(cards) > 0:
+        for card in cards:
+            if card.extended_data.sponsor_name != last_sponsor:
+                last_sponsor = card.extended_data.sponsor_name
+                excelReport.laneBreak()
+                excelReport.writeSponsor(last_sponsor)
+            excelReport.writeCard(card)
+            if card.taskboard_completed_card_size is not None:
+                sum_in_progress += card.taskboard_completed_card_size
+            if card.taskboard_total_size is not None:
+                sum_total += card.taskboard_total_size
+        excelReport.writeSummary(sum_in_progress, sum_total)
 
     data = excelReport.close()
 

@@ -3,7 +3,7 @@ __author__ = 'asia grzywna'
 from mongoengine import *
 
 class Board(Document):
-    board_id = LongField(primary_key=True)
+    board_id = LongField()
     title = StringField()
     is_archived = BooleanField()
     creation_date = DateTimeField()
@@ -13,7 +13,7 @@ class User(Document):
     email = StringField()
     full_name = StringField()
     enabled = BooleanField()
-    user_id = LongField(primary_key=True)
+    user_id = LongField()
     role = IntField()
     role_name = StringField()
     user_name = StringField()
@@ -21,7 +21,7 @@ class User(Document):
 
 
 class Comment (EmbeddedDocument):
-    comment_id = LongField(primary_key=True)
+    comment_id = LongField()
     text = StringField()
     post_date = DateTimeField()
     posted_by_id = LongField ()
@@ -29,7 +29,6 @@ class Comment (EmbeddedDocument):
 
 
 class Sponsor(Document):
-    sponsor_id = LongField(primary_key=True)
     name = StringField()
     bo_name = StringField()
 
@@ -45,7 +44,7 @@ class CardExtend(EmbeddedDocument):
 
 
 class Card(Document):
-    card_id = LongField(primary_key=True)
+    card_id = LongField()
 
     active = BooleanField()
     #actual_start_date = DateTimeField()
@@ -124,19 +123,15 @@ class Team(Document):
     location = StringField()
     default_category = StringField() # IT platform, business
     pmo = StringField ()# PMO1, PMO2
+    sponsor_name = StringField()
 
 
 class MasterLane(Document):
-    lane_id = LongField(primary_key=True)
+    lane_id = LongField()
     title = StringField()
     index = IntField()
     lane_type = IntField()
     board_id = LongField()
-
-
-class SystemSettings(Document):
-    setting_key = StringField(primary_key=True)
-    setting_value = StringField()
 
 
 class Report (Document):

@@ -1,5 +1,5 @@
 <!-- public/views/report.html -->
-<md-toolbar ng-show="!showSearch">
+<md-toolbar>
     <div class="md-toolbar-tools">
       <h3>{{ title }}</h3>
       <span flex></span>
@@ -12,21 +12,22 @@
 
     <md-content>
         <p>Last date of LeanKit synchronization: {{lastLeankitDate | date: 'medium'}}
-        <md-button class="md-accent md-raised md-hue-1">Refresh from LeanKit</md-button></p>
+        <md-button class="md-accent md-raised md-hue-1" ng-disabled="true">Refresh from LeanKit</md-button></p>
         <p>If you want to get a fresh report, generate a new one from database.
         <md-button class="md-accent md-raised md-hue-1" ng-click="generateReport();">Generate report</md-button></p>
     </md-content>
     <!-- Reports' list -->
-    <md-content ng-cloak="">
-        <h2>Available reports</h2>
+    <md-content ng-cloak="" layout="column" layout-align="start start">
+        <h3>Available reports</h3>
         <md-list layout="column">
-            <md-list-item ng-repeat="item in reports">
+            <md-list-item ng-repeat="item in reports" layout="row">
                 <div class="md-tile-left inset" hide-sm>
                     <md-icon>account_balance</md-icon>
                 </div>
-                <p>Report from {{ item.generation_date | date:'medium'}}</p>
-                <md-button ng-href="reports/{{item._id}}">Download</md-button>
-
+                <div>Report from {{ item.generation_date | date:'medium'}}</div>
+                <md-button class="md-fab md-mini md-primary" aria-label="Download file" ng-href="reports/{{item._id}}">
+                    <md-icon>file_download</md-icon>
+                </md-button>
               </md-list-item>
         </md-list>
     </md-content>

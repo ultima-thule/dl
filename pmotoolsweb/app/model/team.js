@@ -8,5 +8,6 @@ module.exports = mongoose.model('team', {
     name : String,
     location: String,
     default_category: String,
-    pmo: String
+    pmo: String,
+    sponsor_name: String
 }, 'team');

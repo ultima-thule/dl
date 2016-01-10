@@ -4,6 +4,7 @@
 var Team = require('./model/team');
 var Report = require('./model/report');
 var ConfigParam = require('./model/configparam');
+var Card = require('./model/card');
 
 module.exports = function(app) {
 
@@ -121,6 +122,20 @@ module.exports = function(app) {
           });
     });
 
+
+    // initiative api route
+    app.get('/api/cards', function(req, res) {
+        // use mongoose to get all teams in the database
+        Card.find({board_masterlane_title: "Current development plan"}, function(err, cards) {
+
+            // if there is an error retrieving, send the error.
+            // nothing after res.send(err) will execute
+            if (err)
+                res.send(err);
+
+            res.json(cards); // return all teams in JSON format
+        });
+    });
 
     // route to handle creating goes here (app.post)
     // route to handle delete goes here (app.delete)

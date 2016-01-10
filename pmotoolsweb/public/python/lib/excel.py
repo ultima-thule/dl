@@ -4,6 +4,9 @@ __author__ = 'asia'
 import xlsxwriter
 import datetime
 import io
+import re
+
+glNumberOfWraps = 7
 
 class ExcelReport (object):
 
@@ -70,7 +73,7 @@ class ExcelReport (object):
 
 
     def _write_header (self):
-        headers = ["Type", "Business initiative", "Actual cost", "Estimated cost",
+        headers = ["Business initiative", "Actual cost", "Estimated cost",
                    "Budget status", "Planned release date", "Release status", "Risks & notes"]
         for i in headers:
             self._write_cell(i, self._format_header)
@@ -95,16 +98,16 @@ class ExcelReport (object):
 
 
     def writeSingleLane (self, lane):
+        global glNumberOfWraps
         next_lane = lane.getNextLanes()
         if next_lane is not None:
-            self._write_merged_cell (lane.parent_lane.title, 8, self._format_lane, True)
+            self._write_merged_cell (lane.parent_lane.title, glNumberOfWraps, self._format_lane, True)
 
     def laneBreak (self):
         self._write_cell("", None, True)
 
 
     def writeSingleCard (self, card):
-            self._write_cell("") #type
             self._write_cell(card.title, self._format_wrap)
             self._write_cell(str(card.task_board_completed_card_size), self._format_wrap)
             self._write_cell(str(card.task_board_total_size), self._format_wrap)
@@ -116,18 +119,26 @@ class ExcelReport (object):
                 self._write_cell(card.block_reason, self._format_risk_high)
             else:
                 if (len(card.comments) > 0):
+                    noHtml = re.sub("<.*?>", "", card.comments[0].text)
                     if card.type.name ==  'Progress: Risk identified':
                         riskFormat = self._format_risk_medium
                     elif card.type.name ==  'Progress: High risk':
                         riskFormat = self._format_risk_high
-                    self._write_cell(card.comments[0].text, riskFormat)
+                    self._write_cell(noHtml, riskFormat)
                 else:
                     self._write_cell("")
             self._write_cell("", None, True)
 
 
     def writeTeam (self, team):
-        self._write_merged_cell (team.name, 8, self._format_lane, True)
+        global glNumberOfWraps
+        self._write_merged_cell (team.name, glNumberOfWraps, self._format_lane, True)
+
+
+    def writeSponsor (self, sponsor_name):
+        global glNumberOfWraps
+        self._write_merged_cell(sponsor_name, glNumberOfWraps, self._format_lane, True)
+
 
     def getBudgetStatusName(self, card):
         if card.taskboard_completed_card_size is None or card.taskboard_total_size is None:
@@ -153,7 +164,6 @@ class ExcelReport (object):
 
 
     def writeCard (self, card):
-            self._write_cell("") #type
             self._write_cell(card.title, self._format_wrap)
             self._write_cell(str(self.getInCurrency(card.taskboard_completed_card_size)), self._format_currency)
             self._write_cell(str(self.getInCurrency(card.taskboard_total_size)), self._format_currency)
@@ -169,10 +179,22 @@ class ExcelReport (object):
             else:
                 comments = card.comments
                 if (len(comments) > 0):
+                    noHtml = re.sub("<.*?>", "", card.comments[0].text)
                     if card.type_name ==  'Progress: Risk identified':
-                        self._write_cell(card.comments[0].text, self._format_risk_medium)
+                        self._write_cell(noHtml, self._format_risk_medium)
                     elif card.type_name ==  'Progress: High risk':
-                        self._write_cell(card.comments[0].text, self._format_risk_high)
+                        self._write_cell(noHtml, self._format_risk_high)
                 else:
                     self._write_cell("")
+            self._write_cell("", None, True)
+
+
+    def writeSummary (self, in_progress, total):
+            self._write_cell("Total", self._format_lane)
+            self._write_cell(str(self.getInCurrency(in_progress)), self._format_currency)
+            self._write_cell(str(self.getInCurrency(total)), self._format_currency)
+            self._write_cell("")
+            self._write_cell("")
+            self._write_cell("")
+            self._write_cell("")
             self._write_cell("", None, True)

@@ -5,6 +5,8 @@ from lib.mongoLeankit import *
 from mongoengine import *
 import datetime
 
+globalTeamDict = {}
+
 def _initMongoConn ():
     connect('leankit')
 
@@ -103,22 +105,6 @@ def _updateCardExtendFromCard(card):
                                     budget_status_name = _getBudgetStatusName(card.taskboard_completed_card_size, card.taskboard_total_size),
                                     release_status_name = _getReleaseStatusName(card.workflow_status_name, card.due_date))
 
-    return ce
-
-def _updateCardExtendBudget(card_extend_id, bg_status_name):
-    ce = CardExtend.objects(_id=card.id).update(budget_status_name = name)
-    return ce
-
-def _updateCardExtendBudget(card_extend_id, rel_status_name):
-    ce = CardExtend.objects(_id=card.id).update(release_status_name = name)
-    return ce
-
-def _updateCardExtendBudget(card_extend_id, bg_status_name):
-    ce = CardExtend.objects(_id=card.id).update(category_name = name)
-    return ce
-
-def _updateCardExtendBudget(card_extend_id, bg_status_name):
-    ce = CardExtend.objects(_id=card.id).update(initiative_type_name = name)
     return ce
 
 
@@ -220,13 +206,22 @@ def _insertTeam(lane):
     t.save()
 
 def _insertAllTeamsForBoard(board):
+    global globalTeamDict
+    globalTeamDict = {}
+
+    teams = lib.mongoLeankit.Team.objects().order_by('location', 'name')
+    for team in teams:
+        globalTeamDict[team.name] = True
+
     for master_lane in board.root_lane.child_lanes:
         print ("Analysin master lane " + master_lane.title)
         for loc_lane in master_lane.child_lanes:
             print ("  Analysin loc lane " + loc_lane.title)
             for team_lane in loc_lane.child_lanes:
                 print ("    Analysin team lane " + team_lane.title)
-                _insertTeam(team_lane)
+                if team_lane.title not in globalTeamDict:
+                    _insertTeam(team_lane)
+                    globalTeamDict[team_lane.title] = True
 
 
 if __name__ == '__main__':
@@ -253,7 +248,7 @@ if __name__ == '__main__':
     print("Getting board '%s'..." % board_name)
     board = kanban.getBoard(title=board_name)
     # _insertMasterLanes(board.root_lane.child_lanes, board.id)
-    #_insertAllCardsForBoard(board.root_lane.child_lanes, '')
+    # _insertAllCardsForBoard(board.root_lane.child_lanes, '')
     _insertAllTeamsForBoard(board)
     # board.printLanes(True, "Current development plan")
     # board.generateReport(report, "Current development plan")
