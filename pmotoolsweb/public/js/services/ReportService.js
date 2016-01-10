@@ -8,9 +8,28 @@ angular.module('ReportService', [])
             get : function() {
                 return $http.get('/api/reports');
             },
-
-            get : function(id) {
-                return $http.get('/api/reports/id=' + id);
+            getId : function(id) {
+                console.log ("factory inside")
+                return $http.get('/api/reports/id=' + id,
+                    { responseType: 'arraybuffer',
+                     headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                        }
+                    });
             }
         }
     });
+
+//angular.module('ReportService')
+//.service('Reports', ['$http', function('$http') {
+//
+//    this.getReports = function() {
+//        return $http.get('api/reports')
+//    }
+//
+//    this.getReport = function(id) {
+//        return $http.get('api/report/id=' + id)
+//    }
+//
+//}])

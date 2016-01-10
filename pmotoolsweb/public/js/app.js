@@ -1,5 +1,5 @@
 // public/js/app.js
-angular.module('sampleApp', ['ngRoute', 'ngMaterial', 'appRoutes', 'MainCtrl', 'CardCtrl', 'CardService',
+angular.module('sampleApp', ['ngRoute', 'ngMaterial', 'ngFileSaver', 'appRoutes', 'MainCtrl', 'CardCtrl', 'CardService',
     'ParamsCtrl', 'SponsorCtrl', 'TeamCtrl', 'TeamService', 'ReportCtrl', 'ReportService'])
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')

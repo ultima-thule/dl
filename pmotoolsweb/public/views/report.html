@@ -6,6 +6,7 @@
             <md-list-item class="md-3-line" ng-repeat="item in reports">
             <div class="md-list-item-text" layout="column">
             <h3>{{ item.generation_date }}</h3>
+            <md-button ng-href="reports/id={{item._id}}">Download</md-button>
             </div>
             </md-list-item>
         </md-list>

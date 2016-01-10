@@ -65,6 +65,23 @@ module.exports = function(app) {
         });
     });
 
+    // get a report
+    app.get('/api/reports/:id', function(req, res) {
+        console.log("sprawdzamy 1")
+        Report.find({_id: "5691bde4b4fa3855b9699394"}, function(err, reports) {
+            console.log("sprawdzamy")
+            if (err)
+                res.send(err);
+            console.log(reports[0]);
+            res.append('Content-Disposition', 'attachment; filename=test.xlsx');
+            res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            console.log("File report was requested");
+            res.send(reports[0].xls_data);
+          //res.render('document', { document : document });
+          });
+    });
+
+
     // report api route
     app.get('/api/reports', function(req, res) {
         // use mongoose to get all teams in the database
@@ -79,20 +96,6 @@ module.exports = function(app) {
 
             res.json(reports); // return all teams in JSON format
         });
-    });
-
-    // get a report
-    app.get('/api/reports/:id', function(req, res) {
-        Report.find(function(err, reports) {
-            if (err)
-                res.send(err);
-            console.log(reports[0]);
-            res.append('Content-Disposition', 'attachment; filename=test.xlsx');
-            res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            console.log(reports[0].xls_data);
-            res.send(reports[0].xls_data);
-          //res.render('document', { document : document });
-          });
     });
 
 
