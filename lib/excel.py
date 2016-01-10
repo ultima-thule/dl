@@ -3,11 +3,13 @@ __author__ = 'asia'
 
 import xlsxwriter
 import datetime
+import io
 
 class ExcelReport (object):
 
     def __init__(self, workbook_name, worksheet_name):
-        self.workbook = xlsxwriter.Workbook(workbook_name)
+        self.output = io.BytesIO()
+        self.workbook = xlsxwriter.Workbook(self.output, {'in_memory': True})
         self.worksheet = self.workbook.add_worksheet(worksheet_name)
 
         self.write_to_row = 0
@@ -28,6 +30,8 @@ class ExcelReport (object):
 
     def close(self):
         self.workbook.close()
+        self.output.seek(0)
+        return self.output.getvalue()
 
 
     def _configure_lane_format (self):

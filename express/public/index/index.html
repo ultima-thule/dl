@@ -1,40 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <title>Angular Node App</title>
-    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/node_modules/angular-material/angular-material.css">
 </head>
+    <body ng-app="YourApp">
 
-<body>
-    <div class="container">
-        <div class="header">
-            <nav>
-                <ul class="nav nav-pills pull-right">
-                    <li role="presentation" class="active"><a href="#">Home</a>
-                    </li>
-                    <li role="presentation"><a href="/signIn">Sign In</a>
-                    </li>
-                    <li role="presentation"><a href="/signUp">Sign Up</a>
-                    </li>
-                </ul>
-            </nav>
-            <h3 class="text-muted">Angular Node App</h3>
-        </div>
-
-        <div class="jumbotron">
-            <h1>Angular Node App</h1>
-            <p class="lead"></p>
-            <p><a class="btn btn-lg btn-success" href="/signUp" role="button">Sign up today</a>
-            </p>
-        </div>
-
-        <footer class="footer">
-            <p>&copy; Company 2015</p>
-        </footer>
+    <div ng-controller="YourController">
 
     </div>
-</body>
 
+    <script src="/node_modules/angular/angular.js"></script>
+    <script src="/node_modules/angular-aria/angular-aria.js"></script>
+    <script src="/node_modules/angular-animate/angular-animate.js"></script>
+    <script src="/node_modules/angular-material/angular-material.js"></script>
+    <script>
+
+        // Include app dependency on ngMaterial
+
+        angular.module( 'YourApp', [ 'ngMaterial' ] )
+            .controller("YourController", YourController );
+
+    </script>
+
+</body>
 </html>

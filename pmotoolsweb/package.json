@@ -1,0 +1,13 @@
+{
+      "name": "pmotoolsweb",
+      "version": "0.0.0",
+      "private": true,
+      "main": "server.js",
+      "dependencies": {
+        "express" : "latest",
+        "mongoose" : "~3.8.0",
+        "body-parser" : "~1.4.2",
+        "method-override" : "~2.0.2",
+        "morgan": "latest"
+      }
+}

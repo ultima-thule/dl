@@ -9,13 +9,13 @@ def _initMongoConn ():
     connect('leankit')
 
 if __name__ == '__main__':
-    _initMongoConn ()
+    _initMongoConn()
 
     excelReport = lib.excel.ExcelReport(datetime.datetime.now().strftime("Status_%Y-%m-%d-%H-%M-%S.xlsx"),
                          "Portfolio DreamLab")
     excelReport.initReport()
 
-    teams = lib.mongoLeankit.Team.objects().order_by('location_name', 'name')
+    teams = lib.mongoLeankit.Team.objects().order_by('location', 'name')
     for team in teams:
 
         cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
@@ -27,4 +27,13 @@ if __name__ == '__main__':
                 excelReport.writeCard(card)
             excelReport.laneBreak()
 
-    excelReport.close()
+    data = excelReport.close()
+
+    print("Report generated, saving to database...")
+    report = lib.mongoLeankit.Report()
+
+    report.xls_data = data
+    report.generation_date = datetime.datetime.now()
+
+    report.save()
+    print("done.")

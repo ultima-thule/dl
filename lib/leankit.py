@@ -17,7 +17,7 @@ import lib.excel
 
 ANNOTATION_REGEX = re.compile('^\s*{.*}\s*$', re.MULTILINE|re.DOTALL)
 
-globalFetchComments = True
+globalFetchComments = False
 
 class Record(dict):
     """A little dict subclass that adds attribute access to values."""

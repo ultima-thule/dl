@@ -215,7 +215,7 @@ def _insertTeam(lane):
     t = lib.mongoLeankit.Team()
 
     t.name = lane.title
-    t.location_name = lane.parent_lane.title
+    t.location = lane.parent_lane.title
 
     t.save()
 
@@ -253,8 +253,8 @@ if __name__ == '__main__':
     print("Getting board '%s'..." % board_name)
     board = kanban.getBoard(title=board_name)
     # _insertMasterLanes(board.root_lane.child_lanes, board.id)
-    _insertAllCardsForBoard(board.root_lane.child_lanes, '')
-    # _insertAllTeamsForBoard(board)
+    #_insertAllCardsForBoard(board.root_lane.child_lanes, '')
+    _insertAllTeamsForBoard(board)
     # board.printLanes(True, "Current development plan")
     # board.generateReport(report, "Current development plan")
 

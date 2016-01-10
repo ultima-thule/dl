@@ -1,0 +1,37 @@
+<!-- public/views/sponsor.html -->
+
+<div ng-cloak="" layout="row">
+    <!-- Sponsors' list -->
+    <md-content flex="auto">
+        <md-list>
+            <md-list-item class="md-3-line" ng-repeat="item in sponsors">
+            <md-icon class="md-avatar-icon"> {{item.face}} </md-icon>
+            <div class="md-list-item-text" layout="column">
+            <h3>{{ item.name }}</h3>
+            <h4>{{ item.bo_name }}</h4>
+            </div>
+            </md-list-item>
+        </md-list>
+    </md-content>
+
+    <!-- Sponsor details -->
+    <md-content flex="auto" id="content">
+        <md-icon md-svg-src="./assets/svg/avatar-1.svg" class="avatar"></md-icon>
+        <h2>Sponsor 1</h2>
+        <h3>Jan Kowalski</h3>
+        <md-list>
+            <md-list-item>
+                Team A
+            </md-list-item>
+            <md-list-item>
+                Team B
+            </md-list-item>
+            <md-list-item>
+                Team C
+            </md-list-item>
+        </md-list>
+        <md-chips ng-model="myItems" placeholder="Add an item" readonly="isReadOnly"></md-chips>
+        <md-button>Add</md-button>
+    </md-content>
+</div>
+

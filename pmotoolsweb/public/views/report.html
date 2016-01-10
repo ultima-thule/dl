@@ -1,0 +1,15 @@
+<!-- public/views/report.html -->
+<div ng-cloak="" layout="row">
+    <!-- Reports' list -->
+    <md-content flex="auto">
+        <md-list>
+            <md-list-item class="md-3-line" ng-repeat="item in reports">
+            <div class="md-list-item-text" layout="column">
+            <h3>{{ item.generation_date }}</h3>
+            </div>
+            </md-list-item>
+        </md-list>
+    </md-content>
+
+</div>
+

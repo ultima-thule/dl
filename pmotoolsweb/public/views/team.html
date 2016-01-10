@@ -1,0 +1,50 @@
+<!-- public/views/team.html -->
+<div ng-cloak="" layout="row">
+    <!-- Teams' list -->
+    <md-content flex="auto">
+        <md-list>
+            <md-list-item class="md-3-line" ng-repeat="item in teams">
+            <div class="md-list-item-text" layout="column">
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.location }}</p>
+            </div>
+            </md-list-item>
+        </md-list>
+    </md-content>
+
+    <!-- Team details -->
+    <md-content flex="auto" layout-padding="">
+        <form>
+            <md-input-container class="md-block">
+                <label>Name</label>
+                <input ng-model="team.name">
+            </md-input-container>
+            <md-input-container class="md-block">
+                <label>Location</label>
+                <md-select ng-model="team.location">
+                    <md-option ng-repeat="location in locations" value="{{location.name}}">
+                        {{location.name}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container class="md-block" >
+            <label>Default category for initiatives</label>
+            <md-select ng-model="team.default_category">
+                <md-option ng-repeat="category in categories" value="{{category.name}}">
+                    {{category.name}}
+                </md-option>
+            </md-select>
+            </md-input-container>
+            <md-input-container class="md-block" >
+                <label>PMO</label>
+                <md-select ng-model="team.pmo">
+                    <md-option ng-repeat="pmo in pmos" value="{{pmo.name}}">
+                        {{pmo.name}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-button class="md-raised" ng-click="createTeam()">Save</md-button>
+       </form>
+    </md-content>
+</div>
+

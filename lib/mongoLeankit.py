@@ -120,11 +120,10 @@ class Card(Document):
 
 
 class Team(Document):
-    name = StringField(primary_key=True)
-    location_name = StringField()
-    sponsor_ref = ReferenceField(Sponsor)
-    default_category_name = StringField() # IT platform, business
-    pmo_name = StringField ()# PMO1, PMO2
+    name = StringField()
+    location = StringField()
+    default_category = StringField() # IT platform, business
+    pmo = StringField ()# PMO1, PMO2
 
 
 class MasterLane(Document):
@@ -138,3 +137,8 @@ class MasterLane(Document):
 class SystemSettings(Document):
     setting_key = StringField(primary_key=True)
     setting_value = StringField()
+
+
+class Report (Document):
+    xls_data = BinaryField()
+    generation_date = DateTimeField()
