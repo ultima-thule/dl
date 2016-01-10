@@ -10,13 +10,17 @@ angular.module('ReportService', [])
             },
             getId : function(id) {
                 console.log ("factory inside")
-                return $http.get('/api/reports/id=' + id,
+                return $http.get('/api/reports/' + id,
                     { responseType: 'arraybuffer',
                      headers: {
                     'Content-type': 'application/json',
                     'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                         }
                     });
+            },
+            generate : function() {
+                console.log ("generate report")
+                return $http.get('/api/genreport');
             }
         }
     });

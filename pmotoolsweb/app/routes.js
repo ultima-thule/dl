@@ -3,6 +3,7 @@
 // grab the card model we just created
 var Team = require('./model/team');
 var Report = require('./model/report');
+var ConfigParam = require('./model/configparam');
 
 module.exports = function(app) {
 
@@ -67,17 +68,15 @@ module.exports = function(app) {
 
     // get a report
     app.get('/api/reports/:id', function(req, res) {
-        console.log("sprawdzamy 1")
-        Report.find({_id: "5691bde4b4fa3855b9699394"}, function(err, reports) {
-            console.log("sprawdzamy")
+        Report.find({_id: req.params.id}, function(err, reports) {
+            console.log("id")
+            console.log(req.params.id)
             if (err)
                 res.send(err);
-            console.log(reports[0]);
             res.append('Content-Disposition', 'attachment; filename=test.xlsx');
             res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             console.log("File report was requested");
             res.send(reports[0].xls_data);
-          //res.render('document', { document : document });
           });
     });
 
@@ -85,7 +84,7 @@ module.exports = function(app) {
     // report api route
     app.get('/api/reports', function(req, res) {
         // use mongoose to get all teams in the database
-        Report.find(function(err, reports) {
+        Report.find({}).sort('-generation_date').exec (function(err, reports) {
 
             console.log("get report")
             console.log(reports)
@@ -96,6 +95,30 @@ module.exports = function(app) {
 
             res.json(reports); // return all teams in JSON format
         });
+    });
+
+
+    // generate new report
+    app.get('/api/genreport', function(req, res) {
+
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen.py']);
+
+        var output = "";
+        python.stdout.on('data', function(){ output += data });
+        python.on('close', function(code)
+        {
+            if (code !== 0) {  return res.send(500, code); }
+            return res.send(200, output)
+        });
+    });
+
+    // get a config param
+    app.get('/api/configparams/:id', function(req, res) {
+        ConfigParam.find({param_key: req.params.id}, function(err, configparams) {
+            if (err)
+                res.send(err);
+            res.json (configparams);
+          });
     });
 
 

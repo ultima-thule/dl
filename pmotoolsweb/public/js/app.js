@@ -1,25 +1,28 @@
 // public/js/app.js
-angular.module('sampleApp', ['ngRoute', 'ngMaterial', 'ngFileSaver', 'appRoutes', 'MainCtrl', 'CardCtrl', 'CardService',
-    'ParamsCtrl', 'SponsorCtrl', 'TeamCtrl', 'TeamService', 'ReportCtrl', 'ReportService'])
-.config(function($mdThemingProvider) {
-  $mdThemingProvider.theme('default')
-    .primaryPalette('lime', {
-      'default': '400', // by default use shade 400 from the palette for primary intentions
-      'hue-1': '100', // use shade 100 for the <code>md-hue-1</code> class
-      'hue-2': '600', // use shade 600 for the <code>md-hue-2</code> class
-      'hue-3': 'A100' // use shade A100 for the <code>md-hue-3</code> class
-    })
-    // If you specify less than all of the keys, it will inherit from the
-    // default shades
-    .accentPalette('pink', {
-      'default': '200' // use shade 200 for default, and keep all other shades the same
-    })
-    .warnPalette('cyan')
-    .backgroundPalette('grey');
-})
-.config(function($mdThemingProvider) {
+var app = angular.module('sampleApp', ['ngRoute', 'ngMaterial', 'ngFileSaver', 'appRoutes', 'MainCtrl', 'CardCtrl', 'CardService',
+    'ParamsCtrl', 'SponsorCtrl', 'TeamCtrl', 'TeamService', 'ReportCtrl', 'ReportService', 'ConfigParamService']);
+
+
+app.config(function($mdThemingProvider) {
     // Configure a dark theme with primary foreground yellow
     $mdThemingProvider.theme('docs-dark', 'default')
       .primaryPalette('yellow')
       .dark();
+});
+
+app.config(function($mdThemingProvider) {
+  var customBlueMap = $mdThemingProvider.extendPalette('light-blue', {
+    'contrastDefaultColor': 'light',
+    'contrastDarkColors': ['50'],
+    '50': 'ffffff'
+  });
+  $mdThemingProvider.definePalette('customBlue', customBlueMap);
+  $mdThemingProvider.theme('default')
+    .primaryPalette('customBlue', {
+      'default': '500',
+      'hue-1': '50'
+    })
+    .accentPalette('pink');
+  $mdThemingProvider.theme('input', 'default')
+        .primaryPalette('grey')
 });

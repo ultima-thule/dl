@@ -15,7 +15,70 @@
 //custom color
 .material-icons.orange600 { color: #FB8C00; }
 
-//for lists
+//for custom lists
 .listdemoBasicUsage md-divider {
   margin-top: 10px;
   margin-bottom: 10px; }
+
+
+.listsListControls {
+/* Add some right padding so that the text doesn't overlap the buttons */ }
+.listsListControls md-divider {
+margin-top: 10px;
+margin-bottom: 10px; }
+.listsListControls md-list-item > p,
+.listsListControls md-list-item > .md-list-item-inner > p,
+.listsListControls md-list-item .md-list-item-inner > p,
+.listsListControls md-list-item .md-list-item-inner > .md-list-item-inner > p {
+-webkit-user-select: none;
+/* Chrome all / Safari all */
+-moz-user-select: none;
+/* Firefox all */
+-ms-user-select: none;
+/* IE 10+ */
+user-select: none;
+/* Likely future */ }
+.listsListControls .secondary-button-padding p {
+padding-right: 100px; }
+
+/* for main index.html setup */
+$gray: #eee;
+
+md-content.md-default-theme {
+  background-color: $gray;
+}
+md-card {
+  background-color: #fff;
+  h2:first-of-type {
+    margin-top: 0;
+  }
+}
+md-toolbar {
+  .md-button.md-default-theme {
+    border-radius: 99%; // round toolbar buttons
+  }
+}
+h2 {
+  font-weight: 400;
+}
+.md-toolbar-tools-bottom {
+  font-size: small;
+  & :last-child {
+    opacity: 0.8;
+  }
+}
+md-toolbar:not(.md-hue-1),
+.md-fab {
+  fill: #fff;
+}
+md-sidenav {
+  fill: #737373;
+  ng-md-icon {
+    position: relative;
+    top: 5px; // adjust for svg viewbox
+  }
+}
+.user-avatar {
+  border-radius: 99%;
+}
+
