@@ -42,8 +42,12 @@
         .when('/reports/:id', {
             templateUrl: 'views/report.html',
             controller: 'ReportController'
-        });
+        })
 
+        .when('/teamedit', {
+            templateUrl: 'views/teamedit.html',
+            controller: 'TeamEditController'
+        });
 
     $locationProvider.html5Mode(true);
 

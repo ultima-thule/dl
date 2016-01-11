@@ -1,6 +1,10 @@
 // public/js/app.js
-var app = angular.module('sampleApp', ['ngRoute', 'ngMaterial', 'ngFileSaver', 'appRoutes', 'MainCtrl', 'CardCtrl', 'CardService',
-    'ParamsCtrl', 'SponsorCtrl', 'TeamCtrl', 'TeamService', 'ReportCtrl', 'ReportService', 'ConfigParamService']);
+
+
+var app = angular.module('sampleApp', ['ngRoute', 'ngMaterial', 'ngFileSaver', 'appRoutes', 'MainCtrl',
+    'CardCtrl', 'CardService', 'ParamsCtrl',
+    'SponsorCtrl', 'SponsorService', 'TeamCtrl', 'TeamService',
+    'ReportCtrl', 'ReportService', 'ConfigParamService']);
 
 
 app.config(function($mdThemingProvider) {

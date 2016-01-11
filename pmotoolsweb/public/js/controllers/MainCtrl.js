@@ -21,7 +21,7 @@ app.controller('MainController', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdD
         {
           link : '/reports',
           title: 'Reports',
-          icon: 'group'
+          icon: 'insert_chart'
         },
         {
           link : '/cards',
@@ -32,9 +32,14 @@ app.controller('MainController', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdD
 
     $scope.admin = [
         {
+          link : '/sponsors',
+          title: 'Sponsors',
+          icon: 'attach_money'
+        },
+        {
           link : '/teams',
           title: 'Teams',
-          icon: 'delete'
+          icon: 'people'
         },
         {
           link : 'showListBottomSheet($event)',
