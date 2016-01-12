@@ -1,11 +1,15 @@
 // public/js/controllers/TeamCtrl.js
 
-angular.module('TeamCtrl', [])
+angular.module('TeamCtrl', ['ngMaterial', 'mdDataTable'])
 .controller('TeamController', function($scope, $http, $mdDialog, $mdToast, Teams) {
 
     $scope.formData = {};
 
     $scope.title = "Teams configuration";
+    $scope.query = {
+        limit: '10',
+        page: 1
+    };
 
     $scope.showDialog = showDialog;
 

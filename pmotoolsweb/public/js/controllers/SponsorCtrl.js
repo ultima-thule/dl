@@ -7,6 +7,11 @@ angular.module('SponsorCtrl', [])
 
     $scope.showDialog = showDialog;
 
+    $scope.query = {
+        limit: '10',
+        page: 1
+    };
+
     // when landing on the page, get all sponsors and show them
     Sponsors.get('/api/sponsors')
         .success(function(data) {

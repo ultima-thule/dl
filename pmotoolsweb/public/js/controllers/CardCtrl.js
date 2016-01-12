@@ -5,7 +5,12 @@ angular.module('CardCtrl', [])
 
     $scope.title = "Current initiatives";
 
-    // when landing on the page, get all teams and show them
+    $scope.query = {
+        limit: '10',
+        page: 1
+    };
+
+    // when landing on the page, get all cards and show them
     Cards.get('/api/cards')
         .success(function(data) {
             $scope.cards = data;

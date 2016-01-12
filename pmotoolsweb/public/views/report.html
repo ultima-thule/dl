@@ -21,13 +21,10 @@
         <h3>Available reports</h3>
         <md-list layout="column">
             <md-list-item ng-repeat="item in reports" layout="row">
-                <div class="md-tile-left inset" hide-sm>
-                    <md-icon>account_balance</md-icon>
-                </div>
-                <div>Report from {{ item.generation_date | date:'medium'}}</div>
-                <md-button class="md-fab md-mini md-primary" aria-label="Download file" ng-href="reports/{{item._id}}">
+                <md-button class="md-fab md-mini" aria-label="Download file" target="_blank" ng-href="api/reports/{{item._id}}">
                     <md-icon>file_download</md-icon>
                 </md-button>
+                <div>Report from {{ item.generation_date | date:'medium'}}</div>
               </md-list-item>
         </md-list>
     </md-content>

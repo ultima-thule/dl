@@ -239,20 +239,20 @@ if __name__ == '__main__':
         #         _createOrUpdateCard(card)
 
 
-    # print("Active boards:")
+    print("Active boards:")
     # boards = kanban.getBoards()
     # _insertBoards(boards)
     #
-    # # Get a board by the title.
+    # Get a board by the title.
     board_name = 'PMO Portfolio Kanban Teams'
     print("Getting board '%s'..." % board_name)
     board = kanban.getBoard(title=board_name)
     # _insertMasterLanes(board.root_lane.child_lanes, board.id)
-    # _insertAllCardsForBoard(board.root_lane.child_lanes, '')
+    _insertAllCardsForBoard(board.root_lane.child_lanes, '')
     _insertAllTeamsForBoard(board)
     # board.printLanes(True, "Current development plan")
     # board.generateReport(report, "Current development plan")
 
     # Print all users.
-    # _insertUsers(board.users, board.id)
+    _insertUsers(board.users, board.id)
 

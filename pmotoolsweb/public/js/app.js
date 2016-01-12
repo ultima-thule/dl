@@ -4,7 +4,8 @@
 var app = angular.module('sampleApp', ['ngRoute', 'ngMaterial', 'ngFileSaver', 'appRoutes', 'MainCtrl',
     'CardCtrl', 'CardService', 'ParamsCtrl',
     'SponsorCtrl', 'SponsorService', 'TeamCtrl', 'TeamService',
-    'ReportCtrl', 'ReportService', 'ConfigParamService']);
+    'ReportCtrl', 'ReportService', 'ConfigParamService',
+    'mdDataTable', 'mdtTemplates', 'md.data.table', 'TabletestCtrl']);
 
 
 app.config(function($mdThemingProvider) {
@@ -15,18 +16,11 @@ app.config(function($mdThemingProvider) {
 });
 
 app.config(function($mdThemingProvider) {
-  var customBlueMap = $mdThemingProvider.extendPalette('light-blue', {
-    'contrastDefaultColor': 'light',
-    'contrastDarkColors': ['50'],
-    '50': 'ffffff'
-  });
-  $mdThemingProvider.definePalette('customBlue', customBlueMap);
   $mdThemingProvider.theme('default')
-    .primaryPalette('customBlue', {
-      'default': '500',
-      'hue-1': '50'
-    })
-    .accentPalette('pink');
+    .primaryPalette('teal')
+    .accentPalette('orange')
+    .warnPalette('pink')
+    .backgroundPalette('grey');
   $mdThemingProvider.theme('input', 'default')
-        .primaryPalette('grey')
+    .primaryPalette('yellow')
 });

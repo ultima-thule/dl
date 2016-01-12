@@ -11,16 +11,42 @@
 </md-toolbar>
 
 <!-- list of initiatives -->
+
 <md-content flex md-scroll-y layout="column" layout-fill layout-padding>
-    <md-list>
-        <md-list-item class="md-3-line" ng-repeat="item in cards" ng-click="showDialog('R', element, $event)">
-            <div class="md-list-item-text">
-                <h3>{{item.title}}</h3>
-                <h4>{{item.extended_data.category_name}}</h4>
-                <p>{{item.extended_data.sponsor_name}}</p>
-            </div>
-            <md-icon aria-label="Edit initiative" class="md-secondary" ng-click="showDialog('UD', element, $event)">edit</md-icon>
-            <md-divider></md-divider>
-        </md-list-item>
-    </md-list>
+    <md-card style="margin:0px">
+        <md-input-container style="margin:15px;">
+            <label>Filter by search</label>
+            <input type="text" ng-model="filterName">
+        </md-input-container>
+
+        <div ng-hide="true">
+            {{(filteredItems = (cards | filter: filterName))}}
+        </div>
+    </md-card>
+    <md-table-container>
+      <table md-table md-progress="promise">
+        <thead md-head md-order="cardOrder">
+          <tr md-row>
+            <th md-column md-order-by="extended_data.sponsor_name"><span>Sponsor</span></th>
+            <th md-column md-order-by="title"><span>Name</span></th>
+            <th md-column md-numeric md-order-by="taskboard_completed_card_size"><span>Current budget</span></th>
+            <th md-column md-numeric md-order-by="taskboard_total_size"><span>Total budget</span></th>
+            <th md-column md-order-by="due_date">Planned finish</th>
+            <th md-column >Sponsor</th>
+            <th md-column>Action</th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row md-select="item" md-select-id="{{item._id}}" ng-repeat="item in cards | filter: filterName | orderBy: cardOrder">
+            <td md-cell>{{item.extended_data.sponsor_name}}</td>
+            <td md-cell>{{item.title}}</td>
+            <td md-cell>{{item.taskboard_completed_card_size * 107}}</td>
+            <td md-cell>{{item.taskboard_total_size * 107}}</td>
+            <td md-cell>{{item.due_date}}</td>
+            <td md-cell>{{item.extended_data.sponsor_name}}</td>
+            <td md-cell ng-click="showDialog('E', item, $event)"><md-icon>edit</md-icon></td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
 </md-content>

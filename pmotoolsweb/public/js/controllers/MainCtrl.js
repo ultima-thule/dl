@@ -42,8 +42,8 @@ app.controller('MainController', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdD
           icon: 'people'
         },
         {
-          link : 'showListBottomSheet($event)',
-          title: 'Settings',
+          link : '/tabletest',
+          title: 'Table test',
           icon: 'settings'
         }
     ];

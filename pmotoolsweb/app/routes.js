@@ -75,7 +75,8 @@ module.exports = function(app) {
             console.log(req.params.id)
             if (err)
                 res.send(err);
-            res.append('Content-Disposition', 'attachment; filename=test.xlsx');
+            var date = reports[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
+            res.append('Content-Disposition', 'attachment; filename=report_' + date + '.xlsx');
             res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             console.log("File report was requested");
             res.send(reports[0].xls_data);

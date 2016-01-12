@@ -17,8 +17,8 @@ class ExcelReport (object):
 
         self.write_to_row = 0
         self.write_to_col = 0
-        self.worksheet.set_column(0, 1, 40)
-        self.worksheet.set_column(4, 5, 40)
+        self.worksheet.set_column(0, 0, 40)
+        self.worksheet.set_column(6, 6, 80)
 
         self._configure_lane_format()
         self._configure_wrap_format()
@@ -48,8 +48,15 @@ class ExcelReport (object):
 
 
     def _configure_risk_format (self):
+        self._format_risk_high_num = self.workbook.add_format()
+        self._format_risk_high_num.set_bg_color('#ff6666')
+        self._format_risk_high_num.set_num_format('#,##0')
         self._format_risk_high = self.workbook.add_format()
         self._format_risk_high.set_bg_color('#ff6666')
+
+        self._format_risk_medium_num = self.workbook.add_format()
+        self._format_risk_medium_num.set_bg_color('#ffff00')
+        self._format_risk_medium_num.set_num_format('#,##0')
         self._format_risk_medium = self.workbook.add_format()
         self._format_risk_medium.set_bg_color('#ffff00')
 
@@ -60,7 +67,7 @@ class ExcelReport (object):
         self._format_header.set_font_color('white')
         self._format_header.set_font_size (12)
 
-    def _configure_currency_format (self):
+    def _configure_currency_format(self):
         self._format_currency = self.workbook.add_format()
         self._format_currency.set_num_format('#,##0')
 
@@ -108,25 +115,31 @@ class ExcelReport (object):
 
 
     def writeSingleCard (self, card):
-            self._write_cell(card.title, self._format_wrap)
-            self._write_cell(str(card.task_board_completed_card_size), self._format_wrap)
-            self._write_cell(str(card.task_board_total_size), self._format_wrap)
-            self._write_cell("") #budget status
-            self._write_cell(card.due_date)
-            self._write_cell("") #release status
+            strComment = ""
+            cellFormatTxt = None
+            cellFormatNum = None
 
             if card.is_blocked:
-                self._write_cell(card.block_reason, self._format_risk_high)
-            else:
-                if (len(card.comments) > 0):
-                    noHtml = re.sub("<.*?>", "", card.comments[0].text)
-                    if card.type.name ==  'Progress: Risk identified':
-                        riskFormat = self._format_risk_medium
-                    elif card.type.name ==  'Progress: High risk':
-                        riskFormat = self._format_risk_high
-                    self._write_cell(noHtml, riskFormat)
-                else:
-                    self._write_cell("")
+                strComment = card.block_reason
+                cellFormatTxt = self._format_risk_medium
+                cellFormatNum = self._format_risk_medium_num
+            elif (len(card.comments) > 0):
+                strComment = re.sub("<.*?>", "", card.comments[0].text)
+                if card.type.name ==  'Progress: Risk identified':
+                    cellFormatTxt = self._format_risk_medium
+                    cellFormatNum = self._format_risk_medium_num
+                elif card.type.name ==  'Progress: High risk':
+                    cellFormatTxt = self._format_risk_high
+                    cellFormatNum = self._format_risk_high_num
+
+
+            self._write_cell(card.title, cellFormatTxt)
+            self._write_cell(str(card.task_board_completed_card_size), cellFormatNum)
+            self._write_cell(str(card.task_board_total_size), cellFormatNum)
+            self._write_cell("", cellFormatTxt) #budget status
+            self._write_cell(card.due_date, cellFormatTxt)
+            self._write_cell("", cellFormatTxt) #release status
+            self._write_cell(strComment, cellFormatTxt)
             self._write_cell("", None, True)
 
 
@@ -164,29 +177,39 @@ class ExcelReport (object):
 
 
     def writeCard (self, card):
-            self._write_cell(card.title, self._format_wrap)
-            self._write_cell(str(self.getInCurrency(card.taskboard_completed_card_size)), self._format_currency)
-            self._write_cell(str(self.getInCurrency(card.taskboard_total_size)), self._format_currency)
-            self._write_cell(self.getBudgetStatusName(card)) #budget status
-            if card.due_date is not None:
-                self._write_cell(card.due_date.strftime("%Y/%m/%d"))
-            else:
-                self._write_cell("")
-            self._write_cell(self.getReleaseStatusName(card)) #release status
 
-            if card.is_blocked:
-                self._write_cell(card.block_reason, self._format_risk_high)
+        strComment = ""
+        cellFormatTxt = None
+        cellFormatNum = self._format_currency
+
+        if card.is_blocked:
+            strComment = card.block_reason
+            cellFormatTxt = self._format_risk_medium
+            cellFormatNum = self._format_risk_medium_num
+        elif (len(card.comments) > 0):
+            strComment = re.sub("<.*?>", "", card.comments[0].text)
+            if card.type_name ==  'Progress: Risk identified':
+                cellFormatTxt = self._format_risk_medium
+                cellFormatNum = self._format_risk_medium_num
+            elif card.type_name == 'Progress: High risk':
+                cellFormatTxt = self._format_risk_high
+                cellFormatNum = self._format_risk_high_num
             else:
-                comments = card.comments
-                if (len(comments) > 0):
-                    noHtml = re.sub("<.*?>", "", card.comments[0].text)
-                    if card.type_name ==  'Progress: Risk identified':
-                        self._write_cell(noHtml, self._format_risk_medium)
-                    elif card.type_name ==  'Progress: High risk':
-                        self._write_cell(noHtml, self._format_risk_high)
-                else:
-                    self._write_cell("")
-            self._write_cell("", None, True)
+                strComment = ""
+
+
+        self._write_cell(card.title, cellFormatTxt)
+        self._write_cell(str(self.getInCurrency(card.taskboard_completed_card_size)), cellFormatNum)
+        self._write_cell(str(self.getInCurrency(card.taskboard_total_size)), cellFormatNum)
+        self._write_cell(self.getBudgetStatusName(card), cellFormatTxt) #budget status
+
+        if card.due_date is not None:
+            self._write_cell(card.due_date.strftime("%Y/%m/%d"), cellFormatTxt)
+        else:
+            self._write_cell("", cellFormatTxt)
+        self._write_cell(self.getReleaseStatusName(card), cellFormatTxt) #release status
+        self._write_cell(strComment, cellFormatTxt)
+        self._write_cell("", None, True)
 
 
     def writeSummary (self, in_progress, total):
