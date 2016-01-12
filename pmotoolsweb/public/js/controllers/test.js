@@ -1,0 +1,432 @@
+(function () {
+    'use strict';
+    var app = angular.module("simpleCRUD", ['ngMessages', 'ngMaterial']);
+    //Registrando iconos
+    app.config(iconConfiguration);
+    //Sobreescribiendo directiva md-maxlength
+    app.config(override_mdMaxlength);
+    //Funcionalidad del mantenimiento
+    app.controller('SimpleCRUDController', ['$scope', '$mdToast', '$mdDialog', SimpleCRUDController]);
+
+    //Funcion para configuracion de iconos
+    function iconConfiguration($mdIconProvider) {
+        $mdIconProvider.defaultIconSet('icons_24x24.svg', 24);
+    }
+
+    //Controller con funcionalidad del mantenimiento y del cuadro de dialogo
+    function SimpleCRUDController($scope, $mdToast, $mdDialog, $mdOpenMenu) {
+        //Data de prueba
+        $scope.view = {
+            dataTable: [
+                { "id": "570c9478-5fc8-4c33-82be-19184ada466c", "name": "Willie", "lastname": "Andrews", "email": "wandrews0@myspace.com", "direction": "4382 Hagan Drive" },
+                { "id": "f74b4996-9d6f-4b1a-97c3-912c159d9c5b", "name": "Gloria", "lastname": "Nelson", "email": "gnelson1@youku.com", "direction": "09 Goodland Lane" },
+                { "id": "39acb9d4-b313-472e-90f6-4afd8cf3cac3", "name": "Jeremy", "lastname": "Reyes", "email": "jreyes2@addthis.com", "direction": "94451 Talmadge Place" },
+                { "id": "3aea0235-8381-49b7-b8e6-50113d0af988", "name": "Daniel", "lastname": "Gray", "email": "dgray3@dedecms.com", "direction": "36 Hagan Place" },
+                { "id": "8099daf8-2210-4d34-9aaa-2e0d714503c4", "name": "Albert", "lastname": "Wood", "email": "awood4@state.gov", "direction": "29775 Hagan Way" },
+                { "id": "edfc944b-f87e-438e-b122-05e95d7ed59a", "name": "Kevin", "lastname": "Tucker", "email": "ktucker5@pagesperso-orange.fr", "direction": "59762 Farmco Junction" },
+                { "id": "346871de-6172-4baf-93aa-955282523038", "name": "Maria", "lastname": "Ferguson", "email": "mferguson6@mediafire.com", "direction": "8566 Fisk Trail" },
+                { "id": "72afca23-368b-490a-95b6-6494202814ce", "name": "Charles", "lastname": "Grant", "email": "cgrant7@youtu.be", "direction": "726 Mariners Cove Point" },
+                { "id": "98ea2793-4c82-4bad-98e9-d5dfff723fdf", "name": "Johnny", "lastname": "Thompson", "email": "jthompson8@google.ca", "direction": "08 Dahle Plaza" },
+                { "id": "38e9f6f6-615e-4ff9-8c8a-06e0d1b24ae9", "name": "John", "lastname": "Olson", "email": "jolson9@earthlink.net", "direction": "71 Dapin Trail" },
+                { "id": "d4d8e591-53ff-4261-a2fe-d5a37928458a", "name": "Virginia", "lastname": "Martin", "email": "vmartina@apache.org", "direction": "58304 Nancy Point" },
+                { "id": "53703796-496f-4b93-8ec0-c92f783aa6bc", "name": "Carol", "lastname": "Gonzales", "email": "cgonzalesb@blogger.com", "direction": "522 Pankratz Lane" }
+            ],
+            order: {
+                classification: 'lastname',
+                orderby: '+'
+            }
+        };
+
+        //Definicion de metodos
+        $scope.ordenarPor = ordenarPor;
+        $scope.clasificarPor = clasificarPor;
+        $scope.abrirMenu = abrirMenu;
+        $scope.mostrarDialogo = mostrarDialogo;
+
+
+
+        //Muestra un mensaje toast (funcion base)
+        function simpleToastBase(message, position, delay, action) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .content(message)
+                    .position(position)
+                    .hideDelay(delay)
+                    .action(action)
+            );
+        }
+
+        //Referencia: http://tinyurl.com/p8ylr8n
+        function generateUUID() {
+            var d = new Date().getTime();
+            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = (d + Math.random()*16)%16 | 0;
+                d = Math.floor(d/16);
+                return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+            });
+            return uuid;
+        }
+
+        //Muestra un mensaje toast de error
+        function mostrarError(mensaje) {
+            simpleToastBase(mensaje, 'bottom right', 6000, 'X');
+        }
+
+        //Ordena los elementos de forma ascendente o descendente
+        function ordenarPor(sign) {
+            $scope.view.order.orderby = sign;
+        }
+
+        //Ordena los elementos por nombre de propiedad
+        function clasificarPor(field) {
+            $scope.view.order.classification = field;
+        }
+
+        //Abre el menu de opciones
+        function abrirMenu(mdOpenMenu, event) {
+            mdOpenMenu(event);
+        }
+
+
+        //Muestra un cuadro de dialogo
+        function mostrarDialogo(operacion, data, event) {
+            //Guardando los datos a enviar
+            var tempData = undefined;
+            if (data === undefined) {
+                tempData = {};
+            } else {
+                tempData = {
+                    id: data.id,
+                    name: data.name,
+                    lastname: data.lastname,
+                    email: data.email,
+                    direction: data.direction
+
+                };
+            }
+            $mdDialog.show({
+                templateUrl: 'editor.html',
+                targetEvent: event,
+                locals: {
+                    selectedItem: tempData,
+                    dataTable: $scope.view.dataTable,
+                    operacion: operacion
+                },
+                bindToController: true,
+                controller: DialogController,
+                parent: angular.element(document.body)
+            })
+            .then(
+                function (result) {
+                    mostrarError(result);
+                }
+            );
+        }
+
+        //Controller de cuadro de dialogo
+        function DialogController($scope, $mdDialog, operacion, selectedItem, dataTable) {
+            $scope.view = {
+                dataTable: dataTable,
+                selectedItem: selectedItem,
+                operacion: 'Agregar'
+            };
+
+            //Determinando el tipo de operacion que es
+            switch (operacion) {
+                case 'C':
+                    $scope.view.operacion = 'Agregar';
+                    break;
+                case 'UD':
+                    $scope.view.operacion = 'Modificar';
+                    break;
+                case 'R':
+                    $scope.view.operacion = 'Detalles';
+                    break;
+                default:
+                    $scope.view.operacion = 'Detalles';
+                    break;
+            }
+
+            //Metodos del controller del cuadro de dialogo
+            $scope.regresar = regresar;
+            $scope.guardar = guardar;
+            $scope.borrar = borrar;
+
+
+            //Regresa a la ventana principal sin realizar accion alguna
+            function regresar() {
+                $mdDialog.cancel();
+            }
+
+
+            //Selecciona la opcion de agregar un elemento nuevo o modificar uno existente
+            function guardar() {
+                if ($scope.view.selectedItem.id === undefined) agregar();
+                else modificar();
+            }
+
+            //Permite agregar un nuevo elemento
+            function agregar() {
+                //Determinando si existe el elemento con el ID especificado
+                var temp = _.find($scope.view.dataTable, function (x) { return x.id === $scope.view.selectedItem.id; });
+                if (temp === undefined) {
+                    //Generando ID para el nuevo elemento
+                    $scope.view.selectedItem.id = generateUUID();
+                    $scope.view.dataTable.push($scope.view.selectedItem);
+                    $mdDialog.hide('Datos agregados con éxito');
+                } else {
+                    $mdDialog.hide('Ya están registrados los datos de la persona indicada');
+                }
+            }
+
+            //Permite modificar un registro
+            function modificar() {
+                //Determinando si existe el elemento con el ID especificado
+                var index = _.findIndex($scope.view.dataTable, { 'id': $scope.view.selectedItem.id });
+                if (index !== -1) {
+                    $scope.view.dataTable[index].name = $scope.view.selectedItem.name;
+                    $scope.view.dataTable[index].lastname = $scope.view.selectedItem.lastname;
+                    $scope.view.dataTable[index].email = $scope.view.selectedItem.email;
+                    $scope.view.dataTable[index].direction = $scope.view.selectedItem.direction;
+                    $mdDialog.hide('Datos modificados con éxito');
+                } else {
+                    $mdDialog.hide('No se pudo modificar los datos de la persona seleccionada');
+                }
+            }
+
+            //Permite eliminar un registro
+            function borrar() {
+                var item = _.find($scope.view.dataTable, function (x) { return x.id === $scope.view.selectedItem.id; });
+                if (item !== undefined) {
+                    _.pull($scope.view.dataTable, item);
+                    $mdDialog.hide('Datos borrados con éxito');
+                } else {
+                    $mdDialog.hide('No se pudo borrar los datos de la persona seleccionada');
+                }
+            }
+        }
+    }
+
+    //======= OVERRIDE DIRECTIVE =====================================================================//
+    //Sobreescribiendo md-maxlength (Reference: Jesús Rodríguez Rodríguez, http://tinyurl.com/o9xhnvg)
+    function override_mdMaxlength($provide) {
+        $provide.decorator(
+            'mdMaxlengthDirective',
+            function ($delegate) {
+                var mdMaxlength = $delegate[0];
+                var link = mdMaxlength.link;
+                mdMaxlength.compile = function () {
+                    return function (scope, element, attr, ctrls) {
+                        var maxlength;
+                        var ngModelCtrl = ctrls[0];
+                        var containerCtrl = ctrls[1];
+                        var charCountEl = angular.element('<div class="md-char-counter">');
+
+                        attr.$set('ngTrim', 'false');
+                        containerCtrl.element.append(charCountEl);
+
+                        ngModelCtrl.$formatters.push(renderCharCount);
+                        ngModelCtrl.$viewChangeListeners.push(renderCharCount);
+                        element.on(
+                            'input keydown',
+                            function () {
+                                renderCharCount(); //make sure it's called with no args
+                            }
+                        );
+
+                        scope.$watch(attr.mdMaxlength, function (value) {
+                            maxlength = value;
+                            if (angular.isNumber(value) && value > 0) {
+                                if (!charCountEl.parent().length) {
+                                    $animate.enter(
+                                        charCountEl,
+                                        containerCtrl.element,
+                                        angular.element(containerCtrl.element[0].lastElementChild)
+                                    );
+                                }
+                                renderCharCount();
+                            } else {
+                                $animate.leave(charCountEl);
+                            }
+                        });
+
+                        ngModelCtrl.$validators['md-maxlength'] = function (modelValue, viewValue) {
+                            if (!angular.isNumber(maxlength) || maxlength < 0) {
+                                return true;
+                            }
+                            return (modelValue || element.val() || viewValue || '').length <= maxlength;
+                        };
+
+                        function renderCharCount(value) {
+                            charCountEl.text((ngModelCtrl.$modelValue || '').length + '/' + maxlength);
+                            return value;
+                        }
+                    };
+                };
+                return $delegate;
+            }
+        );
+    }
+})();
+
+
+<span ng-app="simpleCRUD" ng-controller="SimpleCRUDController">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            Simple CRUD Angular Material
+            <span flex></span>
+            <md-menu>
+                <md-button class="md-icon-button" aria-label="Orden" ng-click="abrirMenu($mdOpenMenu, $event)">
+                    <md-icon md-svg-icon="white_order"></md-icon>
+                    <md-tooltip md-delay="1500" md-autohide="true">Orden</md-tooltip>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button class="md-button" ng-click="ordenarPor('+')">Ascendente</md-button>
+                    </md-menu-item>
+                    <md-menu-divider></md-menu-divider>
+                    <md-menu-item>
+                        <md-button class="md-button" ng-click="ordenarPor('-')">Descendente</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-menu>
+                <md-button class="md-icon-button" aria-label="Clasificar" ng-click="abrirMenu($mdOpenMenu, $event)">
+                    <md-icon md-svg-icon="white_classification"></md-icon>
+                    <md-tooltip md-delay="1500" md-autohide="true">Clasificar</md-tooltip>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button class="md-button" ng-click="clasificarPor('name')">Name</md-button>
+                    </md-menu-item>
+                    <md-menu-divider></md-menu-divider>
+                    <md-menu-item>
+                        <md-button class="md-button" ng-click="clasificarPor('lastname')">Last name</md-button>
+                    </md-menu-item>
+                    <md-menu-divider></md-menu-divider>
+                    <md-menu-item>
+                        <md-button class="md-button" ng-click="clasificarPor('email')">Email</md-button>
+                    </md-menu-item>
+                    <md-menu-divider></md-menu-divider>
+                    <md-menu-item>
+                        <md-button class="md-button" ng-click="clasificarPor('direction')">Direction</md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-toolbar>
+    <md-content class="full-heigth">
+        <md-list>
+            <md-list-item class="md-3-line" ng-repeat="element in view.dataTable | orderBy:view.order.orderby + view.order.classification" ng-click="mostrarDialogo('R', element, $event)">
+                <div class="md-list-item-text">
+                    <h3>{{element.lastname + ", " + element.name}}</h3>
+                    <h4>{{element.email}}</h4>
+                    <p>{{element.direction}}</p>
+                </div>
+                <md-icon aria-label="Editar" class="md-secondary" md-svg-icon="white_edit" ng-click="mostrarDialogo('UD', element, $event)"></md-icon>
+                <md-divider></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-content>
+    <md-button class="md-fab md-fab-bottom-right" aria-label="Nuevo">
+        <md-icon md-svg-icon="white_person_add" ng-click="mostrarDialogo('C', undefined, $event)"></md-icon>
+    </md-button>
+    <script type="text/ng-template" id="editor.html">
+        <md-dialog aria-label="Editar" class="dialog-95">
+            <form name="inputForm" novalidate>
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <md-button class="md-icon-button" ng-click="regresar()">
+                            <md-icon md-svg-icon="white_back" aria-label="Regresar"></md-icon>
+                            <md-tooltip md-delay="1500" md-autohide="true">Regresar</md-tooltip>
+                        </md-button>
+                        <h2>{{view.operacion}}</h2>
+                        <span flex></span>
+                        <md-button class="md-icon-button" ng-click="borrar()" ng-show="view.operacion === 'Modificar'">
+                            <md-icon md-svg-icon="white_delete" aria-label="Borrar"></md-icon>
+                            <md-tooltip md-delay="1500" md-autohide="true">Borrar</md-tooltip>
+                        </md-button>
+                        <md-button class="md-icon-button" ng-click="guardar()" ng-show="view.operacion === 'Agregar' || view.operacion === 'Modificar'" ng-disabled="inputForm.$invalid">
+                            <md-icon md-svg-icon="white_save" aria-label="Guardar"></md-icon>
+                            <md-tooltip md-delay="1500" md-autohide="true">Guardar</md-tooltip>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-dialog-content>
+                    <md-content layout-padding ng-cloak>
+                        <md-input-container>
+                            <label>ID (solo lectura)</label>
+                            <input type="text" readonly name="id" ng-model="view.selectedItem.id" />
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Name</label>
+                            <input type="text" name="name" required md-maxlength="50" ng-model="view.selectedItem.name" />
+                            <ng-messages for="inputForm.name.$error">
+                                <ng-message when="required">El nombre es obligatorio</ng-message>
+                                <ng-message when="md-maxlength">Use 50 caracteres o menos para el nombre</ng-message>
+                            </ng-messages>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Last name</label>
+                            <input type="text" name="lastname" md-maxlength="50" ng-model="view.selectedItem.lastname" />
+                            <ng-messages for="inputForm.lastname.$error">
+                                <ng-message when="md-maxlength">Use 50 caracteres o menos para el nombre</ng-message>
+                            </ng-messages>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Email</label>
+                            <input type="text" name="email" required ng-model="view.selectedItem.email" ng-pattern="/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i">
+                            <ng-messages for="inputForm.email.$error">
+                                <ng-message when="required">El correo es obligatorio</ng-message>
+                                <ng-message when="pattern">Email inválido</ng-message>
+                            </ng-messages>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Direction</label>
+                            <textarea rows="2" name="direccion" md-maxlength="100" ng-model="view.selectedItem.direction"></textarea>
+                            <ng-messages for="inputForm.direccion.$error">
+                                <ng-message when="md-maxlength">Use 100 caracteres o menos para la dirección</ng-message>
+                            </ng-messages>
+                        </md-input-container>
+                    </md-content>
+                </md-dialog-content>
+            </form>
+        </md-dialog>
+    </script>
+    <script type="text/ng-template" id="icons_24x24.svg">
+    <svg
+         width="24"
+         height="24"
+         viewBox="0 0 24 24"
+         xmlns="http://www.w3.org/2000/svg">
+        <g id="white_person_add">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+        </g>
+        <g id="white_delete">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+            <path d="M0 0h24v24H0z" fill="none" />
+        </g>
+        <g id="white_edit">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+            <path d="M0 0h24v24H0z" fill="none" />
+        </g>
+        <g id="white_save">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" />
+        </g>
+        <g id="white_back">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+        </g>
+        <g id="white_classification">
+            <path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z" />
+            <path d="M0 0h24v24H0z" fill="none" />
+        </g>
+        <g id="white_order">
+            <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z" />
+            <path d="M0 0h24v24H0z" fill="none" />
+        </g>
+    </svg>
+    </script>
+</span>

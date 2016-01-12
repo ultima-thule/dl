@@ -8,7 +8,6 @@ var methodOverride = require('method-override'); // simulate DELETE and PUT (exp
 var mongoose       = require('mongoose');
 var morgan         = require('morgan'); // log requests to the console (express4)
 
-
 // configuration ===========================================
 
 

@@ -5,6 +5,7 @@ var Team = require('./model/team');
 var Report = require('./model/report');
 var ConfigParam = require('./model/configparam');
 var Card = require('./model/card');
+var Sponsor = require('./model/sponsor');
 
 module.exports = function(app) {
 
@@ -138,6 +139,23 @@ module.exports = function(app) {
             res.json(cards); // return all teams in JSON format
         });
     });
+
+    // sponsor api route
+    app.get('/api/sponsors', function(req, res) {
+        // use mongoose to get all sponsors in the database
+        Sponsor.find(function(err, sponsors) {
+
+            console.log("sponsors")
+            console.log(sponsors)
+            // if there is an error retrieving, send the error.
+                            // nothing after res.send(err) will execute
+            if (err)
+                res.send(err);
+
+            res.json(sponsors); // return all teams in JSON format
+        });
+    });
+
 
     // route to handle creating goes here (app.post)
     // route to handle delete goes here (app.delete)

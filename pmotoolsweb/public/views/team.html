@@ -11,56 +11,82 @@
 </md-toolbar>
 
 <!-- list of teams -->
+
 <md-content flex md-scroll-y layout="column" layout-fill layout-padding>
     <md-list>
-        <md-list-item class="md-3-line" ng-repeat="item in teams" ng-click="mostrarDialogo('R', element, $event)">
+        <md-list-item class="md-3-line" ng-repeat="item in teams" ng-click="showDialog('R', item, $event)">
             <div class="md-list-item-text">
                 <h3>{{item.name}}</h3>
                 <h4>{{item.sponsor_name}}</h4>
                 <p>{{item.location}}</p>
             </div>
-            <md-icon aria-label="Edit team" class="md-secondary" ng-click="mostrarDialogo('UD', element, $event)">edit</md-icon>
+            <md-icon aria-label="Edit team" class="md-secondary" ng-click="showDialog('E', item, $event)">edit</md-icon>
             <md-divider></md-divider>
         </md-list-item>
     </md-list>
 </md-content>
 
-<!--
-<div ng-cloak="" layout="row">
-
-    <md-content flex="auto" layout-padding="">
-        <form>
-            <md-input-container class="md-block">
-                <label>Name</label>
-                <input ng-model="team.name">
-            </md-input-container>
-            <md-input-container class="md-block">
-                <label>Location</label>
-                <md-select ng-model="team.location">
-                    <md-option ng-repeat="location in locations" value="{{location.name}}">
-                        {{location.name}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
-            <md-input-container class="md-block" >
-            <label>Default category for initiatives</label>
-            <md-select ng-model="team.default_category">
-                <md-option ng-repeat="category in categories" value="{{category.name}}">
-                    {{category.name}}
-                </md-option>
-            </md-select>
-            </md-input-container>
-            <md-input-container class="md-block" >
-                <label>PMO</label>
-                <md-select ng-model="team.pmo">
-                    <md-option ng-repeat="pmo in pmos" value="{{pmo.name}}">
-                        {{pmo.name}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
-            <md-button class="md-raised" ng-click="createTeam()">Save</md-button>
-       </form>
-    </md-content>
-</div>
-
--->
+<script type="text/ng-template" id="editor.html">
+    <md-dialog aria-label="Edit" >
+        <form name="inputForm" novalidate>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <md-button class="md-icon-button" ng-click="back()">
+                        <md-icon aria-label="Back">arrow_back</md-icon>
+                        <md-tooltip md-delay="1500" md-autohide="true">Back</md-tooltip>
+                    </md-button>
+                    <h2>{{view.operation}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="remove()" ng-show="view.operation === 'Edit'">
+                        <md-icon aria-label="Remove">delete</md-icon>
+                        <md-tooltip md-delay="1500" md-autohide="true">Remove</md-tooltip>
+                    </md-button>
+                    <md-button class="md-icon-button" ng-click="save()" ng-show="view.operation === 'Create' || view.operation === 'Edit'" ng-disabled="inputForm.$invalid">
+                        <md-icon aria-label="Save">save</md-icon>
+                        <md-tooltip md-delay="1500" md-autohide="true">Save</md-tooltip>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <md-content layout-padding ng-cloak>
+                    <div layout-gt-sm="row">
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Name</label>
+                            <input type="text" name="name" required md-maxlength="50" ng-model="view.selectedItem.name" />
+                            <ng-messages for="inputForm.name.$error">
+                                <ng-message when="required">The field is required</ng-message>
+                                <ng-message when="md-maxlength">Use 50 characters</ng-message>
+                            </ng-messages>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Location</label>
+                            <md-select ng-model="view.selectedItem.location">
+                                <md-option ng-repeat="location in locations" value="{{location.name}}">
+                                    {{location.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <md-input-container>
+                        <label>Sponsor</label>
+                        <textarea rows="2" name="sponsor" md-maxlength="50" ng-model="view.selectedItem.sponsor"></textarea>
+                        <ng-messages for="inputForm.sponsor.$error">
+                            <ng-message when="md-maxlength">Use 50 characters</ng-message>
+                        </ng-messages>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Type</label>
+                        <md-select ng-model="view.selectedItem.category">
+                            <md-option ng-repeat="category in categories" value="{{category.name}}">
+                                {{category.name}}
+                            </md-option>
+                        </md-select>
+                        <ng-messages for="inputForm.category.$error">
+                            <ng-message when="md-maxlength">Use 50 characters</ng-message>
+                        </ng-messages>
+                    </md-input-container>
+                </md-content>
+            </md-dialog-content>
+        </form>
+    </md-dialog>
+</script>

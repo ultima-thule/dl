@@ -1,3 +1,5 @@
+body { font-family: 'Roboto', sans-serif; }
+
 / Rules for sizing the icon.
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
@@ -82,3 +84,9 @@ md-sidenav {
   border-radius: 99%;
 }
 
+/* edit/view  team dialog */
+
+.dialog-95 {
+    width: 95%;
+    height: auto;
+}

@@ -1,6 +1,6 @@
 {
     "name": "pmotoolsweb",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "dependencies": {
         "bootstrap": "latest",
         "font-awesome": "latest",
@@ -9,6 +9,11 @@
         "angular-route": "latest",
         "angular-material": "latest",
         "material-design-icons": "latest",
-        "angular-file-saver": "latest"
+        "angular-file-saver": "latest",
+        "dndLists": "latest",
+        "mdDataTable": "latest",
+        "angular-material-icons": "latest",
+        "lodash": "latest",
+        "angular-lodash-module": "latest"
     }
 }

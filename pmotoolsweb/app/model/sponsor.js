@@ -4,13 +4,8 @@ var mongoose = require('mongoose');
 // define our sponsor model
 // module.exports allows us to pass this to other files when it is called
 
-var Schema = mongoose.Schema;
-
-var sponsorSchema = new Schema({
+module.exports = mongoose.model('sponsor', {
     name : String,
-    bo_name: String,
-    default_team: ObjectId,
-    default_team_name: String
-});a
+    bo_name: String
+}, 'sponsor');
 
-module.exports = mongoose.model('Sponsor', sponsorSchema);
