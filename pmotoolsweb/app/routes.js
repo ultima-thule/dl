@@ -102,7 +102,9 @@ module.exports = function(app) {
     // generate new report
     app.get('/api/genreport', function(req, res) {
 
-        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen.py']);
+        //var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen.py']);
+        var python = require('child_process').spawn('C://python34//python.exe', ["C://Users//jgrzywna//PycharmProjects//dl//pmotoolsweb//public//python//py_gen.py"]);
+
 
         var output = "";
         python.stdout.on('data', function(){ output += data });
