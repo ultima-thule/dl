@@ -6,6 +6,7 @@ var Report = require('./model/report');
 var ConfigParam = require('./model/configparam');
 var Card = require('./model/card');
 var Sponsor = require('./model/sponsor');
+var LeanKitClient  = require("leankit-client");
 
 module.exports = function(app) {
 
@@ -157,6 +158,19 @@ module.exports = function(app) {
         });
     });
 
+    // synchro api route
+    app.get('/api/synchro', function(req, res) {
+        var accountName = "dreamlab";
+        var email = "joanna.grzywna@grupaonet.pl";
+        var password = "piotrek2003";
+        var LeanKitClient = require( "leankit-client" );
+        var client = new LeanKitClient(accountName, email, password);
+        client.getBoard(249156903( function( err, boards ) {
+	console.log( boards );
+} );
+
+        res.send("OK");
+    });
 
     // route to handle creating goes here (app.post)
     // route to handle delete goes here (app.delete)

@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 
 module.exports = mongoose.model('sponsor', {
     name : String,
-    bo_name: String
+    bo_name: String,
+    tag: String
 }, 'sponsor');
 

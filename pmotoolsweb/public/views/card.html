@@ -27,26 +27,100 @@
       <table md-table md-progress="promise">
         <thead md-head md-order="cardOrder">
           <tr md-row>
-            <th md-column md-order-by="extended_data.sponsor_name"><span>Sponsor</span></th>
             <th md-column md-order-by="title"><span>Name</span></th>
-            <th md-column md-numeric md-order-by="taskboard_completed_card_size"><span>Current budget</span></th>
-            <th md-column md-numeric md-order-by="taskboard_total_size"><span>Total budget</span></th>
+            <th md-column md-numeric md-order-by="taskboard_completed_card_size"><span>Current budget (PLN)</span></th>
+            <th md-column md-numeric md-order-by="taskboard_completion_percent"><span>Budget %</span></th>
             <th md-column md-order-by="due_date">Planned finish</th>
-            <th md-column >Sponsor</th>
+            <th md-column >Status</th>
             <th md-column>Action</th>
           </tr>
         </thead>
         <tbody md-body>
           <tr md-row md-select="item" md-select-id="{{item._id}}" ng-repeat="item in cards | filter: filterName | orderBy: cardOrder">
-            <td md-cell>{{item.extended_data.sponsor_name}}</td>
             <td md-cell>{{item.title}}</td>
-            <td md-cell>{{item.taskboard_completed_card_size * 107}}</td>
-            <td md-cell>{{item.taskboard_total_size * 107}}</td>
-            <td md-cell>{{item.due_date}}</td>
-            <td md-cell>{{item.extended_data.sponsor_name}}</td>
-            <td md-cell ng-click="showDialog('E', item, $event)"><md-icon>edit</md-icon></td>
+            <td md-cell>{{item.taskboard_completed_card_size * 107 | number:0}}</td>
+            <td md-cell>{{item.taskboard_completion_percent}}</td>
+            <td md-cell>{{item.due_date | date: format: medium}}</td>
+            <td md-cell>{{item.workflow_status_name}}</td>
+            <td md-cell ng-click="showDialog('R', item, $event)"><md-icon>edit</md-icon></td>
           </tr>
         </tbody>
       </table>
     </md-table-container>
 </md-content>
+
+<!-- edit dialogs -->
+
+<script type="text/ng-template" id="editor.html">
+    <md-dialog aria-label="Edit" class="dialog-95">
+        <form name="inputForm" novalidate>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <md-button class="md-icon-button" ng-click="back()">
+                        <md-icon aria-label="Back">arrow_back</md-icon>
+                        <md-tooltip md-delay="1500" md-autohide="true">Back</md-tooltip>
+                    </md-button>
+                    <h2>{{view.operation}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="save()" ng-show="view.operation === 'Create' || view.operation === 'Edit'" ng-disabled="inputForm.$invalid">
+                        <md-icon aria-label="Save">save</md-icon>
+                        <md-tooltip md-delay="1500" md-autohide="true">Save</md-tooltip>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <md-content layout-padding ng-cloak md-theme="docs-dark">
+                    <div layout-gt-sm="row">
+                        <md-input-container flex-gt-sm>
+                            <label>Initiative</label>
+                            <input type="text" name="name" disabled ng-model="view.selectedItem.title"/>
+                        </md-input-container>
+                    </div>
+                </md-content>
+                <md-content layout-padding ng-cloak>
+                    <div layout-gt-sm="row">
+                        <md-input-container>
+                            <label>Sponsor</label>
+                            <input type="text" name="sponsor" disabled  ng-model="view.selectedItem.extended_data.sponsor_name"></textarea>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Team</label>
+                            <input type="text" name="team_name" disabled ng-model="view.selectedItem.team_name" />
+                        </md-input-container>
+                    </div>
+                    <div layout-gt-sm="row">
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Actual cost</label>
+                            <input type="text" name="taskboard_completed_card_size" type="number" step="any" disabled  ng-model="view.selectedItem.taskboard_completed_card_size" />
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Predicted cost</label>
+                            <input type="text" name="taskboard_total_size" type="number" step="any" disabled ng-model="view.selectedItem.taskboard_total_size" />
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>% budget</label>
+                            <input type="text" name=" taskboard_completion_percent" type="number" step="any" disabled ng-model="view.selectedItem. taskboard_completion_percent" />
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Budget status</label>
+                            <input type="text" name="virt_budget_status" disabled ng-model="view.selectedItem.virt_budget_status" />
+                        </md-input-container>
+                    </div>
+                    <div layout-gt-sm="row">
+                        <md-datepicker ng-model="view.selectedItem.due_date" md-placeholder="Planned release date" disabled></md-datepicker>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Release status</label>
+                            <input type="text" name="virt_release_status" ng-model="view.selectedItem.virt_release_status" />
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Status</label>
+                            <input type="text" name="workflow_status_name" ng-model="view.selectedItem.workflow_status_name" />
+                        </md-input-container>
+
+
+                    </div>
+                </md-content>
+            </md-dialog-content>
+        </form>
+    </md-dialog>
+</script>

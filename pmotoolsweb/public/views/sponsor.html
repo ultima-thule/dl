@@ -20,7 +20,7 @@
         </md-input-container>
 
         <div ng-hide="true">
-            {{(filteredItems = (teams | filter: filterName))}}
+            {{(filteredItems = (sponsors | filter: filterName))}}
         </div>
     </md-card>
     <md-table-container>
@@ -29,13 +29,15 @@
           <tr md-row>
             <th md-column md-order-by="name"><span>Name</span></th>
             <th md-column md-order-by="bo_name"><span>Business Owner</span></th>
-              <th md-column>Action</th>
+            <th md-column md-order-by="tag"><span>LeanKit tag</span></th>
+            <th md-column>Action</th>
           </tr>
         </thead>
         <tbody md-body>
-          <tr md-row md-select="item" md-select-id="{{item._id}}" ng-repeat="item in sponsors | filter: filterName | orderBy: sponsorOrder | limitTo: query.limit: (query.page- 1) * query.limit">
+          <tr md-row md-select="item" md-select-id="{{item._id}}" ng-repeat="item in filteredItems | orderBy: sponsorOrder | limitTo: query.limit: (query.page- 1) * query.limit">
             <td md-cell>{{item.name}}</td>
             <td md-cell>{{item.bo_name}}</td>
+            <td md-cell>{{item.tag}}</td>
             <td md-cell ng-click="showDialog('E', item, $event)" ><md-icon>edit</md-icon></td>
           </tr>
         </tbody>
@@ -81,6 +83,13 @@
                             <textarea rows="2" name="bo_name" md-maxlength="50" ng-model="view.selectedItem.bo_name"></textarea>
                             <ng-messages for="inputForm.bo_name.$error">
                                 <ng-message when="md-maxlength">Use 50 characters</ng-message>
+                            </ng-messages>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>LeanKit tag</label>
+                            <textarea rows="2" name="tag" md-maxlength="50" ng-model="view.selectedItem.tag"></textarea>
+                            <ng-messages for="inputForm.bo_name.$error">
+                                <ng-message when="md-maxlength">Use 20 characters</ng-message>
                             </ng-messages>
                         </md-input-container>
                     </div>

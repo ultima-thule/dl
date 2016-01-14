@@ -6,6 +6,7 @@ angular.module('TeamCtrl', ['ngMaterial', 'mdDataTable'])
     $scope.formData = {};
 
     $scope.title = "Teams configuration";
+
     $scope.query = {
         limit: '10',
         page: 1

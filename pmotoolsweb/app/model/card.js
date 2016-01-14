@@ -4,8 +4,13 @@ var mongoose = require('mongoose');
 // define our team  model
 // module.exports allows us to pass this to other files when it is called
 
+function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+};
 
-var CommentSchema = new mongoose.Schema(
+var commentSchema = new mongoose.Schema(
     {
         comment_id: Number,
         text: String,
@@ -13,9 +18,10 @@ var CommentSchema = new mongoose.Schema(
         posted_by_id: Number,
         posted_by_full_name: String
     }
-    );
+);
 
-module.exports = mongoose.model('card', {
+var cardSchema = new mongoose.Schema(
+{
     card_id: Number,
     active: Boolean,
     assigned_user_id: Number,
@@ -26,7 +32,7 @@ module.exports = mongoose.model('card', {
     block_state_change_date: Date,
     class_of_service_id: Number,
     class_of_service_title : String,
-    comments: [CommentSchema],
+    comments: [commentSchema],
     comments_count: Number,
     current_taskboard_id: Number,
     create_date: Date,
@@ -72,5 +78,29 @@ module.exports = mongoose.model('card', {
         budget_status_name: String,
         release_status_name: String
     }
+},
+{
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true }
+});
 
-}, 'card');
+cardSchema.virtual('virt_budget_status').get(function () {
+    if (this.taskboard_completed_card_size <= this.taskboard_total_size)
+    {
+        return "in budget";
+    }
+    return "budget exceeded";
+});
+
+cardSchema.virtual('virt_release_status').get(function () {
+    if (this.workflow_status_name == "Recently Done") { return "released"; }
+    if (this.workflow_status_name == "Todo") { return "not started"; }
+    if (typeof(this.due_date) != "undefined" && addDays (this.due_date, 1) >= new Date())
+    {
+        return "in plan";
+    }
+    return "term exceeded";
+});
+
+module.exports = mongoose.model('card', cardSchema, 'card');
+

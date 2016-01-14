@@ -36,7 +36,7 @@
           </tr>
         </thead>
         <tbody md-body>
-          <tr md-row md-select="item" md-select-id="{{item._id}}" ng-repeat="item in teams | filter: filterName | orderBy: teamOrder | limitTo: query.limit: (query.page- 1) * query.limit">
+          <tr md-row md-select="item" md-select-id="{{item._id}}" ng-repeat="item in filteredItems | orderBy: teamOrder | limitTo: query.limit: (query.page- 1) * query.limit">
             <td md-cell>{{item.name}}</td>
             <td md-cell>{{item.location}}</td>
             <td md-cell>{{item.sponsor_name}}</td>

@@ -7,6 +7,7 @@ import io
 import re
 
 glNumberOfWraps = 7
+glColWidth = []
 
 class ExcelReport (object):
 
@@ -17,29 +18,44 @@ class ExcelReport (object):
 
         self.write_to_row = 0
         self.write_to_col = 0
-        self.worksheet.set_column(0, 0, 40)
-        self.worksheet.set_column(6, 6, 80)
+        # self.worksheet.set_column(0, 0, 40)
+        # self.worksheet.set_column(6, 6, 80)
 
         self._configure_lane_format()
+        self._configure_lane_currency_format()
         self._configure_wrap_format()
         self._configure_risk_format()
         self._configure_header_format()
         self._configure_currency_format()
-
+        self.sponsors_dict = {}
 
     def __enter__(self):
         return self
 
 
     def close(self):
+        self._configure_cols_width()
         self.workbook.close()
         self.output.seek(0)
         return self.output.getvalue()
 
 
+    def _configure_cols_width (self):
+        global glNumberOfWraps
+        global glColWidth
+        for i in range(glNumberOfWraps):
+            self.worksheet.set_column(i, i, min(glColWidth[i], 100))
+
+
     def _configure_lane_format (self):
         self._format_lane = self.workbook.add_format()
         self._format_lane.set_bg_color('#c0c0c0')
+
+
+    def _configure_lane_currency_format (self):
+        self._format_lane_currency= self.workbook.add_format()
+        self._format_lane_currency.set_bg_color('#c0c0c0')
+        self._format_lane_currency.set_num_format('#,##0')
 
 
     def _configure_wrap_format (self):
@@ -80,14 +96,23 @@ class ExcelReport (object):
 
 
     def _write_header (self):
+        global glNumberOfWraps
+        global glColWidth
+
         headers = ["Business initiative", "Actual cost", "Estimated cost",
                    "Budget status", "Planned release date", "Release status", "Risks & notes"]
-        for i in headers:
-            self._write_cell(i, self._format_header)
-        self._write_cell("", None, True)
+        glNumberOfWraps = len(headers)
+
+        glColWidth = [len(headers[x]) for x in range(glNumberOfWraps)]
+
+        for i, elem in enumerate(headers):
+            self._write_cell(i, elem, self._format_header)
+        self._write_cell(0, "", None, True)
 
 
-    def _write_cell(self, text, cell_format=None, lastCell=False):
+    def _write_cell(self, position, text, cell_format=None, lastCell=False):
+        global glColWidth
+        glColWidth[position] = max(glColWidth[position], len(str(text)))
         if text.isdigit():
             self.worksheet.write_number(self.write_to_row, self.write_to_col, int(text), cell_format)
         else:
@@ -100,7 +125,8 @@ class ExcelReport (object):
                                     self.write_to_col + mergeCount - 1, text, cell_format)
         self._reset_cnt (lastCell)
 
-    def initReport (self):
+    def initReport (self, sponsors_dict):
+        self.sponsors_dict = sponsors_dict
         self._write_header()
 
 
@@ -111,7 +137,7 @@ class ExcelReport (object):
             self._write_merged_cell (lane.parent_lane.title, glNumberOfWraps, self._format_lane, True)
 
     def laneBreak (self):
-        self._write_cell("", None, True)
+        self._write_cell(0, "", None, True)
 
 
     def writeSingleCard (self, card):
@@ -133,14 +159,14 @@ class ExcelReport (object):
                     cellFormatNum = self._format_risk_high_num
 
 
-            self._write_cell(card.title, cellFormatTxt)
-            self._write_cell(str(card.task_board_completed_card_size), cellFormatNum)
-            self._write_cell(str(card.task_board_total_size), cellFormatNum)
-            self._write_cell("", cellFormatTxt) #budget status
-            self._write_cell(card.due_date, cellFormatTxt)
-            self._write_cell("", cellFormatTxt) #release status
-            self._write_cell(strComment, cellFormatTxt)
-            self._write_cell("", None, True)
+            self._write_cell(0, card.title, cellFormatTxt)
+            self._write_cell(1, str(card.task_board_completed_card_size), cellFormatNum)
+            self._write_cell(2, str(card.task_board_total_size), cellFormatNum)
+            self._write_cell(3, "", cellFormatTxt) #budget status
+            self._write_cell(4, card.due_date, cellFormatTxt)
+            self._write_cell(5, "", cellFormatTxt) #release status
+            self._write_cell(6, strComment, cellFormatTxt)
+            self._write_cell(0, "", None, True)
 
 
     def writeTeam (self, team):
@@ -150,7 +176,8 @@ class ExcelReport (object):
 
     def writeSponsor (self, sponsor_name):
         global glNumberOfWraps
-        self._write_merged_cell(sponsor_name, glNumberOfWraps, self._format_lane, True)
+
+        self._write_merged_cell(self.sponsors_dict.get(sponsor_name, ""), glNumberOfWraps, self._format_lane, True)
 
 
     def getBudgetStatusName(self, card):
@@ -198,26 +225,26 @@ class ExcelReport (object):
                 strComment = ""
 
 
-        self._write_cell(card.title, cellFormatTxt)
-        self._write_cell(str(self.getInCurrency(card.taskboard_completed_card_size)), cellFormatNum)
-        self._write_cell(str(self.getInCurrency(card.taskboard_total_size)), cellFormatNum)
-        self._write_cell(self.getBudgetStatusName(card), cellFormatTxt) #budget status
+        self._write_cell(0, card.title, cellFormatTxt)
+        self._write_cell(1, str(self.getInCurrency(card.taskboard_completed_card_size)), cellFormatNum)
+        self._write_cell(2, str(self.getInCurrency(card.taskboard_total_size)), cellFormatNum)
+        self._write_cell(3, self.getBudgetStatusName(card), cellFormatTxt) #budget status
 
         if card.due_date is not None:
-            self._write_cell(card.due_date.strftime("%Y/%m/%d"), cellFormatTxt)
+            self._write_cell(4, card.due_date.strftime("%Y/%m/%d"), cellFormatTxt)
         else:
-            self._write_cell("", cellFormatTxt)
-        self._write_cell(self.getReleaseStatusName(card), cellFormatTxt) #release status
-        self._write_cell(strComment, cellFormatTxt)
-        self._write_cell("", None, True)
+            self._write_cell(4, "", cellFormatTxt)
+        self._write_cell(5, self.getReleaseStatusName(card), cellFormatTxt) #release status
+        self._write_cell(6, strComment, cellFormatTxt)
+        self._write_cell(0, "", None, True)
 
 
-    def writeSummary (self, in_progress, total):
-            self._write_cell("Total", self._format_lane)
-            self._write_cell(str(self.getInCurrency(in_progress)), self._format_currency)
-            self._write_cell(str(self.getInCurrency(total)), self._format_currency)
-            self._write_cell("")
-            self._write_cell("")
-            self._write_cell("")
-            self._write_cell("")
-            self._write_cell("", None, True)
+    def writeSummary (self, in_progress, total, label):
+            self._write_cell(0, label, self._format_lane)
+            self._write_cell(1, str(self.getInCurrency(in_progress)), self._format_lane_currency)
+            self._write_cell(2, str(self.getInCurrency(total)), self._format_lane_currency)
+            self._write_cell(3, "", self._format_lane)
+            self._write_cell(4, "", self._format_lane)
+            self._write_cell(5, "", self._format_lane)
+            self._write_cell(6, "", self._format_lane)
+            self._write_cell(0, "", None, True)

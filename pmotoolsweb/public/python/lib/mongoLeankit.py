@@ -31,6 +31,7 @@ class Comment (EmbeddedDocument):
 class Sponsor(Document):
     name = StringField()
     bo_name = StringField()
+    tag = StringField()
 
 
 class CardExtend(EmbeddedDocument):

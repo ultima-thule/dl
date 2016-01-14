@@ -93,6 +93,7 @@ def _createCardExtend(card):
     #new fields for report
     c.budget_status_name = _getBudgetStatusName(card.taskboard_completed_card_size, card.taskboard_total_size)
     c.release_status_name = _getReleaseStatusName(card.workflow_status_name, card.due_date)
+    c.sponsor_name = _getSponsorName(card.tags)
     c.category_name = "not set"
     c.initiative_type_name = "not set"
 
@@ -196,6 +197,14 @@ def _getReleaseStatusName(workflow_step, due_date):
         return "in plan"
     return "term exceeded"
 
+def _getSponsorName(tags):
+    if tags is None or len(tags) == 0:
+        return ""
+    tagBo = [x for x in tags if str(x).startswith("BO_")]
+    if len(tagBo) > 0:
+        return tagBo[0]
+    return ""
+
 
 def _insertTeam(lane):
     t = lib.mongoLeankit.Team()
@@ -249,10 +258,11 @@ if __name__ == '__main__':
     board = kanban.getBoard(title=board_name)
     # _insertMasterLanes(board.root_lane.child_lanes, board.id)
     _insertAllCardsForBoard(board.root_lane.child_lanes, '')
-    _insertAllTeamsForBoard(board)
+    # _insertAllTeamsForBoard(board)
     # board.printLanes(True, "Current development plan")
     # board.generateReport(report, "Current development plan")
 
     # Print all users.
-    _insertUsers(board.users, board.id)
+    # _insertUsers(board.users, board.id)
+
 

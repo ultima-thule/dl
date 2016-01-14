@@ -42,7 +42,8 @@ angular.module('SponsorCtrl', [])
             tempData = {
                 id: data._id,
                 name: data.name,
-                bo_name: data.bo_name
+                bo_name: data.bo_name,
+                tag: data.tag
             };
         }
         $mdDialog.show({

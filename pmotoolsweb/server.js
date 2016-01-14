@@ -40,6 +40,9 @@ app.use(express.static(__dirname + '/public'));
 // log every request to the console
 app.use(morgan('dev'));
 
+//leankit connection conf
+//var client = LeanKitClient.createClient("dreamlab", "joanna.grzywna@grupaonet.pl", "piotrek2003");
+
 // routes ==================================================
 require('./app/routes')(app); // configure our routes
 
