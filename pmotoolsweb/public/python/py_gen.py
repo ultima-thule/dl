@@ -7,7 +7,7 @@ import datetime
 
 
 def _initMongoConn ():
-    connect('leankit')
+    connect('leankit', host='10.188.128.11')
 
 def _initSponsorsDict ():
     spons_dict = {}
