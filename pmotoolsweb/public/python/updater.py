@@ -8,7 +8,7 @@ import datetime
 globalTeamDict = {}
 
 def _initMongoConn ():
-    connect('leankit', host='10.188.128.11')
+    connect('leankit')
 
 def _insertBoards (boards):
     for board in boards:
