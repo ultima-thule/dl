@@ -165,10 +165,9 @@ module.exports = function(app) {
         var password = "piotrek2003";
         var LeanKitClient = require( "leankit-client" );
         var client = new LeanKitClient(accountName, email, password);
-        client.getBoard(249156903( function( err, boards ) {
-	console.log( boards );
-} );
-
+//        client.getBoard(249156903, ( function( err, boards ) {
+//	        console.log( boards );
+//        } );
         res.send("OK");
     });
 
