@@ -205,37 +205,33 @@ class ExcelReport (object):
 
     def writeCard (self, card):
 
-        strComment = ""
+        self._write_cell(0, card.title)
+        self._write_cell(1, str(self.getInCurrency(card.taskboard_completed_card_size)), self._format_currency)
+        self._write_cell(2, str(self.getInCurrency(card.taskboard_total_size)), self._format_currency)
+
+        budgetTxt = self.getBudgetStatusName(card)
         cellFormatTxt = None
-        cellFormatNum = self._format_currency
-
-        if card.is_blocked:
-            strComment = card.block_reason
-            cellFormatTxt = self._format_risk_medium
-            cellFormatNum = self._format_risk_medium_num
-        elif (len(card.comments) > 0):
-            strComment = re.sub("<.*?>", "", card.comments[0].text)
-            if card.type_name ==  'Progress: Risk identified':
-                cellFormatTxt = self._format_risk_medium
-                cellFormatNum = self._format_risk_medium_num
-            elif card.type_name == 'Progress: High risk':
-                cellFormatTxt = self._format_risk_high
-                cellFormatNum = self._format_risk_high_num
-            else:
-                strComment = ""
-
-
-        self._write_cell(0, card.title, cellFormatTxt)
-        self._write_cell(1, str(self.getInCurrency(card.taskboard_completed_card_size)), cellFormatNum)
-        self._write_cell(2, str(self.getInCurrency(card.taskboard_total_size)), cellFormatNum)
-        self._write_cell(3, self.getBudgetStatusName(card), cellFormatTxt) #budget status
+        if budgetTxt == "budget exceeded":
+            cellFormatTxt = self._format_risk_high
+        self._write_cell(3, budgetTxt, cellFormatTxt) #budget status
 
         if card.due_date is not None:
-            self._write_cell(4, card.due_date.strftime("%Y/%m/%d"), cellFormatTxt)
+            self._write_cell(4, card.due_date.strftime("%Y/%m/%d"))
         else:
-            self._write_cell(4, "", cellFormatTxt)
-        self._write_cell(5, self.getReleaseStatusName(card), cellFormatTxt) #release status
-        self._write_cell(6, strComment, cellFormatTxt)
+            self._write_cell(4, "")
+        releaseTxt = self.getReleaseStatusName(card)
+        cellFormatTxt = None
+        if releaseTxt == "term exceeded":
+            cellFormatTxt = self._format_risk_high
+        self._write_cell(5, releaseTxt, cellFormatTxt) #release status
+
+        strComment = ""
+        if card.is_blocked:
+            strComment = card.block_reason
+        elif len(card.comments) > 0 and (card.type_name == 'Progress: Risk identified' or card.type_name == 'Progress: High risk'):
+            strComment = re.sub("<.*?>", "", card.comments[0].text)
+        self._write_cell(6, strComment)
+
         self._write_cell(0, "", None, True)
 
 
