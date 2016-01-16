@@ -193,6 +193,8 @@ class ExcelReport (object):
             return "released"
         if card.workflow_status_name == "Todo":
             return "not started"
+        if card.due_date is None:
+            return ""
         if card.due_date is not None and card.due_date + datetime.timedelta(days=1) >= datetime.datetime.today():
             return "in plan"
         return "term exceeded"
