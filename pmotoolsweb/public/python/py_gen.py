@@ -5,6 +5,8 @@ import lib.mongoLeankit
 import lib.excel
 import datetime
 
+sum_in_progress = 0
+sum_total = 0
 
 def _initMongoConn ():
     connect('leankit')
@@ -17,25 +19,16 @@ def _initSponsorsDict ():
     return spons_dict
 
 
-if __name__ == '__main__':
-    _initMongoConn()
-
-    excelReport = lib.excel.ExcelReport(datetime.datetime.now().strftime("Status_%Y-%m-%d-%H-%M-%S.xlsx"),
-                         "Portfolio DreamLab")
-    excelReport.initReport(_initSponsorsDict ())
+def writeCollection(collection, excelReport):
+    global sum_in_progress
+    global sum_total
 
     last_sponsor = "Not defined"
     sponsor_sum_in_progress = 0
     sponsor_sum_total = 0
-    sum_in_progress = 0
-    sum_total = 0
-    # teams = lib.mongoLeankit.Team.objects().order_by('location', 'name')
-    # for team in teams:
 
-    cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
-                                  & Q(board_masterlane_title='Current development plan')).order_by('extended_data__sponsor_name', 'title')
-    if len(cards) > 0:
-        for index, card in enumerate(cards):
+    if len(collection) > 0:
+        for index, card in enumerate(collection):
             if card.extended_data.sponsor_name != last_sponsor:
                 if index != 0:
                     excelReport.writeSummary(sponsor_sum_in_progress, sponsor_sum_total, "Total for sponsor")
@@ -52,7 +45,32 @@ if __name__ == '__main__':
                 sum_total += card.taskboard_total_size
                 sponsor_sum_total += card.taskboard_total_size
         excelReport.writeSummary(sponsor_sum_in_progress, sponsor_sum_total, "Total for sponsor")
-        excelReport.writeSummary(sum_in_progress, sum_total, "IT Production total")
+
+
+if __name__ == '__main__':
+    sum_in_progress = 0
+    sum_total = 0
+
+    _initMongoConn()
+
+    excelReport = lib.excel.ExcelReport(datetime.datetime.now().strftime("Status_%Y-%m-%d-%H-%M-%S.xlsx"),
+                         "Portfolio DreamLab")
+    excelReport.initReport(_initSponsorsDict ())
+
+
+    # write all cards with set up sponsor
+    cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
+                                  & Q(board_masterlane_title='Current development plan')
+                                  & Q(extended_data__sponsor_name__ne ='')).order_by('extended_data__sponsor_name', 'title')
+    writeCollection(cards, excelReport)
+
+    # writa all cards without sponsor
+    cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
+                                  & Q(board_masterlane_title='Current development plan')
+                                  & Q(extended_data__sponsor_name ='')).order_by('title')
+    writeCollection(cards, excelReport)
+
+    excelReport.writeSummary(sum_in_progress, sum_total, "IT Production total")
 
     data = excelReport.close()
 
