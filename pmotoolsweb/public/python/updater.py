@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 __author__ = 'asia'
 
 import lib.leankit
