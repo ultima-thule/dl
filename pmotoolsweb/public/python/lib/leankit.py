@@ -218,7 +218,7 @@ class LeankitCard(Converter):
         # if (self.type.name ==  'Progress: Risk identified' or self.type.name ==  'Progress: High risk'):
         #     print ("Fetching comments for card " + self.title)
         #     self.fetchComments()
-        if globalFetchComments is True:
+        if globalFetchComments:
             print ("Fetching comments for card " + self.title)
             self.fetchComments()
 
@@ -722,7 +722,9 @@ class LeankitBoard(Converter):
 
 class LeankitKanban(object):
 
-    def __init__(self, account, username=None, password=None):
+    def __init__(self, account, username=None, password=None, fetchComments=True):
+        global globalFetchComments
+        globalFetchComments = fetchComments
         self.connector = LeankitConnector(account, username, password)
         self._boards = []
         self._boards_by_id = {}

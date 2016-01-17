@@ -75,9 +75,9 @@ def _getCorrectDate (date_str, is_long=False, is_long_with_at=False):
         return None
 
     date_format = '%Y/%m/%d'
-    if is_long is True:
+    if is_long:
         date_format = '%Y/%m/%d %H:%M:%S %p'
-    if is_long_with_at is True:
+    if is_long_with_at:
         date_format = '%Y/%m/%d at %H:%M:%S %p'
 
     return datetime.datetime.strptime(date_str, date_format)
@@ -234,11 +234,39 @@ def _insertAllTeamsForBoard(board):
                     globalTeamDict[team_lane.title] = True
 
 
+def _cleanBoard(board_id):
+    lib.mongoLeankit.Card.objects(board_id=board_id).delete()
+
+def _insertParamInfo(key):
+    param = lib.mongoLeankit.Configparam.objects(param_key=key).modify(upsert=True, new=True,
+                                                               set__param_value_date=datetime.datetime.now())
+
+
 if __name__ == '__main__':
+
+    # init mongo
     _initMongoConn ()
 
-    kanban = lib.leankit.LeankitKanban('dreamlab',
-                           'joanna.grzywna@grupaonet.pl', 'piotrek2003')
+    # parse arguments
+    parser = argparse.ArgumentParser(description='Synchronize with LeanKit account.')
+    parser.add_argument('-b', '--board', help='board (id) to be synchronized', type=int)
+    parser.add_argument('-c', '--comments', help='fetch comments', default=False)
+    args = parser.parse_args()
+
+    if args.board is not None and args.comments is not None:
+        # init kanban
+        kanban = lib.leankit.LeankitKanban('dreamlab', 'joanna.grzywna@grupaonet.pl',
+                                           'piotrek2003', args.comments)
+
+        print("Getting board '%s'..." % args.board)
+        board = kanban.getBoard(board_id=args.board)
+
+        if board is not None:
+            _cleanBoard(args.board)
+            _insertAllCardsForBoard(board.root_lane.child_lanes, '')
+            _insertParamInfo("last_leankit_synchro")
+
+    exit(0)
 
     # boards = kanban.getBoards()
     # for board in boards:
@@ -249,16 +277,16 @@ if __name__ == '__main__':
         #         _createOrUpdateCard(card)
 
 
-    print("Active boards:")
+    # print("Active boards:")
     # boards = kanban.getBoards()
     # _insertBoards(boards)
     #
     # Get a board by the title.
-    board_name = 'PMO Portfolio Kanban Teams'
-    print("Getting board '%s'..." % board_name)
-    board = kanban.getBoard(title=board_name)
+    # board_name = 'PMO Portfolio Kanban Teams'
+    # print("Getting board '%s'..." % board_name)
+    # board = kanban.getBoard(title=board_name)
     # _insertMasterLanes(board.root_lane.child_lanes, board.id)
-    _insertAllCardsForBoard(board.root_lane.child_lanes, '')
+    # _insertAllCardsForBoard(board.root_lane.child_lanes, '')
     # _insertAllTeamsForBoard(board)
     # board.printLanes(True, "Current development plan")
     # board.generateReport(report, "Current development plan")

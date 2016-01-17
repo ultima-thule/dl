@@ -218,7 +218,7 @@ class LeankitCard(Converter):
         # if (self.type.name ==  'Progress: Risk identified' or self.type.name ==  'Progress: High risk'):
         #     print ("Fetching comments for card " + self.title)
         #     self.fetchComments()
-        if globalFetchComments is True:
+        if globalFetchComments:
             print ("Fetching comments for card " + self.title)
             self.fetchComments()
 
