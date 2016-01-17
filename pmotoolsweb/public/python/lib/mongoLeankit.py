@@ -138,3 +138,8 @@ class MasterLane(Document):
 class Report (Document):
     xls_data = BinaryField()
     generation_date = DateTimeField()
+
+class Configparam (Document):
+    param_key = StringField(),
+    param_value_date = DateTimeField(),
+    param_value_string = StringField()

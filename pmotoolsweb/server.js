@@ -7,9 +7,9 @@ var bodyParser     = require('body-parser'); // pull information from HTML POST 
 var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 var mongoose       = require('mongoose');
 var morgan         = require('morgan'); // log requests to the console (express4)
+var LeanKitClient  = require( "leankit-client" );
 
 // configuration ===========================================
-
 
 // config files
 var db = require('./config/db');
@@ -18,7 +18,6 @@ var db = require('./config/db');
 var port = process.env.PORT || 8080;
 
 // connect to our mongoDB database
-// (uncomment after you enter in your own credentials in config/db.js)
 mongoose.connect(db.url);
 
 // get all data/stuff of the body (POST) parameters
@@ -39,9 +38,6 @@ app.use(express.static(__dirname + '/public'));
 
 // log every request to the console
 app.use(morgan('dev'));
-
-//leankit connection conf
-//var client = LeanKitClient.createClient("dreamlab", "joanna.grzywna@grupaonet.pl", "piotrek2003");
 
 // routes ==================================================
 require('./app/routes')(app); // configure our routes

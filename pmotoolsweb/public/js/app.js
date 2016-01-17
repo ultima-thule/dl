@@ -1,11 +1,12 @@
 // public/js/app.js
 
 
-var app = angular.module('sampleApp', ['ngRoute', 'ngMaterial', 'ngResource', 'ngFileSaver', 'appRoutes', 'MainCtrl',
+var app = angular.module('pmoApp', ['ngRoute', 'ngMaterial', 'ngResource', 'ngFileSaver', 'appRoutes', 'MainCtrl',
     'CardCtrl', 'CardService', 'ParamsCtrl',
     'SponsorCtrl', 'SponsorService', 'TeamCtrl', 'TeamService',
     'ReportCtrl', 'ReportService', 'ConfigParamService',
-    'mdDataTable', 'mdtTemplates', 'md.data.table', 'TabletestCtrl']);
+    'mdDataTable', 'mdtTemplates', 'md.data.table',
+    'SynchroCtrl', 'SynchroService']);
 
 
 app.config(function($mdThemingProvider) {
@@ -15,12 +16,12 @@ app.config(function($mdThemingProvider) {
       .dark();
 });
 
-app.config(function($mdThemingProvider) {
-  $mdThemingProvider.theme('default')
-    .primaryPalette('indigo')
-    .accentPalette('amber')
-    .warnPalette('pink')
-    .backgroundPalette('grey');
-  $mdThemingProvider.theme('input', 'default')
-    .primaryPalette('yellow')
-});
+//app.config(function($mdThemingProvider) {
+//  $mdThemingProvider.theme('default')
+//    .primaryPalette('indigo')
+//    .accentPalette('amber')
+//    .warnPalette('pink')
+//    .backgroundPalette('grey');
+//  $mdThemingProvider.theme('input', 'default')
+//    .primaryPalette('yellow')
+//});

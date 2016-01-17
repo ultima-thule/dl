@@ -47,18 +47,19 @@
     <script src="js/services/TeamService.js"></script>
     <script src="js/controllers/ReportCtrl.js"></script>
     <script src="js/services/ReportService.js"></script>
-    <script src="js/controllers/TabletestCtrl.js"></script>
+    <script src="js/services/SynchroCtrl.js"></script>
+    <script src="js/services/SynchroService.js"></script>
     <script src="js/appRoutes.js"></script>
     <script src="js/app.js"></script>
 </head>
 
-<body ng-app="sampleApp" ng-controller="MainController" layout="row">
+<body ng-app="pmoApp" ng-controller="MainController" layout="row">
     <!-- Side Navigation -->
     <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
       <md-toolbar class="md-tall md-hue-2">
         <span flex></span>
         <div layout="column" class="md-toolbar-tools-bottom inset">
-          <user-avatar></user-avatar>
+\          <user-avatar></user-avatar>
           <span></span>
           <div>Firstname Lastname</div>
           <div>email@domainname.com</div>

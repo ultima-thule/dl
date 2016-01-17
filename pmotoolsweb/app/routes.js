@@ -96,11 +96,26 @@ module.exports = function(app) {
 
     // get all initiatives
     app.get('/api/cards', function(req, res) {
-        // use mongoose to get all teams in the database
         Card.find({board_masterlane_title: "Current development plan"}, function(err, cards) {
             if (err)
                 res.send(err);
             res.json(cards);
+        });
+    });
+
+    // get a single card
+    app.get('/api/cards/:id', function(req, res) {
+        Card.findOne({_id : req.params.id}, function(err, card) {
+            if (err)
+                res.send(err);
+            res.json(card);
+        });
+    });
+
+    // update a single card
+    app.put('/api/cards/:id', function(req, res) {
+        Card.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, function (err, card) {
+            res.send(card);
         });
     });
 
@@ -141,18 +156,26 @@ module.exports = function(app) {
 
     // =========================== LEANKIT SYNCHRONIZATION ================================
 
-    // synchro api route
-    app.get('/api/synchro', function(req, res) {
-        var accountName = "dreamlab";
-        var email = "joanna.grzywna@grupaonet.pl";
-        var password = "piotrek2003";
-        var LeanKitClient = require( "leankit-client" );
-        var client = new LeanKitClient(accountName, email, password);
-//        client.getBoard(249156903, ( function( err, boards ) {
-//	        console.log( boards );
-//        } );
-        res.send("OK");
+    // get all boardsfrom leankit
+    app.get('/api/synchronize/boards', function(req, res) {
+        var client = new LeanKitClient  ("dreamlab", "joanna.grzywna@grupaonet.pl", "piotrek2003");
+        client.getBoards(function(err, boards) {
+            if (err)
+                res.send(err);
+            res.json(boards);
+        });
     });
+
+    // get single board
+    app.get('/api/synchronize/boards/:id', function(req, res) {
+        var client = new LeanKitClient  ("dreamlab", "joanna.grzywna@grupaonet.pl", "piotrek2003");
+        client.getBoard(req.params.id, function(err, board) {
+            if (err)
+                res.send(err);
+            res.json(board);
+        });
+    });
+
 
     // =========================== FRONTEND IN ANGULAR ================================
     // route to handle all angular requests

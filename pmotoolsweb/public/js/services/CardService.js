@@ -1,12 +1,9 @@
 // js/services/CardeService.js
 angular.module('CardService', [])
-
-    // super simple service
-    // each function returns a promise object
-    .factory('Cards', function($http) {
-        return {
-            get : function() {
-                return $http.get('/api/cards');
-            }
-        }
+    .factory('Cards', function($resource) {
+        return $resource('/api/cards/:id', { id: '@_id' }, {
+            update: {method: 'PUT'},
+            query: {method: 'GET', isArray: true},
+            get: {method: 'GET'},
+        });
     });
