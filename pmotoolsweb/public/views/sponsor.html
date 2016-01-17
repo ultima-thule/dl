@@ -2,11 +2,14 @@
 <!--upper toolbar -->
 <md-toolbar>
     <div class="md-toolbar-tools">
+      <md-button ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
+        <md-icon>menu</md-icon>
+      </md-button>
       <h3>{{ title }}</h3>
       <span flex></span>
-      <md-button aria-label="Open Settings" ng-click="showListBottomSheet($event)">
-        <md-icon>more_vert</md-icon>
-      </md-button>
+      <!--<md-button aria-label="Open Settings" ng-click="showListBottomSheet($event)">-->
+        <!--<md-icon>more_vert</md-icon>-->
+      <!--</md-button>-->
     </div>
 </md-toolbar>
 
@@ -46,6 +49,11 @@
     <md-table-pagination md-limit="query.limit" md-page="query.page" md-options="[10, 20, 50]" md-total="{{sponsors.length}}" md-page-select> </md-table-pagination>
 </md-content>
 
+<md-button class="md-fab md-fab-bottom-right" aria-label="Create" ng-click="showDialog('C', undefined, $event)">
+    <md-icon>add</md-icon>
+</md-button>
+
+
 <script type="text/ng-template" id="editor.html">
     <md-dialog aria-label="Edit" >
         <form name="inputForm" novalidate>
@@ -80,16 +88,18 @@
                         </md-input-container>
                         <md-input-container>
                             <label>Business Owner</label>
-                            <textarea rows="2" name="bo_name" md-maxlength="50" ng-model="view.selectedItem.bo_name"></textarea>
+                            <textarea rows="2" name="bo_name" required md-maxlength="50" ng-model="view.selectedItem.bo_name"></textarea>
                             <ng-messages for="inputForm.bo_name.$error">
+                                <ng-message when="required">The field is required</ng-message>
                                 <ng-message when="md-maxlength">Use 50 characters</ng-message>
                             </ng-messages>
                         </md-input-container>
                         <md-input-container>
                             <label>LeanKit tag</label>
-                            <textarea rows="2" name="tag" md-maxlength="50" ng-model="view.selectedItem.tag"></textarea>
+                            <textarea rows="2" name="tag" required md-maxlength="30" ng-model="view.selectedItem.tag"></textarea>
                             <ng-messages for="inputForm.bo_name.$error">
-                                <ng-message when="md-maxlength">Use 20 characters</ng-message>
+                                <ng-message when="required">The field is required</ng-message>
+                                <ng-message when="md-maxlength">Use 30 characters</ng-message>
                             </ng-messages>
                         </md-input-container>
                     </div>

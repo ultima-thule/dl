@@ -1,7 +1,7 @@
 // public/js/app.js
 
 
-var app = angular.module('sampleApp', ['ngRoute', 'ngMaterial', 'ngFileSaver', 'appRoutes', 'MainCtrl',
+var app = angular.module('sampleApp', ['ngRoute', 'ngMaterial', 'ngResource', 'ngFileSaver', 'appRoutes', 'MainCtrl',
     'CardCtrl', 'CardService', 'ParamsCtrl',
     'SponsorCtrl', 'SponsorService', 'TeamCtrl', 'TeamService',
     'ReportCtrl', 'ReportService', 'ConfigParamService',
@@ -17,8 +17,8 @@ app.config(function($mdThemingProvider) {
 
 app.config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
-    .primaryPalette('teal')
-    .accentPalette('orange')
+    .primaryPalette('indigo')
+    .accentPalette('amber')
     .warnPalette('pink')
     .backgroundPalette('grey');
   $mdThemingProvider.theme('input', 'default')

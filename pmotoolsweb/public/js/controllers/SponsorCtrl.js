@@ -12,14 +12,8 @@ angular.module('SponsorCtrl', [])
         page: 1
     };
 
-    // when landing on the page, get all sponsors and show them
-    Sponsors.get('/api/sponsors')
-        .success(function(data) {
-            $scope.sponsors = data;
-        })
-        .error(function(data) {
-            console.log('Error: ' + data);
-        });
+    $scope.sponsors = Sponsors.query(function() {
+    });
 
     //show message after CRUD operation
     function simpleToastBase(message, position, delay, action) {
@@ -34,7 +28,7 @@ angular.module('SponsorCtrl', [])
 
 
     function showDialog(operation, data, event) {
-        console.log(data);
+//        console.log(data);
         var tempData = undefined;
         if (data === undefined) {
             tempData = {};
@@ -50,7 +44,7 @@ angular.module('SponsorCtrl', [])
             templateUrl: 'editor.html',
             targetEvent: event,
             locals: {
-                selectedItem: tempData,
+                selectedItem: data,
                 dataCollection: $scope.sponsors,
                 operation: operation
             },
@@ -71,11 +65,11 @@ angular.module('SponsorCtrl', [])
     }
 
     //Dialog's controller
-    function DialogController($scope, $filter, $mdDialog, $mdToast, operation, selectedItem, dataCollection) {
+    function DialogController($scope, $filter, $mdDialog, $mdToast, operation, selectedItem, dataCollection, Sponsors) {
         $scope.view = {
             dataCollection: dataCollection,
             selectedItem: selectedItem,
-            operation: 'Create'
+            operation: 'Details'
         };
 
         switch (operation) {
@@ -102,41 +96,36 @@ angular.module('SponsorCtrl', [])
         }
 
         function save() {
-            if ($scope.view.selectedItem.id === undefined) create();
+            if ($scope.view.selectedItem._id === undefined) create();
             else edit();
         }
 
-        //Permite agregar un nuevo elemento
         function create() {
-            //Determinando si existe el elemento con el ID especificado
-            var temp = _.find($scope.view.dataCollection, function (x) { return x.id === $scope.view.selectedItem.id; });
-            if (temp === undefined) {
-                //Generando ID para el nuevo elemento
-                $scope.view.selectedItem.id = generateUUID();
-                $scope.view.dataCollection.push($scope.view.selectedItem);
-                $mdDialog.hide('Datos agregados con éxito');
-            } else {
-                $mdDialog.hide('Ya están registrados los datos de la persona indicada');
-            }
+            var sp = new Sponsors($scope.view.selectedItem)
+            sp.$save (function() {
+                $mdDialog.hide('Sponsor was successfully created.');
+            });
         }
 
         function edit() {
-            var found = $filter('filter')($scope.view.dataCollection, $scope.view.selectedItem.id)
+            var found = $filter('filter')($scope.view.dataCollection, $scope.view.selectedItem._id)
             if (found.length == 1) {
-                found[0].name = $scope.view.selectedItem.name
-                found[0].bo_name = $scope.view.selectedItem.bo_name
-                $mdDialog.hide('Sponsor was successfully updated.');
+                $scope.view.selectedItem.$update(function() {
+                    $mdDialog.hide('Sponsor was successfully updated.');
+                })
             } else {
                 $mdDialog.hide('Cannot modify selected sponsor.');
             }
         }
 
         function remove() {
-            var found = $filter('filter')($scope.view.dataCollection, $scope.view.selectedItem.id)
+            var found = $filter('filter')($scope.view.dataCollection, $scope.view.selectedItem._id)
             if (found.length == 1) {
-                $mdDialog.hide('Sponsor was removed.');
+                $scope.view.selectedItem.$remove(function() {
+                    $mdDialog.hide('Sponsor was removed.');
+                })
             } else {
-                    $mdDialog.hide('Cannot remove selected sponsor.');
+                $mdDialog.hide('Cannot remove selected sponsor.');
             }
         }
     }

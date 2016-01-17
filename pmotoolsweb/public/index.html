@@ -26,6 +26,7 @@
     <script src="libs/angular-material/angular-material.js"></script>
     <script src="libs/angular-route/angular-route.min.js"></script>
     <script src="libs/angular-sanitize/angular-sanitize.js"></script>
+    <script src="libs/angular-resource/angular-resource.js"></script>
     <script src="libs/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
     <script src="libs/angular-material-icons/angular-material-icons.js"></script>
     <script src="libs/dndLists/angular-drag-and-drop-lists.js"></script>
@@ -69,7 +70,7 @@
         <p>{{item.title}}</p>
       </md-list-item>
       <md-divider></md-divider>
-      <md-subheader>Management</md-subheader>
+      <md-subheader>Configuration</md-subheader>
       <md-list-item ng-repeat="item in admin" layout="row" layout-align="start center" ng-href="{{item.link}}">
         <md-icon>{{item.icon}} </md-icon>
         <p>{{item.title}}</p>

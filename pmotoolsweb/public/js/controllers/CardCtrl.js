@@ -24,7 +24,7 @@ angular.module('CardCtrl', [])
         });
 
     function showDialog(operation, data, event) {
-        console.log(data);
+//        console.log(data);
 //        var tempData = undefined;
 //        if (data === undefined) {
 //            tempData = {};

@@ -14,100 +14,63 @@ module.exports = function(app) {
     // handle things like api calls
     // authentication routes
 
-    // team api route
+    // =========================== TEAM ================================
+
+    // get all teams
     app.get('/api/teams', function(req, res) {
-        // use mongoose to get all teams in the database
         Team.find(function(err, teams) {
-
-            console.log("teams")
-            console.log(teams)
-            // if there is an error retrieving, send the error.
-                            // nothing after res.send(err) will execute
             if (err)
                 res.send(err);
-
-            res.json(teams); // return all teams in JSON format
+            res.json(teams);
         });
     });
 
-
-    // create team and send back all teams after creation
-    app.post('/api/teams', function(req, res) {
-
-        // create a team, information comes from AJAX request from Angular
-        Team.create({
-            name : req.body.text,
-            done : false
-        }, function(err, todo) {
+    // get a single team
+    app.get('/api/teams/:id', function(req, res) {
+        Team.findOne({_id : req.params.id}, function(err, team) {
             if (err)
                 res.send(err);
-
-            // get and return all the teams after you create another
-            Team.find(function(err, teams) {
-                if (err)
-                    res.send(err)
-                res.json(teams);
-            });
-        });
-
-    });
-
-    // delete a team
-    app.delete('/api/teams/:team_id', function(req, res) {
-        Team.remove({
-            _id : req.params.team_id
-        }, function(err, team) {
-            if (err)
-                res.send(err);
-
-            // get and return all the teams after you create another
-            Team.find(function(err, teams) {
-                if (err)
-                    res.send(err)
-                res.json(teams);
-            });
+            res.json(team);
         });
     });
 
-    // get a report
+    // update a single team
+    app.put('/api/teams/:id', function(req, res) {
+        Team.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, function (err, team) {
+            res.send(team);
+        });
+    });
+
+    // =========================== REPORT ================================
+
+    // get a report in excel format
     app.get('/api/reports/:id', function(req, res) {
         Report.find({_id: req.params.id}, function(err, reports) {
-            console.log("id")
-            console.log(req.params.id)
             if (err)
                 res.send(err);
             var date = reports[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
             res.append('Content-Disposition', 'attachment; filename=report_' + date + '.xlsx');
             res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            console.log("File report was requested");
             res.send(reports[0].xls_data);
           });
     });
 
-
-    // report api route
+    // gel all reports
     app.get('/api/reports', function(req, res) {
         // use mongoose to get all teams in the database
         Report.find({}).sort('-generation_date').exec (function(err, reports) {
-
-            console.log("get report")
-            console.log(reports)
-            // if there is an error retrieving, send the error.
-                            // nothing after res.send(err) will execute
             if (err)
                 res.send(err);
-
-            res.json(reports); // return all teams in JSON format
+            res.json(reports);
         });
     });
 
 
-    // generate new report
+    // generate new report with python script
     app.get('/api/genreport', function(req, res) {
 
         var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/py_gen.py']);
         //var python = require('child_process').spawn('C://python34//python.exe', ["C://Users//jgrzywna//PycharmProjects//dl//pmotoolsweb//public//python//py_gen.py"]);
-
 
         var output = "";
         python.stdout.on('data', function(){ output += data });
@@ -118,7 +81,9 @@ module.exports = function(app) {
         });
     });
 
-    // get a config param
+    // =========================== CONFIG ================================
+
+    // get a single config param
     app.get('/api/configparams/:id', function(req, res) {
         ConfigParam.find({param_key: req.params.id}, function(err, configparams) {
             if (err)
@@ -127,36 +92,54 @@ module.exports = function(app) {
           });
     });
 
+    // =========================== CARD ================================
 
-    // initiative api route
+    // get all initiatives
     app.get('/api/cards', function(req, res) {
         // use mongoose to get all teams in the database
         Card.find({board_masterlane_title: "Current development plan"}, function(err, cards) {
-
-            // if there is an error retrieving, send the error.
-            // nothing after res.send(err) will execute
             if (err)
                 res.send(err);
-
-            res.json(cards); // return all teams in JSON format
+            res.json(cards);
         });
     });
 
-    // sponsor api route
+    // =========================== SPONSOR ================================
+
+    // get all sponsors
     app.get('/api/sponsors', function(req, res) {
-        // use mongoose to get all sponsors in the database
         Sponsor.find(function(err, sponsors) {
-
-            console.log("sponsors")
-            console.log(sponsors)
-            // if there is an error retrieving, send the error.
-                            // nothing after res.send(err) will execute
             if (err)
                 res.send(err);
-
-            res.json(sponsors); // return all teams in JSON format
+            res.json(sponsors);
         });
     });
+
+    // create new sponsor
+    app.post('/api/sponsors', function(req, res) {
+        Sponsor.create(req.body, function (err, small) {
+            if (err)
+                res.send(err);
+            res.send(200);
+        })
+    });
+
+    // update a single sponsor
+    app.put('/api/sponsors/:id', function(req, res) {
+        Sponsor.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, function (err, sponsor) {
+            res.send(sponsor);
+        });
+    });
+
+    // delete a single sponsor
+    app.delete('/api/sponsors/:id', function(req, res) {
+        Sponsor.remove({_id: req.params.id}, function (err) {
+            res.send(200);
+        });
+    });
+
+
+    // =========================== LEANKIT SYNCHRONIZATION ================================
 
     // synchro api route
     app.get('/api/synchro', function(req, res) {
@@ -171,10 +154,7 @@ module.exports = function(app) {
         res.send("OK");
     });
 
-    // route to handle creating goes here (app.post)
-    // route to handle delete goes here (app.delete)
-
-    // frontend routes =========================================================
+    // =========================== FRONTEND IN ANGULAR ================================
     // route to handle all angular requests
     app.get('*', function(req, res) {
         res.sendfile('./public/views/index.html'); // load our public/index.html file

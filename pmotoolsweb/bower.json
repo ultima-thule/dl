@@ -15,6 +15,7 @@
     "angular-material-icons": "latest",
     "lodash": "latest",
     "angular-lodash-module": "latest",
-    "angular-material-data-table": "latest"
+    "angular-material-data-table": "latest",
+    "angular-resource": "latest"
   }
 }

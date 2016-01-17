@@ -8,7 +8,7 @@ angular.module('ReportCtrl', [])
     $scope.generateReport = function() {
         Reports.generate ()
         .success(function(data){
-            console.log('Generated: ' + data);
+//            console.log('Generated: ' + data);
             Reports.get('/api/reports')
                         .success(function(data2) {
                             $scope.reports = data2;
@@ -28,7 +28,7 @@ angular.module('ReportCtrl', [])
             var blob = new Blob([data], {
                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 });
-            console.log(blob)
+//            console.log(blob)
 
             var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
             var filename = "report " + date + ".xlsx";
@@ -55,7 +55,7 @@ angular.module('ReportCtrl', [])
             .success(function(data) {
                 $scope.reports = data;
                 console.log("report data")
-                console.log(data);
+//                console.log(data);
             }).error(function(data) {
                 console.log('Error: ' + data);
             });
