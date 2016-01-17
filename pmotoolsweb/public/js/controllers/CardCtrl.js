@@ -14,14 +14,10 @@ angular.module('CardCtrl', [])
 
     $scope.showDialog = showDialog;
 
-    // when landing on the page, get all cards and show them
-    Cards.get('/api/cards')
-        .success(function(data) {
-            $scope.cards = data;
-        })
-        .error(function(data) {
-            console.log('Error: ' + data);
-        });
+
+    $scope.cards = Cards.query(function() {
+        //console.log(entries);
+    });
 
     function showDialog(operation, data, event) {
 //        console.log(data);
