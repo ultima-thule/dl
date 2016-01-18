@@ -6,7 +6,7 @@ var app = angular.module('pmoApp', ['ngRoute', 'ngMaterial', 'ngResource', 'ngFi
     'SponsorCtrl', 'SponsorService', 'TeamCtrl', 'TeamService',
     'ReportCtrl', 'ReportService', 'ConfigParamService',
     'mdDataTable', 'mdtTemplates', 'md.data.table',
-    'SynchroCtrl', 'SynchroService']);
+    'SynchroCtrl', 'SynchroService', 'angular-chartist']);
 
 
 app.config(function($mdThemingProvider) {
