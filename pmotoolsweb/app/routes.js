@@ -96,7 +96,9 @@ module.exports = function(app) {
 
     // get all initiatives
     app.get('/api/cards', function(req, res) {
-        Card.find({board_masterlane_title: "Current development plan"}, function(err, cards) {
+        Card.find({board_masterlane_title: "Current development plan"},
+        'title extended_data team_name taskboard_completed_card_size taskboard_total_size taskboard_completion_percent due_date workflow_status_name',
+        function(err, cards) {
             if (err)
                 res.send(err);
             res.json(cards);

@@ -58,7 +58,7 @@ angular.module('CardCtrl', [])
     }
 
     //Dialog's controller
-    function DialogController($scope, $filter, $mdDialog, $mdToast, operation, selectedItem, dataCollection) {
+    function DialogController($scope, $filter, $mdDialog, $mdToast, operation, selectedItem, dataCollection, Sponsors) {
         $scope.view = {
             dataCollection: dataCollection,
             selectedItem: selectedItem,
@@ -80,6 +80,9 @@ angular.module('CardCtrl', [])
         $scope.back = back;
 //        $scope.save = save;
 //        $scope.remove = remove;
+
+        $scope.sponsors = Sponsors.query(function() {
+        });
 
         function back() {
             $mdDialog.cancel();
