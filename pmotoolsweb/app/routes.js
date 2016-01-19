@@ -125,7 +125,8 @@ module.exports = function(app) {
         Card.aggregate([
                 {
                     $match: {
-                        board_masterlane_title: "Current development plan"
+                        board_masterlane_title: "Current development plan",
+                        workflow_status_name: "In progress"
                     }
                 },
                 {
@@ -133,6 +134,9 @@ module.exports = function(app) {
                         _id: '$extended_data.sponsor_name',
                         count: {$sum: 1}
                     }
+                },
+                {
+                    $sort: {count: -1}
                 }
             ], function (err, result) {
                 if (err)
