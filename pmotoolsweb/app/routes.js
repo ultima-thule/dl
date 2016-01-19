@@ -121,6 +121,26 @@ module.exports = function(app) {
         });
     });
 
+    app.get('/api/chart/cardbysponsor', function(req, res){
+        Card.aggregate([
+                {
+                    $match: {
+                        board_masterlane_title: "Current development plan"
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$extended_data.sponsor_name',
+                        count: {$sum: 1}
+                    }
+                }
+            ], function (err, result) {
+                if (err)
+                    res.send(err);
+                res.json(result);
+        });
+    });
+
     // =========================== SPONSOR ================================
 
     // get all sponsors

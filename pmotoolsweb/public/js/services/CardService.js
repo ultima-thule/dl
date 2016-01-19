@@ -4,6 +4,6 @@ angular.module('CardService', [])
         return $resource('/api/cards/:id', { id: '@_id' }, {
             update: {method: 'PUT'},
             query: {method: 'GET', isArray: true},
-            get: {method: 'GET'},
+            get: {method: 'GET'}
         });
     });

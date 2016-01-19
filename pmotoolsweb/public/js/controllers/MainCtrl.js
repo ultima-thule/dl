@@ -1,6 +1,7 @@
 var app = angular.module('MainCtrl', [])
 
-app.controller('MainController', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog', '$location', function($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location){
+app.controller('MainController', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog', '$location', 'Chart',
+    function($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location, Chart){
 
     $scope.toggleSidenav = function(menuId) {
         $mdSidenav(menuId).toggle();
@@ -30,10 +31,23 @@ app.controller('MainController', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdD
         }
     ];
 
-    // pie chart
-    $scope.pieData = {
-        series: [20, 10, 30, 40]
-    };
+    Chart.getCardsBySponsorCnt()
+          .then( function( result ) {
+                $scope.sponsorLabels = result.data.map(function(card) {
+                    return card._id;
+                });
+                $scope.sponsorData = [result.data.map(function(card) {
+                    return card.count;
+                })];
+                $scope.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+                $scope.series = ['Series A', 'Series B'];
+
+                $scope.data = [
+                    [65, 59, 80, 81, 56, 55, 40],
+                    [28, 48, 40, 19, 86, 27, 90]
+                ];
+                $scope.sponsorSeries = ['be³t Le¿aka'];
+          });
 
     $scope.admin = [
         {
