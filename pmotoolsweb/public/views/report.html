@@ -11,10 +11,10 @@
       <!--</md-button>-->
     </div>
 </md-toolbar>
-<md-content flex md-scroll-y layout="column" layout-fill layout-padding>
 
+<md-content flex md-scroll-y layout="column" layout-fill layout-padding>
     <md-content>
-        <p>Last date of LeanKit synchronization: {{lastLeankitDate | date: 'medium'}}
+        <p>All reports are based on data from LeanKit, synchronized daily. Last date of synchronization: {{lastLeankitDate | date: 'medium'}}
         <md-button class="md-accent md-raised md-hue-1" ng-disabled="true">Refresh from LeanKit</md-button></p>
         <p>If you want to get a fresh report, generate a new one from database.
         <md-button class="md-accent md-raised md-hue-1" ng-click="generateReport();">Generate report</md-button></p>

@@ -5,7 +5,7 @@ angular.module('CardCtrl', [])
 
     $scope.formData = {};
 
-    $scope.title = "Current initiatives";
+    $scope.title = "Initiatives in production";
 
     $scope.query = {
         limit: '10',
