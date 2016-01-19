@@ -15,30 +15,10 @@
     <md-toolbar class="md-hue-1" ng-show="showSearch">
 </md-toolbar>
 
-<md-content>
-    <canvas id="bar" class="chart chart-bar"
-        chart-data="sponsorData" chart-labels="sponsorLabels" chart-series="sponsorSeries">
-    </canvas>
-</md-content>
-<md-content flex md-scroll-y layout="row" layout-fill layout-padding>
-    <md-card>
-        <md-card-title>
-            <md-card-title-text>
-            <span class="md-headline">Businesses</span>
-            <span class="md-subhead">Extra Large</span>
-            </md-card-title-text>
-        </md-card-title>
-        <md-card-content layout="row">
-        </md-card-content>
-    </md-card>
-    <md-card>
-        <md-card-title>
-            <md-card-title-text>
-            <span class="md-headline">Businesses</span>
-            <span class="md-subhead">Extra Large</span>
-            </md-card-title-text>
-        </md-card-title>
-        <md-card-content layout="row">
-        </md-card-content>
-    </md-card>
+<md-content layout="row" layout-padding>
+    <md-content flex>
+        <h1>No of active initiatives per business</h1>
+        <canvas id="bar" class="chart chart-bar" chart-data="sponsorData" chart-labels="sponsorLabels" chart-series="sponsorSeries"></canvas>
+    </md-content>
+    <md-content flex></md-content>
 </md-content>
