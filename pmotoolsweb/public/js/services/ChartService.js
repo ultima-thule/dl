@@ -5,6 +5,9 @@ angular.module('ChartService', [])
         return {
             getCardsBySponsorCnt : function() {
                 return $http.get('/api/chart/cardbysponsor');
+            },
+            getCardsByWorkflowCnt : function() {
+                return $http.get('/api/chart/cardbyworkflowstatus');
             }
         }
     });
