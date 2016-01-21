@@ -244,6 +244,7 @@ def _insertParamInfo(key):
 
 if __name__ == '__main__':
 
+    print ("Starting script %s" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     # init mongo
     _initMongoConn ()
 
@@ -265,6 +266,8 @@ if __name__ == '__main__':
             _cleanBoard(args.board)
             _insertAllCardsForBoard(board.root_lane.child_lanes, '')
             _insertParamInfo("last_leankit_synchro")
+
+    print ("Ending script %s" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     exit(0)
 
