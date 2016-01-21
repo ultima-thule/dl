@@ -18,7 +18,10 @@
 <md-content layout="row" layout-padding>
     <md-content flex>
         <h1>No of active initiatives per business</h1>
-        <canvas id="bar" class="chart chart-bar" chart-data="sponsorData" chart-labels="sponsorLabels" chart-series="sponsorSeries"></canvas>
+        <canvas id="sponsors-bar" class="chart chart-bar" chart-data="sponsorData" chart-labels="sponsorLabels" chart-series="sponsorSeries"></canvas>
     </md-content>
-    <md-content flex></md-content>
+    <md-content flex>
+        <h1>Initiatives per status</h1>
+        <canvas id="workflow-pie" class="chart chart-pie" chart-data="workflowData" chart-labels="workflowLabels" chart-options="chartOptions"></canvas>
+    </md-content>
 </md-content>

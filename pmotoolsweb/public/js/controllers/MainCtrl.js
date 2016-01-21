@@ -47,6 +47,21 @@ app.controller('MainController', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdD
                 });
           });
 
+    Chart.getCardsByWorkflowCnt()
+          .then( function( result ) {
+                 $scope.workflowLabels = result.data.map(function(work) {
+                    return work._id;
+                });
+                $scope.workflowData = result.data.map(function(work) {
+                    return work.count;
+                });
+                $scope.chartOptions = {
+                    onAnimationComplete: function () {
+                        this.showTooltip(this.segments, true);
+                    }
+                }
+          });
+
     $scope.admin = [
         {
           link : '/sponsors',

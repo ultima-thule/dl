@@ -121,17 +121,34 @@ module.exports = function(app) {
         });
     });
 
+    // =========================== CHARTS ================================
+
     app.get('/api/chart/cardbysponsor', function(req, res){
+        Card.aggregate([{
+                $match: {
+                    board_masterlane_title: "Current development plan",
+                    workflow_status_name: "In progress" }
+                },
+                {
+                $group: { _id: '$extended_data.sponsor_name',
+                    count: {$sum: 1} }
+                },
+                { $sort: {count: -1} }
+            ], function (err, result) {
+                if (err)
+                    res.send(err);
+                res.json(result);
+        });
+    });
+
+    app.get('/api/chart/cardbyworkflowstatus', function(req, res){
         Card.aggregate([
                 {
-                    $match: {
-                        board_masterlane_title: "Current development plan",
-                        workflow_status_name: "In progress"
-                    }
+                    $match: { board_masterlane_title: "Current development plan" }
                 },
                 {
                     $group: {
-                        _id: '$extended_data.sponsor_name',
+                        _id: '$workflow_status_name',
                         count: {$sum: 1}
                     }
                 },
@@ -144,6 +161,7 @@ module.exports = function(app) {
                 res.json(result);
         });
     });
+
 
     // =========================== SPONSOR ================================
 
