@@ -1,12 +1,17 @@
 // js/services/ParamService.js
-angular.module('ParamService', [])
+(function() {
+    'use strict';
 
-    // super simple service
-    // each function returns a promise object
-    .factory('Param', function($http) {
-        return {
-            getId : function(id) {
-                return $http.get('/api/params/' + id);
+    angular
+        .module('ParamService', [])
+        .factory('Param', params);
+
+        function params($http) {
+            return {
+                getId : function(id) {
+                    return $http.get('/api/params/' + id);
+                }
             }
-        }
-    });
+        };
+
+})();

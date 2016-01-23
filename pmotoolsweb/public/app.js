@@ -1,15 +1,17 @@
 // public/js/app.js
 
+angular
+    .module('pmoApp', ['ngRoute', 'ngMaterial', 'ngResource', 'ngFileSaver', 'appRoutes', 'MainCtrl',
+        'CardCtrl', 'CardService', 'ParamCtrl',
+        'SponsorCtrl', 'SponsorService', 'TeamCtrl', 'TeamService',
+        'ReportCtrl', 'ReportService', 'ParamService', 'DashboardService',
+        'mdDataTable', 'mdtTemplates', 'md.data.table',
+        'chart.js']);
 
-var app = angular.module('pmoApp', ['ngRoute', 'ngMaterial', 'ngResource', 'ngFileSaver', 'appRoutes', 'MainCtrl',
-    'CardCtrl', 'CardService', 'ParamCtrl',
-    'SponsorCtrl', 'SponsorService', 'TeamCtrl', 'TeamService',
-    'ReportCtrl', 'ReportService', 'ParamService', 'DashboardService',
-    'mdDataTable', 'mdtTemplates', 'md.data.table',
-    'chart.js']);
 
-
-app.config(function($mdThemingProvider) {
+angular
+    .module('pmoApp')
+    .config(function($mdThemingProvider) {
     // Configure a dark theme with primary foreground yellow
     $mdThemingProvider.theme('docs-dark', 'default')
       .primaryPalette('yellow')

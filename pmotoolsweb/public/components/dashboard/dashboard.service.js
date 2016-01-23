@@ -1,13 +1,20 @@
 // js/services/ChartService.js
-angular.module('DashboardService', [])
+(function() {
+    'use strict';
 
-    .factory('Dashboard', function($http) {
-        return {
-            getCardsBySponsorCnt : function() {
-                return $http.get('/api/dashboard/cardbysponsor');
-            },
-            getCardsByWorkflowCnt : function() {
-                return $http.get('/api/dashboard/cardbyworkflowstatus');
+    angular
+        .module('DashboardService', [])
+        .factory('Dashboard', dashboards);
+
+        function dashboards($http) {
+            return {
+                getCardsBySponsorCnt : function() {
+                    return $http.get('/api/dashboard/cardbysponsor');
+                },
+                getCardsByWorkflowCnt : function() {
+                    return $http.get('/api/dashboard/cardbyworkflowstatus');
+                }
             }
-        }
-    });
+        };
+
+})();

@@ -224,7 +224,7 @@ module.exports = function(app) {
     // =========================== FRONTEND IN ANGULAR ================================
     // route to handle all angular requests
     app.get('*', function(req, res) {
-        res.sendfile('./public/views/index.html'); // load our public/index.html file
+        res.sendfile('./public/shared/index.html'); // load our public/index.html file
     });
 
 };
