@@ -1,6 +1,6 @@
 // public/js/controllers/ParamsCtrl.js
 
-angular.module('ParamsCtrl', []).controller('ParamsController', function($scope) {
+angular.module('ParamCtrl', []).controller('ParamController', function($scope) {
 
     $scope.tagline = 'Nothing beats a pocket protector!';
 

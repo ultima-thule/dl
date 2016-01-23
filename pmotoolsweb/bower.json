@@ -17,7 +17,6 @@
     "angular-lodash-module": "latest",
     "angular-material-data-table": "latest",
     "angular-resource": "latest",
-    "angular-chart.js": "latest",
-    "chart.js": "latest"
+    "angular-chart.js": "latest"
   }
 }

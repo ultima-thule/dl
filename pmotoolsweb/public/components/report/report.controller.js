@@ -1,7 +1,7 @@
 // public/js/controllers/ReportCtrl.js
 
 angular.module('ReportCtrl', [])
-.controller('ReportController', function($scope, $http, $routeParams, $location, Reports, FileSaver, Blob, ConfigParams) {
+.controller('ReportController', function($scope, $http, $routeParams, $location, Reports, FileSaver, Blob, Param) {
 
     $scope.title = "IT production reports";
 
@@ -43,7 +43,7 @@ angular.module('ReportCtrl', [])
     else
     {
         // when landing on the page, get all reports and show them
-        var data = ConfigParams.getId('last_leankit_synchro')
+        var data = Param.getId('last_leankit_synchro')
         .success(function(data){
             if (data.length > 0)
                 $scope.lastLeankitDate = data[0].param_value_date

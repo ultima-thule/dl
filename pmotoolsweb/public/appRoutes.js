@@ -5,48 +5,43 @@
 
         // home page
         .when('/', {
-            templateUrl: 'views/home.html',
+            templateUrl: 'components/dashboard/dashboard.html',
             controller: 'MainController'
         })
 
         // cards page that will use the CardController
         .when('/cards', {
-            templateUrl: 'views/card.html',
+            templateUrl: 'components/card/card.html',
             controller: 'CardController'
         })
 
         // params page that will use the ParamController
-        .when('/params', {
-            templateUrl: 'views/params.html',
-            controller: 'ParamsController'
+        .when('/param', {
+            templateUrl: 'components/param/param.html',
+            controller: 'ParamController'
         })
 
         // sponsors page that will use the SponsorController
         .when('/sponsors', {
-            templateUrl: 'views/sponsor.html',
+            templateUrl: 'components/sponsor/sponsor.html',
             controller: 'SponsorController'
         })
 
         // teams page that will use the SponsorController
         .when('/teams', {
-            templateUrl: 'views/team.html',
+            templateUrl: 'components/team/team.html',
             controller: 'TeamController'
         })
 
         // reports page that will use the SponsorController
         .when('/reports', {
-            templateUrl: 'views/report.html',
+            templateUrl: 'components/report/report.html',
             controller: 'ReportController'
         })
 
         .when('/reports/:id', {
-            templateUrl: 'views/report.html',
+            templateUrl: 'components/report/report.html',
             controller: 'ReportController'
-        })
-
-        .when('/tabletest', {
-            templateUrl: 'views/tabletest.html',
-            controller: 'TabletestController'
         });
 
     $locationProvider.html5Mode(true);

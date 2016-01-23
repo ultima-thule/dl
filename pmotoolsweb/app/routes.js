@@ -84,7 +84,7 @@ module.exports = function(app) {
     // =========================== CONFIG ================================
 
     // get a single config param
-    app.get('/api/configparams/:id', function(req, res) {
+    app.get('/api/params/:id', function(req, res) {
         ConfigParam.find({param_key: req.params.id}, function(err, configparams) {
             if (err)
                 res.send(err);
@@ -123,7 +123,7 @@ module.exports = function(app) {
 
     // =========================== CHARTS ================================
 
-    app.get('/api/chart/cardbysponsor', function(req, res){
+    app.get('/api/dashboard/cardbysponsor', function(req, res){
         Card.aggregate([{
                 $match: {
                     board_masterlane_title: "Current development plan",
@@ -141,7 +141,7 @@ module.exports = function(app) {
         });
     });
 
-    app.get('/api/chart/cardbyworkflowstatus', function(req, res){
+    app.get('/api/dashboard/cardbyworkflowstatus', function(req, res){
         Card.aggregate([
                 {
                     $match: { board_masterlane_title: "Current development plan" }

@@ -1,7 +1,7 @@
 var app = angular.module('MainCtrl', [])
 
-app.controller('MainController', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog', '$location', 'Chart', 'Sponsors',
-    function($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location, Chart, Sponsors){
+app.controller('MainController', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdDialog', '$location', 'Dashboard', 'Sponsors',
+    function($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location, Dashboard, Sponsors){
 
     $scope.toggleSidenav = function(menuId) {
         $mdSidenav(menuId).toggle();
@@ -31,7 +31,7 @@ app.controller('MainController', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdD
         }
     ];
 
-    Chart.getCardsBySponsorCnt()
+    Dashboard.getCardsBySponsorCnt()
           .then( function( result ) {
                 var lookup = {};
                 var sponsors = Sponsors.query(function() {
@@ -47,7 +47,7 @@ app.controller('MainController', ['$scope', '$mdBottomSheet','$mdSidenav', '$mdD
                 });
           });
 
-    Chart.getCardsByWorkflowCnt()
+    Dashboard.getCardsByWorkflowCnt()
           .then( function( result ) {
                  $scope.workflowLabels = result.data.map(function(work) {
                     return work._id;

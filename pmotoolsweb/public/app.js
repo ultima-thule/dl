@@ -2,11 +2,11 @@
 
 
 var app = angular.module('pmoApp', ['ngRoute', 'ngMaterial', 'ngResource', 'ngFileSaver', 'appRoutes', 'MainCtrl',
-    'CardCtrl', 'CardService', 'ParamsCtrl',
+    'CardCtrl', 'CardService', 'ParamCtrl',
     'SponsorCtrl', 'SponsorService', 'TeamCtrl', 'TeamService',
-    'ReportCtrl', 'ReportService', 'ConfigParamService', 'ChartService',
+    'ReportCtrl', 'ReportService', 'ParamService', 'DashboardService',
     'mdDataTable', 'mdtTemplates', 'md.data.table',
-    'SynchroCtrl', 'SynchroService', 'chart.js']);
+    'chart.js']);
 
 
 app.config(function($mdThemingProvider) {
