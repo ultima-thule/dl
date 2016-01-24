@@ -4,9 +4,13 @@
 
     angular
         .module('TeamCtrl', ['ngMaterial', 'mdDataTable'])
-        .controller('TeamController', TeamController);
+        .controller('TeamController', TeamController)
+        .controller('TeamDetailsController', TeamDetailsController);
 
         TeamController.$inject = ['$scope', '$http', '$mdDialog', '$mdToast', 'teamService'];
+        TeamDetailsController.$inject = ['$scope', '$filter', '$resource', '$mdDialog', '$mdToast',
+            'operation', 'selectedItem', 'dataCollection', 'teamService', 'sponsorService'];
+
 
         function TeamController($scope, $http, $mdDialog, $mdToast, teamService) {
             $scope.formData = {};
@@ -58,7 +62,7 @@
                         operation: operation
                     },
                     bindToController: true,
-                    controller: DialogController,
+                    controller: TeamDetailsController,
                     parent: angular.element(document.body)
                 })
                 .then(
@@ -72,75 +76,74 @@
             function showMessage(message) {
                 simpleToastBase(message, 'bottom right', 3000, 'Close');
             }
+        };
 
-            //Dialog's controller
-            function DialogController($scope, $filter, $resource, $mdDialog, $mdToast, operation, selectedItem, dataCollection, teamService, sponsorService) {
-                $scope.view = {
-                    dataCollection: dataCollection,
-                    selectedItem: selectedItem,
-                    operation: 'Details'
-                };
+        //Dialog's controller
+        function TeamDetailsController ($scope, $filter, $resource, $mdDialog, $mdToast, operation, selectedItem, dataCollection, teamService, sponsorService) {
+            $scope.view = {
+                dataCollection: dataCollection,
+                selectedItem: selectedItem,
+                operation: 'Details'
+            };
 
-                $scope.categories = ('IT Platforms;Business').split(';').map(function(category) {
-                        return {name: category};
-                });
+            $scope.categories = ('IT Platforms;Business').split(';').map(function(category) {
+                    return {name: category};
+            });
 
-                $scope.locations = ('Kraków;Warszawa;Wrocław').split(';').map(function(location) {
-                        return {name: location};
-                });
+            $scope.locations = ('Kraków;Warszawa;Wrocław').split(';').map(function(location) {
+                    return {name: location};
+            });
 
-                $scope.pmos = ('PMO Asia;PMO Sławek').split(';').map(function(pmo) {
-                        return {name: pmo};
-                });
+            $scope.pmos = ('PMO Asia;PMO Sławek').split(';').map(function(pmo) {
+                    return {name: pmo};
+            });
 
-                $scope.sponsors = sponsorService.query(function() {
-                });
+            $scope.sponsors = sponsorService.query(function() {
+            });
 
 
-                switch (operation) {
-        //            case 'C':
-        //                $scope.view.operation = 'Create';
-        //                break;
-                    case 'E':
-                        $scope.view.operation = 'Edit';
-                        break;
-                    case 'R':
-                        $scope.view.operation = 'Details';
-                        break;
-                    default:
-                        $scope.view.operation = 'Details';
-                        break;
-                }
-
-                $scope.back = back;
-                $scope.save = save;
-                $scope.edit = edit;
-                $scope.create = create;
-
-                function back() {
-                    $mdDialog.cancel();
-                }
-
-                function create() {
-                }
-
-                function save() {
-                    if ($scope.view.selectedItem._id === undefined) create();
-                    else edit();
-                }
-
-                function edit() {
-                    var found = $filter('filter')($scope.view.dataCollection, $scope.view.selectedItem._id)
-                    if (found.length == 1) {
-                        $scope.view.selectedItem.$update(function() {
-                            $mdDialog.hide('Team was successfully updated.');
-                        })
-                    } else {
-                        $mdDialog.hide('Cannot modify selected team.');
-                    }
-                }
+            switch (operation) {
+    //            case 'C':
+    //                $scope.view.operation = 'Create';
+    //                break;
+                case 'E':
+                    $scope.view.operation = 'Edit';
+                    break;
+                case 'R':
+                    $scope.view.operation = 'Details';
+                    break;
+                default:
+                    $scope.view.operation = 'Details';
+                    break;
             }
 
+            $scope.back = back;
+            $scope.save = save;
+            $scope.edit = edit;
+            $scope.create = create;
+
+            function back() {
+                $mdDialog.cancel();
+            }
+
+            function create() {
+            }
+
+            function save() {
+                if ($scope.view.selectedItem._id === undefined) create();
+                else edit();
+            }
+
+            function edit() {
+                var found = $filter('filter')($scope.view.dataCollection, $scope.view.selectedItem._id)
+                if (found.length == 1) {
+                    $scope.view.selectedItem.$update(function() {
+                        $mdDialog.hide('Team was successfully updated.');
+                    })
+                } else {
+                    $mdDialog.hide('Cannot modify selected team.');
+                }
+            }
         };
 
 })();

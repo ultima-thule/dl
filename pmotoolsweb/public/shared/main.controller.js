@@ -21,17 +21,17 @@
 
             $scope.menu = [
                 {
-                  link : '/',
+                  link : 'home',
                   title: 'Dashboard',
                   icon: 'dashboard'
                 },
                 {
-                  link : '/reports',
+                  link : 'reports',
                   title: 'Reports',
                   icon: 'insert_chart'
                 },
                 {
-                  link : '/cards',
+                  link : 'cards',
                   title: 'Initiatives',
                   icon: 'message'
                 }
@@ -70,20 +70,15 @@
 
             $scope.admin = [
                 {
-                  link : '/sponsors',
+                  link : 'sponsors',
                   title: 'Sponsors',
                   icon: 'attach_money'
                 },
                 {
-                  link : '/teams',
+                  link : 'teams',
                   title: 'Teams',
                   icon: 'people'
                 }
-        //        {
-        //          link : '/tabletest',
-        //          title: 'Table test',
-        //          icon: 'settings'
-        //        }
             ];
 
 

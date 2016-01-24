@@ -1,0 +1,55 @@
+<!-- edit dialogs -->
+<md-dialog aria-label="Edit" class="dialog-70">
+    <form name="inputForm" novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <md-button class="md-icon-button" ng-click="back()">
+                    <md-icon aria-label="Back">arrow_back</md-icon>
+                    <md-tooltip md-delay="1500" md-autohide="true">Back</md-tooltip>
+                </md-button>
+                <h2>{{view.operation}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="save()" ng-show="view.operation === 'Edit'" ng-disabled="inputForm.$invalid">
+                    <md-icon aria-label="Save">save</md-icon>
+                    <md-tooltip md-delay="1500" md-autohide="true">Save</md-tooltip>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <md-content layout-padding ng-cloak>
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Name</label>
+                        <input type="text" name="name" disabled ng-model="view.selectedItem.name" />
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Location</label>
+                        <md-select ng-model="view.selectedItem.location">
+                            <md-option ng-repeat="location in locations" value="{{location.name}}">
+                                {{location.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Type</label>
+                        <md-select ng-model="view.selectedItem.default_category">
+                            <md-option ng-repeat="category in categories" value="{{category.name}}">
+                                {{category.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Sponsor</label>
+                        <md-select ng-model="view.selectedItem.sponsor_name">
+                            <md-option ng-repeat="sponsor in sponsors | orderBy: 'name'" value="{{sponsor.tag}}">
+                                {{sponsor.name + " (" + sponsor.bo_name +")"}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </md-content>
+        </md-dialog-content>
+    </form>
+</md-dialog>

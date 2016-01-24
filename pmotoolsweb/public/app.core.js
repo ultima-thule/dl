@@ -6,6 +6,7 @@ angular
         'ngResource',
         /* Cross-app modules */
         'app.route',
+        'ui.router',
         /* 3-rd party modules */
         'ngFileSaver',
         'md.data.table',

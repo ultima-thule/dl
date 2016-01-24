@@ -26,6 +26,7 @@
     <script src="libs/angular-animate/angular-animate.js"></script>
     <script src="libs/angular-material/angular-material.js"></script>
     <script src="libs/angular-route/angular-route.min.js"></script>
+    <script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="libs/angular-sanitize/angular-sanitize.js"></script>
     <script src="libs/angular-resource/angular-resource.js"></script>
     <script src="libs/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
@@ -69,13 +70,13 @@
         </div>
       </md-toolbar>
       <md-list>
-      <md-list-item ng-repeat="item in menu" layout="row" layout-align="start center" ng-href="{{item.link}}">
+      <md-list-item ng-repeat="item in menu" layout="row" layout-align="start center" ui-sref="{{item.link}}">
         <md-icon>{{item.icon}} </md-icon>
         <p>{{item.title}}</p>
       </md-list-item>
       <md-divider></md-divider>
       <md-subheader>Configuration</md-subheader>
-      <md-list-item ng-repeat="item in admin" layout="row" layout-align="start center" ng-href="{{item.link}}">
+      <md-list-item ng-repeat="item in admin" layout="row" layout-align="start center" ui-sref="{{item.link}}">
         <md-icon>{{item.icon}} </md-icon>
         <p>{{item.title}}</p>
       </md-list-item>
@@ -89,7 +90,7 @@
       </md-button>
     -->
         <!-- ANGULAR DYNAMIC CONTENT -->
-        <div ng-view></div>
+        <div ui-view></div>
     </div>
 </body>
 </html>

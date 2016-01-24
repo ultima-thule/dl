@@ -1,53 +1,52 @@
 // public/js/appRoutes.js
     angular
-    .module('app.route', [])
+    .module('app.route', ['ui.router'])
     .config(config);
 
-    function config($routeProvider, $locationProvider) {
+    function config($stateProvider, $urlRouterProvider, $locationProvider) {
 
-    $routeProvider
+        $urlRouterProvider.otherwise('/');
 
-        // home page
-        .when('/', {
-            templateUrl: 'components/dashboard/dashboard.html',
-            controller: 'MainController'
-        })
+        $stateProvider
+            // HOME STATES AND NESTED VIEWS ========================================
+            .state('home', {
+                url: '/',
+                templateUrl: 'components/dashboard/dashboard.html'
+            })
 
-        // cards page that will use the CardController
-        .when('/cards', {
-            templateUrl: 'components/card/card.html',
-            controller: 'CardController'
-        })
+            // CARDS STATES =================================
+            .state('cards', {
+                url: '/cards',
+                templateUrl: 'components/card/card.html',
+                controller: 'CardController'
+            })
 
-        // params page that will use the ParamController
-        .when('/param', {
-            templateUrl: 'components/param/param.html',
-            controller: 'ParamController'
-        })
+            // SPONSORS STATES =================================
+            .state('sponsors', {
+                url: '/sponsors',
+                templateUrl: 'components/sponsor/sponsor.html',
+                controller: 'SponsorController'
+            })
 
-        // sponsors page that will use the SponsorController
-        .when('/sponsors', {
-            templateUrl: 'components/sponsor/sponsor.html',
-            controller: 'SponsorController'
-        })
+            // teams page that will use the SponsorController
+            .state('teams', {
+                url: '/teams',
+                templateUrl: 'components/team/team.html',
+                controller: 'TeamController'
+            })
 
-        // teams page that will use the SponsorController
-        .when('/teams', {
-            templateUrl: 'components/team/team.html',
-            controller: 'TeamController'
-        })
+            // reports page that will use the SponsorController
+            .state('reports', {
+                url: '/reports',
+                templateUrl: 'components/report/report.html',
+                controller: 'ReportController'
+            })
 
-        // reports page that will use the SponsorController
-        .when('/reports', {
-            templateUrl: 'components/report/report.html',
-            controller: 'ReportController'
-        })
+            .state('reports.details', {
+                url: '/reports/:id',
+                templateUrl: 'components/report/report.html',
+                controller: 'ReportController'
+            });
 
-        .when('/reports/:id', {
-            templateUrl: 'components/report/report.html',
-            controller: 'ReportController'
-        });
-
-    $locationProvider.html5Mode(true);
-
+        $locationProvider.html5Mode(true);
 };

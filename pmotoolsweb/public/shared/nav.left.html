@@ -1,0 +1,24 @@
+<div ng-controller="NavLeftCtrl" >
+    <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+      <md-toolbar class="md-tall md-hue-2">
+        <span flex></span>
+        <div class="md-toolbar-tools-bottom inset">
+          <img src="assets/images/dl_full2.png" />
+          <span></span>
+            <div>Project Management Office</div>
+        </div>
+      </md-toolbar>
+      <md-list>
+      <md-list-item ng-repeat="item in menu" layout="row" layout-align="start center" ng-href="{{item.link}}">
+        <md-icon>{{item.icon}} </md-icon>
+        <p>{{item.title}}</p>
+      </md-list-item>
+      <md-divider></md-divider>
+      <md-subheader>Configuration</md-subheader>
+      <md-list-item ng-repeat="item in admin" layout="row" layout-align="start center" ng-href="{{item.link}}">
+        <md-icon>{{item.icon}} </md-icon>
+        <p>{{item.title}}</p>
+      </md-list-item>
+    </md-list>
+    </md-sidenav>
+</div>
