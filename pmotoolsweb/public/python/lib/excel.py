@@ -181,7 +181,7 @@ class ExcelReport (object):
 
 
     def getBudgetStatusName(self, card):
-        if card.taskboard_completed_card_size is None or card.size is None:
+        if card.taskboard_completed_card_size is None or card.size is None or card.size == 0:
             return ""
         if card.taskboard_completed_card_size <= card.size:
             return "in budget"
@@ -190,6 +190,8 @@ class ExcelReport (object):
 
     def getReleaseStatusName(self, card):
         if card.workflow_status_name == "Recently Done":
+            if card.title.lower().startswith('cancel'):
+                return "cancelled"
             return "released"
         if card.workflow_status_name == "Todo":
             return "not started"
