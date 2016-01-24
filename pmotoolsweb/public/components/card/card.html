@@ -35,7 +35,7 @@
             <th md-column md-numeric md-order-by="taskboard_completed_card_size"><span>Current budget (PLN)</span></th>
               <th md-column md-numeric md-order-by="size"><span>Planned budget (PLN)</span></th>
             <th md-column md-order-by="due_date">Planned finish</th>
-            <th md-column >Status</th>
+            <th md-column >Release status</th>
             <th md-column>Action</th>
           </tr>
         </thead>
@@ -46,7 +46,7 @@
             <td md-cell>{{item.taskboard_completed_card_size * 107 | number:0}}</td>
             <td md-cell>{{item.size * 107 | number:0}}</td>
             <td md-cell>{{item.due_date | date: format: medium}}</td>
-            <td md-cell>{{item.workflow_status_name}}</td>
+            <td md-cell>{{item.virt_release_status}}</td>
             <td md-cell ng-click="showDialog('R', item, $event)"><md-icon>edit</md-icon></td>
           </tr>
         </tbody>
@@ -121,10 +121,6 @@
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Release status</label>
                             <input type="text" name="virt_release_status" disabled value="{{view.selectedItem.virt_release_status}}" />
-                        </md-input-container>
-                        <md-input-container class="md-block" flex-gt-sm>
-                            <label>Status</label>
-                            <input type="text" name="workflow_status_name" disabled value="{{view.selectedItem.workflow_status_name}}" />
                         </md-input-container>
                     </div>
                 </md-content>

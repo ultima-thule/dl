@@ -97,9 +97,11 @@ cardSchema.virtual('virt_budget_status').get(function () {
 });
 
 cardSchema.virtual('virt_release_status').get(function () {
+    if (this.title.toLowerCase().lastIndexOf("cancel", 0) === 0) {return "cancelled";}
     if (this.workflow_status_name == "Recently Done") { return "released"; }
     if (this.workflow_status_name == "Todo") { return "not started"; }
-    if (typeof this.due_date != "undefined" && (addDays (this.due_date, 1) >= new Date()))
+    if (typeof this.due_date === "undefined") { return ""; }
+    if (addDays (this.due_date, 1) >= new Date())
     {
         return "in plan";
     }
