@@ -4,9 +4,9 @@
 
     angular
         .module('ParamService', [])
-        .factory('Param', params);
+        .factory('paramService', paramService);
 
-        function params($http) {
+        function paramService($http) {
             return {
                 getId : function(id) {
                     return $http.get('/api/params/' + id);

@@ -7,14 +7,16 @@
         .module('ReportCtrl', [])
         .controller('ReportController', ReportController);
 
-        function ReportController($scope, $http, $routeParams, $location, Reports, FileSaver, Blob, Param) {
+        ReportController.$inject = ['$scope', '$http', '$routeParams', '$location', 'reportService', 'FileSaver', 'Blob', 'paramService'];
+
+        function ReportController($scope, $http, $routeParams, $location, reportService, FileSaver, Blob, paramService) {
 
             $scope.title = "IT production reports";
 
             $scope.generateReport = function() {
-                Reports.generate ()
+                reportService.generate ()
                 .success(function(data){
-                    Reports.get('/api/reports')
+                    reportService.get('/api/reports')
                                 .success(function(data2) {
                                     $scope.reports = data2;
                                 }).error(function(data2) {
@@ -28,7 +30,7 @@
             // if requested to download a file
             if ($routeParams.id)
             {
-                Reports.getId($routeParams.id)
+                reportService.getId($routeParams.id)
                 .success(function(data){
                     var blob = new Blob([data], {
                         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -47,7 +49,7 @@
             else
             {
                 // when landing on the page, get all reports and show them
-                var data = Param.getId('last_leankit_synchro')
+                var data = paramService.getId('last_leankit_synchro')
                 .success(function(data){
                     if (data.length > 0)
                         $scope.lastLeankitDate = data[0].param_value_date
@@ -55,7 +57,7 @@
                     console.log('Error: ' + data);
                 });
 
-                Reports.get('/api/reports')
+                reportService.get('/api/reports')
                     .success(function(data) {
                         $scope.reports = data;
                     }).error(function(data) {

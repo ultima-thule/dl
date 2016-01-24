@@ -6,21 +6,22 @@
         .module('TeamCtrl', ['ngMaterial', 'mdDataTable'])
         .controller('TeamController', TeamController);
 
-        function TeamController($scope, $http, $mdDialog, $mdToast, Teams) {
+        TeamController.$inject = ['$scope', '$http', '$mdDialog', '$mdToast', 'teamService'];
 
+        function TeamController($scope, $http, $mdDialog, $mdToast, teamService) {
             $scope.formData = {};
-
             $scope.title = "Teams configuration";
-
             $scope.query = {
                 limit: '10',
                 page: 1
             };
 
-            $scope.showDialog = showDialog;
-
-            $scope.teams = Teams.query(function() {
+            $scope.teams = teamService.query(function() {
             });
+
+            $scope.showDialog = showDialog;
+            $scope.simpleToastBase = simpleToastBase;
+            $scope.showMessage = showMessage;
 
             //show message after CRUD operation
             function simpleToastBase(message, position, delay, action) {
@@ -73,7 +74,7 @@
             }
 
             //Dialog's controller
-            function DialogController($scope, $filter, $resource, $mdDialog, $mdToast, operation, selectedItem, dataCollection, Teams, Sponsors) {
+            function DialogController($scope, $filter, $resource, $mdDialog, $mdToast, operation, selectedItem, dataCollection, teamService, sponsorService) {
                 $scope.view = {
                     dataCollection: dataCollection,
                     selectedItem: selectedItem,
@@ -92,7 +93,7 @@
                         return {name: pmo};
                 });
 
-                $scope.sponsors = Sponsors.query(function() {
+                $scope.sponsors = sponsorService.query(function() {
                 });
 
 
@@ -113,6 +114,8 @@
 
                 $scope.back = back;
                 $scope.save = save;
+                $scope.edit = edit;
+                $scope.create = create;
 
                 function back() {
                     $mdDialog.cancel();
@@ -122,7 +125,6 @@
                 }
 
                 function save() {
-        //            console.log($scope.view.selectedItem)
                     if ($scope.view.selectedItem._id === undefined) create();
                     else edit();
                 }

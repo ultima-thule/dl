@@ -6,7 +6,9 @@
         .module('SponsorCtrl', [])
         .controller('SponsorController', SponsorController);
 
-        function SponsorController($scope, $http, $mdDialog, $mdToast, Sponsors) {
+        SponsorController.$inject = ['$scope', '$http', '$mdDialog', '$mdToast', 'sponsorService'];
+
+        function SponsorController($scope, $http, $mdDialog, $mdToast, sponsorService) {
 
             $scope.title = "Sponsors configuration";
 
@@ -17,7 +19,7 @@
                 page: 1
             };
 
-            $scope.sponsors = Sponsors.query(function() {
+            $scope.sponsors = sponsorService.query(function() {
             });
 
             //show message after CRUD operation
@@ -69,7 +71,7 @@
             }
 
             //Dialog's controller
-            function DialogController($scope, $filter, $mdDialog, $mdToast, operation, selectedItem, dataCollection, Sponsors) {
+            function DialogController($scope, $filter, $mdDialog, $mdToast, operation, selectedItem, dataCollection, sponsorService) {
                 $scope.view = {
                     dataCollection: dataCollection,
                     selectedItem: selectedItem,
@@ -105,7 +107,7 @@
                 }
 
                 function create() {
-                    var sp = new Sponsors($scope.view.selectedItem)
+                    var sp = new sponsorService($scope.view.selectedItem)
                     sp.$save (function() {
                         $mdDialog.hide('Sponsor was successfully created.');
                     });

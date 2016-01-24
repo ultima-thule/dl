@@ -4,9 +4,9 @@
 
     angular
         .module('DashboardService', [])
-        .factory('Dashboard', dashboards);
+        .factory('dashboardService', dashboardService);
 
-        function dashboards($http) {
+        function dashboardService($http) {
             return {
                 getCardsBySponsorCnt : function() {
                     return $http.get('/api/dashboard/cardbysponsor');

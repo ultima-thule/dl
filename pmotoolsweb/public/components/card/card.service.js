@@ -4,9 +4,9 @@
 
     angular
         .module('CardService', [])
-        .factory('Cards', cards);
+        .factory('cardService', cardService);
 
-        function cards($resource) {
+        function cardService($resource) {
             return $resource('/api/cards/:id', { id: '@_id' }, {
                 update: {method: 'PUT'},
                 query: {method: 'GET', isArray: true},

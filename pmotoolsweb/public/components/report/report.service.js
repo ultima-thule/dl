@@ -4,9 +4,9 @@
 
     angular
         .module('ReportService', [])
-        .factory('Reports', reports);
+        .factory('reportService', reportService);
 
-        function reports($http) {
+        function reportService($http) {
             return {
                 get : function() {
                     return $http.get('/api/reports');

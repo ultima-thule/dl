@@ -5,9 +5,9 @@
         .module('MainCtrl', [])
         .controller('MainController', MainController);
 
-        MainController.$inject = ['$scope', '$mdBottomSheet', '$mdSidenav', '$mdDialog', '$location', 'Dashboard', 'Sponsors'];
+        MainController.$inject = ['$scope', '$mdBottomSheet', '$mdSidenav', '$mdDialog', '$location', 'dashboardService', 'sponsorService'];
 
-        function MainController($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location, Dashboard, Sponsors){
+        function MainController($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location, dashboardService, sponsorService){
 
             $scope.toggleSidenav = function(menuId) {
                 $mdSidenav(menuId).toggle();
@@ -37,10 +37,10 @@
                 }
             ];
 
-            Dashboard.getCardsBySponsorCnt()
+            dashboardService.getCardsBySponsorCnt()
                   .then( function( result ) {
                         var lookup = {};
-                        var sponsors = Sponsors.query(function() {
+                        var sponsors = sponsorService.query(function() {
                             for (var i = 0, len = sponsors.length; i < len; i++) {
                                 lookup[sponsors[i].tag] = sponsors[i].name;
                             }
@@ -53,7 +53,7 @@
                         });
                   });
 
-            Dashboard.getCardsByWorkflowCnt()
+            dashboardService.getCardsByWorkflowCnt()
                   .then( function( result ) {
                          $scope.workflowLabels = result.data.map(function(work) {
                             return work._id;

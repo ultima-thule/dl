@@ -6,12 +6,12 @@
         .module('CardCtrl', [])
         .controller('CardController', CardController);
 
-        function CardController($scope, $http, $mdDialog, $mdToast, Cards) {
+        CardController.$inject = ['$scope', '$http', '$mdDialog', '$mdToast', 'cardService'];
+
+        function CardController($scope, $http, $mdDialog, $mdToast, cardService) {
 
             $scope.formData = {};
-
             $scope.title = "Initiatives in production";
-
             $scope.query = {
                 limit: '10',
                 page: 1
@@ -19,7 +19,7 @@
 
             $scope.showDialog = showDialog;
 
-            $scope.cards = Cards.query(function() {
+            $scope.cards = cardService.query(function() {
             });
 
             function showDialog(operation, data, event) {
@@ -61,7 +61,7 @@
             }
 
             //Dialog's controller
-            function DialogController($scope, $filter, $mdDialog, $mdToast, operation, selectedItem, dataCollection, Sponsors) {
+            function DialogController($scope, $filter, $mdDialog, $mdToast, operation, selectedItem, dataCollection, sponsorService) {
                 $scope.view = {
                     dataCollection: dataCollection,
                     selectedItem: selectedItem,
@@ -84,7 +84,7 @@
         //        $scope.save = save;
         //        $scope.remove = remove;
 
-                $scope.sponsors = Sponsors.query(function() {
+                $scope.sponsors = sponsorService.query(function() {
                 });
 
                 function back() {

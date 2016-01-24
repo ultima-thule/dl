@@ -4,9 +4,9 @@
 
     angular
         .module('SponsorService', [])
-        .factory('Sponsors', sponsors);
+        .factory('sponsorService', sponsorService);
 
-        function sponsors($resource) {
+        function sponsorService($resource) {
             return $resource('/api/sponsors/:id', { id: '@_id' }, {
                 update: {method: 'PUT'},
                 query: {method: 'GET', isArray: true},

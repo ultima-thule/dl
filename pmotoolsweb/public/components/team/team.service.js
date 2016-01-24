@@ -4,9 +4,9 @@
 
     angular
         .module('TeamService', [])
-        .factory('Teams', teams);
+        .factory('teamService', teamService);
 
-        function teams($resource) {
+        function teamService($resource) {
             return $resource('/api/teams/:id', { id: '@_id' }, {
                 update: {method: 'PUT'},
                 query: {method: 'GET', isArray: true},
