@@ -85,8 +85,12 @@ var cardSchema = new mongoose.Schema(
 });
 
 cardSchema.virtual('virt_budget_status').get(function () {
-    if (this.taskboard_completed_card_size <= this.taskboard_total_size)
-    {
+    if (typeof this.taskboard_completed_card_size === "undefined"
+        || typeof this.size === "undefined"
+        || this.size == 0) {
+            return "";
+        }
+    if (this.taskboard_completed_card_size <= this.size){
         return "in budget";
     }
     return "budget exceeded";
@@ -95,7 +99,7 @@ cardSchema.virtual('virt_budget_status').get(function () {
 cardSchema.virtual('virt_release_status').get(function () {
     if (this.workflow_status_name == "Recently Done") { return "released"; }
     if (this.workflow_status_name == "Todo") { return "not started"; }
-    if (typeof(this.due_date) != "undefined" && addDays (this.due_date, 1) >= new Date())
+    if (typeof this.due_date != "undefined" && (addDays (this.due_date, 1) >= new Date()))
     {
         return "in plan";
     }

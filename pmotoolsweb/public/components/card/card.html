@@ -33,7 +33,7 @@
             <th md-column md-order-by="title"><span>Name</span></th>
             <th md-column md-order-by="extended_data.sponsor_name"><span>Sponsor</span></th>
             <th md-column md-numeric md-order-by="taskboard_completed_card_size"><span>Current budget (PLN)</span></th>
-              <th md-column md-numeric md-order-by="taskboard_total_size"><span>Planned budget (PLN)</span></th>
+              <th md-column md-numeric md-order-by="size"><span>Planned budget (PLN)</span></th>
             <th md-column md-order-by="due_date">Planned finish</th>
             <th md-column >Status</th>
             <th md-column>Action</th>
@@ -44,7 +44,7 @@
             <td md-cell>{{item.title}}</td>
             <td md-cell>{{item.extended_data.sponsor_name}}</td>
             <td md-cell>{{item.taskboard_completed_card_size * 107 | number:0}}</td>
-            <td md-cell>{{item.taskboard_total_size * 107 | number:0}}</td>
+            <td md-cell>{{item.size * 107 | number:0}}</td>
             <td md-cell>{{item.due_date | date: format: medium}}</td>
             <td md-cell>{{item.workflow_status_name}}</td>
             <td md-cell ng-click="showDialog('R', item, $event)"><md-icon>edit</md-icon></td>
@@ -78,7 +78,7 @@
                     <div layout-gt-sm="row">
                         <md-input-container flex-gt-sm>
                             <label>Initiative</label>
-                            <input type="text" name="name" disabled ng-model="view.selectedItem.title"/>
+                            <input type="text" name="name" disabled value="{{view.selectedItem.title}}"/>
                         </md-input-container>
                     </div>
                     <div layout-gt-sm="row">
@@ -92,39 +92,39 @@
                         </md-input-container>
                         <md-input-container class="md-block">
                             <label>Team</label>
-                            <input type="text" name="team_name" disabled ng-model="view.selectedItem.team_name" />
+                            <input type="text" name="team_name" disabled value="{{view.selectedItem.team_name}}" />
                         </md-input-container>
                     </div>
                     <div layout-gt-sm="row">
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Current budget (PLN)</label>
-                            <input type="text" name="taskboard_completed_card_size" type="number" step="any" disabled  ng-model="view.selectedItem.taskboard_completed_card_size * 107 | number: 0" />
+                            <input type="text" name="taskboard_completed_card_size" type="number" disabled  value="{{view.selectedItem.taskboard_completed_card_size * 107 | number: 0}}" />
                         </md-input-container>
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Predicted budget (PLN)</label>
-                            <input type="text" name="taskboard_total_size" type="number" step="any" disabled ng-model="view.selectedItem.taskboard_total_size * 107 | number: 0" />
+                            <input type="text" name="size" type="number" disabled value="{{view.selectedItem.size * 107 | number: 0}}" />
                         </md-input-container>
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Budget %</label>
-                            <input type="text" name="taskboard_completion_percent" type="number" step="any" disabled ng-model="view.selectedItem.taskboard_completion_percent" />
+                            <input type="text" name="taskboard_completion_percent" type="number" disabled value="{{view.selectedItem.taskboard_completion_percent}}" />
                         </md-input-container>
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Budget status</label>
-                            <input type="text" name="virt_budget_status" disabled ng-model="view.selectedItem.virt_budget_status" />
+                            <input type="text" name="virt_budget_status" disabled value="{{view.selectedItem.virt_budget_status}}" />
                         </md-input-container>
                     </div>
                     <div layout-gt-sm="row">
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Planned release date</label>
-                            <input type="text" name="view.selectedItem.due_date" disabled ng-model="view.selectedItem.due_date | date: format: medium" />
+                            <input type="text" name="view.selectedItem.due_date" disabled value="{{view.selectedItem.due_date | date: format: medium}}" />
                         </md-input-container>
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Release status</label>
-                            <input type="text" name="virt_release_status" disabled ng-model="view.selectedItem.virt_release_status" />
+                            <input type="text" name="virt_release_status" disabled value="{{view.selectedItem.virt_release_status}}" />
                         </md-input-container>
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Status</label>
-                            <input type="text" name="workflow_status_name" disabled ng-model="view.selectedItem.workflow_status_name" />
+                            <input type="text" name="workflow_status_name" disabled value="{{view.selectedItem.workflow_status_name}}" />
                         </md-input-container>
                     </div>
                 </md-content>
