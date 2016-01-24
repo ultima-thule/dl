@@ -41,9 +41,9 @@ def writeCollection(collection, excelReport):
             if card.taskboard_completed_card_size is not None:
                 sum_in_progress += card.taskboard_completed_card_size
                 sponsor_sum_in_progress += card.taskboard_completed_card_size
-            if card.taskboard_total_size is not None:
-                sum_total += card.taskboard_total_size
-                sponsor_sum_total += card.taskboard_total_size
+            if card.size is not None:
+                sum_total += card.size
+                sponsor_sum_total += card.size
         excelReport.writeSummary(sponsor_sum_in_progress, sponsor_sum_total, "Total for sponsor")
 
 

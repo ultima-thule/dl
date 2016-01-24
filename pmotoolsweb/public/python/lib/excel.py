@@ -181,9 +181,9 @@ class ExcelReport (object):
 
 
     def getBudgetStatusName(self, card):
-        if card.taskboard_completed_card_size is None or card.taskboard_total_size is None:
+        if card.taskboard_completed_card_size is None or card.size is None:
             return ""
-        if card.taskboard_completed_card_size <= card.taskboard_total_size:
+        if card.taskboard_completed_card_size <= card.size:
             return "in budget"
         return "budget exceeded"
 
@@ -209,7 +209,7 @@ class ExcelReport (object):
 
         self._write_cell(0, card.title)
         self._write_cell(1, str(self.getInCurrency(card.taskboard_completed_card_size)), self._format_currency)
-        self._write_cell(2, str(self.getInCurrency(card.taskboard_total_size)), self._format_currency)
+        self._write_cell(2, str(self.getInCurrency(card.size)), self._format_currency)
 
         budgetTxt = self.getBudgetStatusName(card)
         cellFormatTxt = None
@@ -246,3 +246,11 @@ class ExcelReport (object):
             self._write_cell(5, "", self._format_lane)
             self._write_cell(6, "", self._format_lane)
             self._write_cell(0, "", None, True)
+
+
+    def getMaxSize (self, card_size, taskboard_size):
+        if card_size is not None and taskboard_size is not None:
+            return max(card_size, taskboard_size)
+        if card_size is not None:
+            return card_size
+        return taskboard_size

@@ -5,8 +5,10 @@ from mongoengine import *
 class Board(Document):
     board_id = LongField()
     title = StringField()
+    description= StringField()
     is_archived = BooleanField()
     creation_date = DateTimeField()
+    is_current =  BooleanField()
 
 
 class User(Document):
@@ -144,3 +146,18 @@ class Configparam (Document):
     param_key = StringField()
     param_value_date = DateTimeField()
     param_value_string = StringField()
+
+class CardHistory (Document):
+    card_id = LongField()
+    synchro_date = DateTimeField()
+    sponsor_id = LongField()
+    team_id = LongField()
+    budget_done = IntField()
+    budget_total = IntField()
+    budget_change = IntField()
+    current_step = StringField()
+    step_todo = IntField()
+    step_inprogress = IntField()
+    step_done = IntField()
+    step_cancelled = IntField()
+    finish_date = DateTimeField()

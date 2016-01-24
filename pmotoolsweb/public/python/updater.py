@@ -1,6 +1,6 @@
 __author__ = 'asia'
 
-import lib.leankit
+import lib.leankitwrapper
 from lib.mongoLeankit import *
 from mongoengine import *
 import datetime
@@ -17,6 +17,7 @@ def _insertBoards (boards):
 
         b.board_id = board.id
         b.title = board.title
+        b.description = board.description
         b.is_archived = board.is_archived
         b.creation_date = datetime.datetime.strptime(board.creation_date, '%Y/%m/%d')
 
@@ -257,13 +258,16 @@ if __name__ == '__main__':
 
     if args.board is not None and args.comments is not None:
         # init kanban
-        kanban = lib.leankit.LeankitKanban('dreamlab', 'joanna.grzywna@grupaonet.pl',
-                                           'piotrek2003', args.comments)
+        kanban = lib.leankitwrapper.LeankitKanban('dreamlab', 'joanna.grzywna@grupaonet.pl',
+                                           'piotrek2003')
 
         print("Getting board '%s'..." % args.board)
         board = kanban.getBoard(board_id=args.board)
 
         if board is not None:
+            if args.comments:
+                for card in board.cards:
+                    card.fetchComments()
             _cleanBoard(args.board)
             _insertAllCardsForBoard(board.root_lane.child_lanes, '')
             _insertParamInfo("last_leankit_synchro")

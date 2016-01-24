@@ -6,6 +6,7 @@ var Report = require('./model/report');
 var ConfigParam = require('./model/configparam');
 var Card = require('./model/card');
 var Sponsor = require('./model/sponsor');
+var Board = require('./model/board');
 var LeanKitClient  = require("leankit-client");
 
 module.exports = function(app) {
