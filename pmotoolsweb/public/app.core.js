@@ -4,6 +4,7 @@ angular
         'ngRoute',
         'ngMaterial',
         'ngResource',
+        'ngCookies',
         /* Cross-app modules */
         'app.route',
         'ui.router',

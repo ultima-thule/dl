@@ -40,7 +40,6 @@
 
             dashboardService.getCardsByWorkflowCnt()
                   .then( function( result ) {
-                            console.log(result);
                          $scope.workflowLabels = result.data.map(function(work) {
                             return work._id;
                         });

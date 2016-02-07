@@ -10,6 +10,7 @@
         "method-override" : "~2.0.2",
         "morgan": "latest",
         "lodash": "latest",
-        "leankit-client": "latest"
+        "leankit-client": "latest",
+        "oauth20-provider": "latest"
       }
 }

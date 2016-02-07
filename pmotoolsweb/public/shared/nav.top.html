@@ -10,8 +10,8 @@
             <div ng-click="openMenu($mdOpenMenu, $event);">Name surname</div>
             <md-menu-content width="4">
                 <md-menu-item>
-                    <md-icon>face</md-icon>
                     <md-button ng-href="/users/2/profile">
+                        <md-icon>face</md-icon>
                         View profile
                     </md-button>
                 </md-menu-item>
@@ -23,7 +23,7 @@
                 </md-menu-item>
                 <md-menu-divider></md-menu-divider>
                 <md-menu-item>
-                    <md-button>
+                    <md-button ng-href="/logout">
                         <md-icon>exit_to_app</md-icon>
                         Logout
                     </md-button>

@@ -1,14 +1,12 @@
 <!-- public/components/report/report.html -->
-<section flex layout-padding>
-<p>Here you can download a report, which shows current production state.</p>
-</section>
 <div layout="row" layout-xs="column" >
     <md-card>
         <md-card-title-media>
             <img src="http://lorempixel.com/400/200/abstract" />
           </md-card-title-media>
         <md-card-content layout="column" layout-aling="center center" >
-            <p>All reports are based on data synchronized daily from LeanKit kanban board. Last date of synchronization:
+            Here you can download a report, which shows current production state.<br/>
+            All reports are based on data synchronized daily from LeanKit kanban board. Last date of synchronization:
             <h1><time title="{{ lastLeankitDate | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">{{lastLeankitDate | amTimeAgo}}</time></h1>
         </md-card-content>
     </md-card>

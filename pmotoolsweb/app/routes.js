@@ -8,12 +8,23 @@ var Card = require('./model/card');
 var Sponsor = require('./model/sponsor');
 var Board = require('./model/board');
 var LeanKitClient  = require("leankit-client");
+var https = require('https');
 
 module.exports = function(app) {
 
     // server routes ===========================================================
     // handle things like api calls
     // authentication routes
+
+
+    function isAuthorized(req, res, next) {
+        if (req.session.authorized) next();
+        else {
+            var params = req.query;
+            params.backUrl = req.path;
+            res.redirect('/login?' + query.stringify(params));
+        }
+    };
 
     // =========================== TEAM ================================
 
@@ -222,10 +233,38 @@ module.exports = function(app) {
     });
 
 
+    // =========================== CHECK AUTHENTICATION ================================
+    app.get('/api/me/:id', function(req, res) {
+
+        https.get({
+                host: 'cloud.onet.pl',
+                path: '/me',
+                data: {
+                    access_token : req.params.id
+                }
+        }, function(response) {
+            // Continuously update stream with data
+            var body = '';
+            response.on('data', function(d) {
+                body += d;
+            });
+            response.on('end', function() {
+                res.send(body);
+                // Data reception is done, do whatever with it!
+//                var parsed = JSON.parse(body);
+//                callback({
+//                    email: parsed.email,
+//                    password: parsed.pass
+//                });
+            });
+        });
+    });
+
+
     // =========================== FRONTEND IN ANGULAR ================================
     // route to handle all angular requests
     app.get('*', function(req, res) {
-        res.sendFile('./public/shared/index.html'); // load our public/index.html file
+        res.sendfile('./public/index.html'); // load our public/index.html file
     });
 
 };

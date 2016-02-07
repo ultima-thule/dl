@@ -5,9 +5,11 @@
         .module('NavLeftCtrl', [])
         .controller('NavLeftController', NavLeftController);
 
-        NavLeftController.$inject = ['$scope', '$mdSidenav', '$location'];
+        NavLeftController.$inject = ['$scope', '$mdSidenav', '$location', '$cookies'];
 
-        function NavLeftController($scope, $mdSidenav, $location){
+        function NavLeftController($scope, $mdSidenav, $location, $cookies){
+
+            $scope.loggedIn = $cookies.get("pmo") !== undefined;
 
             $scope.menu = [
                 {

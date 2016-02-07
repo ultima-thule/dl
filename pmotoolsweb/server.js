@@ -1,13 +1,14 @@
 // server.js
 
 // modules =================================================
-var express        = require('express');
-var app            = express();
-var bodyParser     = require('body-parser'); // pull information from HTML POST (express4)
-var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
-var mongoose       = require('mongoose');
-var morgan         = require('morgan'); // log requests to the console (express4)
-var LeanKitClient  = require( "leankit-client" );
+var express        	= require('express');
+var app            	= express();
+var bodyParser     	= require('body-parser'); // pull information from HTML POST (express4)
+var methodOverride 	= require('method-override'); // simulate DELETE and PUT (express4)
+var mongoose       	= require('mongoose');
+var morgan         	= require('morgan'); // log requests to the console (express4)
+var LeanKitClient  	= require('leankit-client');
+var User = require('./app/model/user');
 
 // configuration ===========================================
 
@@ -19,6 +20,7 @@ var port = process.env.PORT || 8080;
 
 // connect to our mongoDB database
 mongoose.connect(db.url);
+
 
 // get all data/stuff of the body (POST) parameters
 // parse application/json
@@ -39,7 +41,9 @@ app.use(express.static(__dirname + '/public'));
 // log every request to the console
 app.use(morgan('dev'));
 
-// routes ==================================================
+//configure OAuth2.0
+
+  // routes ==================================================
 require('./app/routes')(app); // configure our routes
 
 // start app ===============================================

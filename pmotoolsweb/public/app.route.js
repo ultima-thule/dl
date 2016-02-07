@@ -13,6 +13,7 @@
                 url: '/',
                 templateUrl: 'components/dashboard/dashboard.html',
                 controller: 'DashboardController',
+                authenticate: true,
                 resolve: {
                   $title: function() { return 'Dashboard'; }
                 }
@@ -23,6 +24,7 @@
                 url: '/cards',
                 templateUrl: 'components/card/card.html',
                 controller: 'CardController',
+                authenticate: true,
                 resolve: {
                   $title: function() { return 'Initiatives'; }
                 }
@@ -34,6 +36,7 @@
                 url: '/sponsors',
                 templateUrl: 'components/sponsor/sponsor.html',
                 controller: 'SponsorController',
+                authenticate: true,
                 resolve: {
                   $title: function() { return 'Sponsors configuration'; }
                 }
@@ -44,6 +47,7 @@
                 url: '/teams',
                 templateUrl: 'components/team/team.html',
                 controller: 'TeamController',
+                authenticate: true,
                 resolve: {
                   $title: function() { return 'Teams configuration'; }
                 }
@@ -54,6 +58,7 @@
                 url: '/reports',
                 templateUrl: 'components/report/report.html',
                 controller: 'ReportController',
+                authenticate: true,
                 resolve: {
                   $title: function() { return 'IT production reports'; }
                 }
@@ -62,32 +67,67 @@
             .state('reports.details', {
                 url: '/reports/:id',
                 templateUrl: 'components/report/report.html',
-                controller: 'ReportController'
+                controller: 'ReportController',
+                authenticate: true
             })
 
             .state('agileboards', {
                 url: '/agileboards',
                 templateUrl: 'components/agileboard/agileboard.html',
-                controller: 'AgileboardController'
+                controller: 'AgileboardController',
+                authenticate: true
             })
 
             .state('agileboard', {
                 url: '/agileboard/:id',
                 templateUrl: 'components/agileboard/agileboard.details.html',
-                controller: 'AgileboardDetailsController'
+                controller: 'AgileboardDetailsController',
+                authenticate: true
             })
 
 
             .state('userprofile', {
                 url: '/users/:id/profile',
                 templateUrl: 'components/user/user.profile.html',
-                controller: 'UserProfileController'
-            })
+                controller: 'UserProfileController',
+                authenticate: true,
+                  resolve: {
+                  $title: function() { return 'User profile'; }
+                }
+          })
 
             .state('usersettings', {
                 url: '/users/:id/settings',
                 templateUrl: 'components/user/user.settings.html',
-                controller: 'UserSettingsController'
+                controller: 'UserSettingsController',
+                authenticate: true,
+                resolve: {
+                  $title: function() { return 'User settings'; }
+                }
+            })
+
+            .state('authcallback', {
+                url: '/auth/callback',
+                templateUrl: 'components/auth/auth.callback.html',
+                controller: 'AuthCallbackController'
+            })
+
+            .state('login', {
+                url: '/login',
+                templateUrl: 'components/auth/login.html',
+                controller: 'LoginController',
+                resolve: {
+                  $title: function() { return 'Login'; }
+                }
+            })
+
+            .state('logout', {
+                url: '/logout',
+                templateUrl: 'components/auth/logout.html',
+                controller: 'LogoutController',
+                resolve: {
+                  $title: function() { return 'Logout'; }
+                }
             });
 
         $locationProvider.html5Mode(true);
