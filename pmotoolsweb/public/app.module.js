@@ -4,10 +4,13 @@ angular
     .module('pmoApp', [
         /* Shared modules */
         'app.core',
-        'MainCtrl',
+        'NavLeftCtrl', 'NavTopCtrl',
         /* Feature areas */
+        'DashboardCtrl',
         'CardCtrl', 'CardService', 'ParamCtrl',
         'SponsorCtrl', 'SponsorService', 'TeamCtrl', 'TeamService',
-        'ReportCtrl', 'ReportService', 'ParamService', 'DashboardService'
+        'ReportCtrl', 'ReportService', 'ParamService', 'DashboardService',
+        'AgileboardCtrl', 'AgileboardService', 'AgileboardDetailsCtrl',
+        'UserProfileCtrl', 'UserSettingsCtrl'
     ]);
 

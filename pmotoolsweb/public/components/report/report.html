@@ -1,34 +1,39 @@
 <!-- public/components/report/report.html -->
-<md-toolbar>
-    <div class="md-toolbar-tools">
-      <md-button ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
-        <md-icon>menu</md-icon>
-      </md-button>
-      <h3>{{ title }}</h3>
-      <span flex></span>
-      <!--<md-button aria-label="Open Settings" ng-click="showListBottomSheet($event)">-->
-        <!--<md-icon>more_vert</md-icon>-->
-      <!--</md-button>-->
-    </div>
-</md-toolbar>
+<section flex layout-padding>
+<p>Here you can download a report, which shows current production state.</p>
+</section>
+<div layout="row" layout-xs="column" >
+    <md-card>
+        <md-card-title-media>
+            <img src="http://lorempixel.com/400/200/abstract" />
+          </md-card-title-media>
+        <md-card-content layout="column" layout-aling="center center" >
+            <p>All reports are based on data synchronized daily from LeanKit kanban board. Last date of synchronization:
+            <h1><time title="{{ lastLeankitDate | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">{{lastLeankitDate | amTimeAgo}}</time></h1>
+        </md-card-content>
+    </md-card>
 
-<md-content flex md-scroll-y layout="column" layout-fill layout-padding>
-    <md-content>
-        <p>All reports are based on data from LeanKit, synchronized daily. Last date of synchronization: {{lastLeankitDate | date: 'medium'}}
-        <md-button class="md-accent md-raised md-hue-1" ng-disabled="true">Refresh from LeanKit</md-button></p>
-        <p>If you want to get a fresh report, generate a new one from database.
-        <md-button class="md-accent md-raised md-hue-1" ng-click="generateReport();">Generate report</md-button></p>
-    </md-content>
-    <!-- Reports' list -->
-    <md-content ng-cloak="" layout="column" layout-align="start start">
-        <h3>Last 10 reports</h3>
-        <md-list layout="column">
-            <md-list-item ng-repeat="item in reports | limitTo: 10" layout="row">
-                <md-button class="md-fab md-mini" aria-label="Download file" target="_blank" ng-href="api/reports/{{item._id}}">
-                    <md-icon>file_download</md-icon>
-                </md-button>
-                <div>Report from {{ item.generation_date | date:'medium'}}</div>
-              </md-list-item>
-        </md-list>
-    </md-content>
-</md-content>
+    <md-card>
+        <md-card-content>
+            <md-list>
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text" layout="column">
+                        <h3>Want a fresh report?</h3>
+                        <p><md-button class="md-raised my-hue-1 md-secondary" ng-click="generateReport();">Generate</md-button></p>
+                    </div>
+                </md-list-item>
+                <md-divider></md-divider>
+                <md-subheader class="md-no-sticky">Download one of the latest reports in MS Excel format</md-subheader>
+                <md-list-item class="md-2-line" ng-repeat="item in reports | limitTo: 5">
+                    <md-button class="md-fab md-mini md-hue-3 md-secondary" aria-label="Download file" target="_blank" ng-href="api/reports/{{item._id}}">
+                        <md-icon>file_download</md-icon>
+                    </md-button>
+                    <div class="md-list-item-text" layout="column">
+                        <h3>Report generated <time title="{{ item.generation_date | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">{{item.generation_date | amTimeAgo}}</time></h4>
+                        <p>at {{ item.generation_date | amDateFormat: 'h:mm a' }}</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-card-content>
+    </md-card>
+</div>

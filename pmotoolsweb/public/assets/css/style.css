@@ -1,5 +1,7 @@
 body { font-family: 'Roboto', sans-serif; }
 
+.bkg_all { background-color: #eee; }
+
 / Rules for sizing the icon.
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
@@ -43,43 +45,7 @@ user-select: none;
 .listsListControls .secondary-button-padding p {
 padding-right: 100px; }
 
-/* for main index.html setup */
-$gray: #eee;
-
-md-content.md-default-theme {
-  background-color: $gray;
-}
-md-card {
-  background-color: #fff;
-  h2:first-of-type {
-    margin-top: 0;
-  }
-}
-md-toolbar {
-  .md-button.md-default-theme {
-    border-radius: 99%; // round toolbar buttons
-  }
-}
-h2 {
-  font-weight: 400;
-}
-.md-toolbar-tools-bottom {
-  font-size: small;
-  & :last-child {
-    opacity: 0.8;
-  }
-}
-md-toolbar:not(.md-hue-1),
-.md-fab {
-  fill: #fff;
-}
-md-sidenav {
-  fill: #737373;
-  ng-md-icon {
-    position: relative;
-    top: 5px; // adjust for svg viewbox
-  }
-}
+/* User avatar */
 .user-avatar {
   border-radius: 99%;
 }
@@ -95,3 +61,34 @@ md-sidenav {
     width: 70%;
     height: auto;
 }
+
+/* Grid list */
+.gridListdemoBasicUsage md-grid-list {
+  margin: 8px; }
+
+.gridListdemoBasicUsage .gray {
+  background: #f5f5f5; }
+
+.gridListdemoBasicUsage .green {
+  background: #b9f6ca; }
+
+.gridListdemoBasicUsage .yellow {
+  background: #ffff8d; }
+
+.gridListdemoBasicUsage .blue {
+  background: #84ffff; }
+
+.gridListdemoBasicUsage .purple {
+  background: #b388ff; }
+
+.gridListdemoBasicUsage .red {
+  background: #ff8a80; }
+
+.gridListdemoBasicUsage md-grid-tile {
+  transition: all 400ms ease-out 50ms; }
+
+.gridListdemoBasicUsage md-grid-tile .chart-container {
+    width: 85%;
+    height: 85%;
+}
+

@@ -1,0 +1,11 @@
+<!-- public/components/agileboard/agileboard.details.html -->
+<md-content layout="row" layout-padding layout-wrap>
+    <md-card ng-repeat="sprint in board.sprints">
+        <md-card-header>{{ sprint.name }}</md-card-header>
+        <md-card-content>
+            <label>ID</label> {{ sprint.id }}
+            <label>State</label> {{ sprint.state }}
+            <md-button ng-href="{{'/sprint/' + sprint.id }}">Details</md-button>
+        </md-card-content>
+    </md-card>
+</md-content>

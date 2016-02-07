@@ -1,0 +1,10 @@
+<!-- public/components/report/report.html -->
+<md-content layout="row" layout-padding layout-wrap>
+    <md-card ng-repeat="board in boards.views">
+        <md-card-header>{{ board.name }}</md-card-header>
+        <md-card-content>
+            <label>ID</label> {{ board.id }}
+            <md-button ui-sref="agileboard ({id: board.id})">Details</md-button>
+        </md-card-content>
+    </md-card>
+</md-content>

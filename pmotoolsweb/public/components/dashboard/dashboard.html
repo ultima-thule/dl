@@ -1,27 +1,77 @@
 <!-- public/components/dashboard/dashboard.html -->
+<!-- grid list -->
+<div ng-cloak class="gridListdemoBasicUsage md-hue-2">
+  <md-grid-list md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="4" md-row-height-gt-md="2:1" md-row-height="4:2" md-gutter="20px" md-gutter-gt-sm="20px">
 
-<md-toolbar ng-show="!showSearch">
-    <div class="md-toolbar-tools">
-      <md-button ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
-        <md-icon>menu</md-icon>
-      </md-button>
-      <h3>{{ title }}</h3>
-      <span flex></span>
-      <!--<md-button aria-label="Open Settings" ng-click="showListBottomSheet($event)">-->
-        <!--<md-icon>more_vert</md-icon>-->
-      <!--</md-button>-->
-    </div>
-    </md-toolbar>
-    <md-toolbar class="md-hue-1" ng-show="showSearch">
-</md-toolbar>
+    <md-grid-tile >
+        <md-card layout-fill layout-padding >
+        </md-card>
+    </md-grid-tile>
 
-<md-content layout="row" layout-padding>
-    <md-content flex>
-        <h1>No of active initiatives per business</h1>
-        <canvas id="sponsors-bar" class="chart chart-bar" chart-data="sponsorData" chart-labels="sponsorLabels" chart-series="sponsorSeries"></canvas>
-    </md-content>
-    <md-content flex>
-        <h1>Initiatives per status</h1>
-        <canvas id="workflow-pie" class="chart chart-pie" chart-data="workflowData" chart-labels="workflowLabels" chart-options="chartOptions"></canvas>
-    </md-content>
-</md-content>
+
+    <md-grid-tile>
+        <md-card layout-fill layout-padding >
+        </md-card>
+    </md-grid-tile>
+
+    <md-grid-tile>
+        <md-card layout-fill layout-padding >
+        </md-card>
+    </md-grid-tile>
+
+    <md-grid-tile >
+        <md-card layout-fill layout-padding >
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-title">Last Leankit synchronization</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content layout="column" layout-aling="center center" >
+                <h1><time title="{{ lastLeankitDate | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">{{lastLeankitDate | amTimeAgo}}</time></h1>
+            </md-card-content>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button md-no-ink class="md-primary" ng-href="/reports">Get reports</md-button>
+            </md-card-actions>
+        </md-card>
+    </md-grid-tile>
+
+    <md-grid-tile md-rowspan="3" md-colspan="2" md-colspan-sm="1">
+        <md-card layout-fill layout-padding >
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-title">Active initiatives per business</span>
+                </md-card-header-text>
+            </md-card-header>
+            <canvas id="workflow-bar" class="chart chart-bar" chart-data="sponsorData" chart-labels="sponsorLabels"></canvas>
+        </md-card>
+    </md-grid-tile>
+
+    <md-grid-tile md-rowspan="3" md-colspan="2" md-colspan-sm="1">
+        <md-card layout-fill layout-padding >
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-title">Initiatives in status</span>
+                </md-card-header-text>
+            </md-card-header>
+            <canvas id="workflow-pie" class="chart chart-pie" chart-data="workflowData" chart-labels="workflowLabels" chart-options="chartOptions"></canvas>
+        </md-card>
+    </md-grid-tile>
+
+    <md-grid-tile md-rowspan="2">
+        <md-card layout-fill layout-padding >
+        </md-card>
+    </md-grid-tile>
+
+    <md-grid-tile md-rowspan="2" md-colspan="2" md-colspan-sm="1">
+        <md-card layout-fill layout-padding >
+        </md-card>
+    </md-grid-tile>
+
+    <md-grid-tile md-rowspan="2">
+        <md-card layout-fill layout-padding >
+        </md-card>
+    </md-grid-tile>
+
+  </md-grid-list>
+</div>
+

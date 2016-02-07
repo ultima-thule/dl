@@ -9,14 +9,6 @@
 
         function NavLeftController($scope, $mdSidenav, $location){
 
-            $scope.toggleSidenav = function(menuId) {
-                $mdSidenav(menuId).toggle();
-            };
-
-            $scope.navigateTo = function(page) {
-                $location.path = page;
-            };
-
             $scope.menu = [
                 {
                   link : '/',
@@ -33,6 +25,11 @@
                   title: 'Initiatives',
                   icon: 'message'
                 }
+//                {
+//                  link : '/agileboards',
+//                  title: 'Agile Boards',
+//                  icon: 'message'
+//                }
             ];
 
             $scope.admin = [

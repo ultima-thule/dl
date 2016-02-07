@@ -1,24 +1,11 @@
 <!-- public/components/sponsor/sponsor.html -->
-<!--upper toolbar -->
-<md-toolbar>
-    <div class="md-toolbar-tools">
-      <md-button ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
-        <md-icon>menu</md-icon>
-      </md-button>
-      <h3>{{ title }}</h3>
-      <span flex></span>
-      <!--<md-button aria-label="Open Settings" ng-click="showListBottomSheet($event)">-->
-        <!--<md-icon>more_vert</md-icon>-->
-      <!--</md-button>-->
-    </div>
-</md-toolbar>
 
 <!-- list of sponsors -->
 
-<md-content flex md-scroll-y layout="column" layout-fill layout-padding>
-    <md-card style="margin:0px">
+<div flex layout="column" layout-fill layout-padding >
+    <md-card >
         <md-input-container style="margin:15px;">
-            <label>Filter by search</label>
+            <label>Filter sponsors by search</label>
             <input type="text" ng-model="filterName">
         </md-input-container>
 
@@ -26,28 +13,30 @@
             {{(filteredItems = (sponsors | filter: filterName))}}
         </div>
     </md-card>
-    <md-table-container>
-      <table md-table md-progress="promise">
-        <thead md-head md-order="sponsorOrder">
-          <tr md-row>
-            <th md-column md-order-by="name"><span>Name</span></th>
-            <th md-column md-order-by="bo_name"><span>Business Owner</span></th>
-            <th md-column md-order-by="tag"><span>LeanKit tag</span></th>
-            <th md-column>Action</th>
-          </tr>
-        </thead>
-        <tbody md-body>
-          <tr md-row md-select="item" md-select-id="{{item._id}}" ng-repeat="item in filteredItems | orderBy: sponsorOrder | limitTo: query.limit: (query.page- 1) * query.limit">
-            <td md-cell>{{item.name}}</td>
-            <td md-cell>{{item.bo_name}}</td>
-            <td md-cell>{{item.tag}}</td>
-            <td md-cell ng-click="showDialog('E', item, $event)" ><md-icon>edit</md-icon></td>
-          </tr>
-        </tbody>
-      </table>
-    </md-table-container>
-    <md-table-pagination md-limit="query.limit" md-page="query.page" md-options="[10, 20, 50]" md-total="{{sponsors.length}}" md-page-select> </md-table-pagination>
-</md-content>
+    <md-card >
+        <md-table-container >
+          <table md-table md-progress="promise">
+            <thead md-head md-order="sponsorOrder">
+              <tr md-row>
+                <th md-column md-order-by="name"><span>Name</span></th>
+                <th md-column md-order-by="bo_name"><span>Business Owner</span></th>
+                <th md-column md-order-by="tag"><span>LeanKit tag</span></th>
+                <th md-column>Action</th>
+              </tr>
+            </thead>
+            <tbody md-body>
+              <tr md-row md-select="item" md-select-id="{{item._id}}" ng-repeat="item in filteredItems | orderBy: sponsorOrder | limitTo: query.limit: (query.page- 1) * query.limit">
+                <td md-cell>{{item.name}}</td>
+                <td md-cell>{{item.bo_name}}</td>
+                <td md-cell>{{item.tag}}</td>
+                <td md-cell ng-click="showDialog('E', item, $event)" ><md-icon>edit</md-icon></td>
+              </tr>
+            </tbody>
+          </table>
+        </md-table-container>
+        <md-table-pagination md-limit="query.limit" md-page="query.page" md-options="[10, 20, 50]" md-total="{{sponsors.length}}" md-page-select> </md-table-pagination>
+    </md-card>
+</div>
 
 <md-button class="md-fab md-fab-bottom-right" aria-label="Create" ng-click="showDialog('C', undefined, $event)">
     <md-icon>add</md-icon>
@@ -55,7 +44,7 @@
 
 
 <script type="text/ng-template" id="editor.html">
-    <md-dialog aria-label="Edit" >
+    <md-dialog aria-label="Edit"  >
         <form name="inputForm" novalidate>
             <md-toolbar>
                 <div class="md-toolbar-tools">

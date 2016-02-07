@@ -1,46 +1,51 @@
 <!-- public/index.html -->
 <!doctype html>
-<html lang="en">
+<html lang="en" class="bkg_all" ng-app="pmoApp" >
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
     <base href="/">
 
-    <title>PMO Tools</title>
+    <title ng-bind="($title || 'Home') + ' - PMO Tools'"></title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="libs/mdDataTable/dist/md-data-table-style.css">
-    <link href="libs/angular-material-data-table/dist/md-data-table.min.css" rel="stylesheet" type="text/css"/>
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="libs/angular-material/angular-material.css">
-    <link rel="stylesheet" href="lib/angular-chart.js/dist/angular-chart.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="libs/angular-material-icon/sangular-material-icons.css">
-    <link rel="stylesheet" href="assets/css/style.css"> <!-- custom styles -->
+    <link rel="stylesheet" type="text/css" href="libs/mdDataTable/dist/md-data-table-style.css">
+    <link rel="stylesheet" type="text/css" href="libs/angular-material-data-table/dist/md-data-table.min.css"/>
+    <link rel="stylesheet" type="text/css" href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" type="text/css" href="libs/angular-material/angular-material.css">
+    <link rel="stylesheet" type="text/css" href="lib/angular-chart.js/dist/angular-chart.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" type="text/css" href="libs/angular-material-icon/sangular-material-icons.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css"> <!-- custom styles -->
 
     <!-- JS -->
     <script src="https://code.jquery.com/jquery-2.1.4.js"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"> </script>
     <script src="libs/angular/angular.min.js"></script>
-    <script src="libs/angular-aria/angular-aria.js"></script>
-    <script src="libs/angular-animate/angular-animate.js"></script>
-    <script src="libs/angular-material/angular-material.js"></script>
+    <script src="libs/angular-aria/angular-aria.min.js"></script>
+    <script src="libs/angular-animate/angular-animate.min.js"></script>
+    <script src="libs/angular-material/angular-material.min.js"></script>
     <script src="libs/angular-route/angular-route.min.js"></script>
     <script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="libs/angular-sanitize/angular-sanitize.js"></script>
-    <script src="libs/angular-resource/angular-resource.js"></script>
-    <script src="libs/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
-    <script src="libs/angular-material-icons/angular-material-icons.js"></script>
+    <script src="libs/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="libs/angular-resource/angular-resource.min.js"></script>
+    <script src="libs/angular-file-saver/dist/angular-file-saver.bundle.min.js"></script>
+    <script src="libs/angular-material-icons/angular-material-icons.min.js"></script>
     <script src="libs/Chart.js/Chart.js"></script>
-    <script src="libs/angular-chart.js/dist/angular-chart.js"></script>
-    <script src="libs/dndLists/angular-drag-and-drop-lists.js"></script>
-    <script src="libs/lodash/lodash.js"></script>
+    <script src="libs/angular-chart.js/dist/angular-chart.min.js"></script>
+    <script src="libs/dndLists/angular-drag-and-drop-lists.min.js"></script>
+    <script src="libs/lodash/lodash.min.js"></script>
     <script src="libs/mdDataTable/dist/md-data-table.js"></script>
     <script src="libs/mdDataTable/dist/md-data-table-templates.js"></script>
     <script src="libs/angular-material-data-table/dist/md-data-table.min.js"></script>
+    <script src="libs/moment/moment.js"></script>
+    <script src="libs/angular-moment/angular-moment.min.js"></script>
+    <script src="libs/angular-ui-router-title/angular-ui-router-title.js"></script>
 
     <!-- ANGULAR CUSTOM -->
-    <script src="shared/main.controller.js"></script>
+    <script src="shared/nav.left.controller.js"></script>
+    <script src="shared/nav.left.directive.js"></script>
+    <script src="shared/nav.top.controller.js"></script>
     <script src="components/card/card.controller.js"></script>
     <script src="components/card/card.service.js"></script>
     <script src="components/params/param.controller.js"></script>
@@ -51,46 +56,32 @@
     <script src="components/team/team.service.js"></script>
     <script src="components/report/report.controller.js"></script>
     <script src="components/report/report.service.js"></script>
+    <script src="components/dashboard/dashboard.controller.js"></script>
     <script src="components/dashboard/dashboard.service.js"></script>
+    <script src="components/agileboard/agileboard.service.js"></script>
+    <script src="components/agileboard/agileboard.controller.js"></script>
+    <script src="components/agileboard/agileboard.details.controller.js"></script>
+    <script src="components/user/user.profile.controller.js"></script>
+    <script src="components/user/user.settings.controller.js"></script>
     <script src="app.route.js"></script>
     <script src="app.core.js"></script>
     <script src="app.module.js"></script>
     <script src="app.config.js"></script>
 </head>
 
-<body ng-app="pmoApp" ng-controller="MainController" layout="row">
-    <!-- Side Navigation -->
-    <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
-      <md-toolbar class="md-tall md-hue-2">
-        <span flex></span>
-        <div class="md-toolbar-tools-bottom inset">
-          <img src="assets/images/dl_full2.png" />
-          <span></span>
-            <div>Project Management Office</div>
-        </div>
-      </md-toolbar>
-      <md-list>
-      <md-list-item ng-repeat="item in menu" layout="row" layout-align="start center" ui-sref="{{item.link}}">
-        <md-icon>{{item.icon}} </md-icon>
-        <p>{{item.title}}</p>
-      </md-list-item>
-      <md-divider></md-divider>
-      <md-subheader>Configuration</md-subheader>
-      <md-list-item ng-repeat="item in admin" layout="row" layout-align="start center" ui-sref="{{item.link}}">
-        <md-icon>{{item.icon}} </md-icon>
-        <p>{{item.title}}</p>
-      </md-list-item>
-    </md-list>
-    </md-sidenav>
+<body layout="row" class="bkg_all">
+        <!-- Side Navigation -->
+        <div ng-include="'shared/nav.left.html'" ng-controller="NavLeftController" layout="column"></div>
 
-    <div layout="column" class="relative" layout-fill role="main">
-      <!--
-        <md-button class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="showAdd($event)">
-        <md-icon>add</md-icon>
-      </md-button>
-    -->
-        <!-- ANGULAR DYNAMIC CONTENT -->
-        <div ui-view></div>
-    </div>
-</body>
+        <div layout="column" class="bkg_all relative" layout-fill role="main">
+            <!--
+                <md-button class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="showAdd($event)">
+                <md-icon>add</md-icon>
+                </md-button>
+            -->
+            <!-- ANGULAR DYNAMIC CONTENT -->
+            <div ng-include="'shared/nav.top.html'"  ng-controller="NavTopController" ></div>
+            <div ui-view ></div>
+        </div>
+    </body>
 </html>

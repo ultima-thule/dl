@@ -1,25 +1,10 @@
 <!-- public/components/team/team.html -->
-<!--upper toolbar -->
-<md-toolbar>
-    <div class="md-toolbar-tools">
-      <md-button ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
-        <md-icon>menu</md-icon>
-      </md-button>
-      <h3>{{ title }}</h3>
-      <span flex></span>
-      <!--<md-button aria-label="Open Settings" ng-click="showListBottomSheet($event)">-->
-        <!--<md-icon>more_vert</md-icon>-->
-      <!--</md-button>-->
-    </div>
-</md-toolbar>
-
-
 <!-- table 2-->
 
-<md-content flex md-scroll-y layout="column" layout-fill layout-padding>
-    <md-card style="margin:0px">
+<div flex md-scroll-y layout="column" layout-fill layout-padding>
+    <md-card >
         <md-input-container style="margin:15px;">
-            <label>Filter by search</label>
+            <label>Filter team by search</label>
             <input type="text" ng-model="filterName">
         </md-input-container>
 
@@ -27,30 +12,32 @@
             {{(filteredItems = (teams | filter: filterName))}}
         </div>
     </md-card>
-    <md-table-container>
-      <table md-table md-progress="promise">
-        <thead md-head md-order="teamOrder">
-          <tr md-row>
-            <th md-column md-order-by="name"><span>Name</span></th>
-            <th md-column md-order-by="location"><span>Location</span></th>
-            <th md-column md-order-by="sponsor_name">Sponsor</th>
-            <th md-column md-order-by="default_category">Category</th>
-            <th md-column>Action</th>
-          </tr>
-        </thead>
-        <tbody md-body>
-          <tr md-row md-select="item" md-select-id="{{item._id}}" ng-repeat="item in filteredItems | orderBy: teamOrder | limitTo: query.limit: (query.page- 1) * query.limit">
-            <td md-cell>{{item.name}}</td>
-            <td md-cell>{{item.location}}</td>
-            <td md-cell>{{item.sponsor_name}}</td>
-            <td md-cell>{{item.default_category}}</td>
-            <td md-cell ng-click="showDialog('E', item, $event)"><md-icon>edit</md-icon></td>
-          </tr>
-        </tbody>
-      </table>
-    </md-table-container>
-    <md-table-pagination md-limit="query.limit" md-page="query.page" md-options="[10, 20, 50]" md-total="{{teams.length}}" md-page-select> </md-table-pagination>
-</md-content>
+    <md-card >
+        <md-table-container>
+          <table md-table md-progress="promise">
+            <thead md-head md-order="teamOrder">
+              <tr md-row>
+                <th md-column md-order-by="name"><span>Name</span></th>
+                <th md-column md-order-by="location"><span>Location</span></th>
+                <th md-column md-order-by="sponsor_name">Sponsor</th>
+                <th md-column md-order-by="default_category">Category</th>
+                <th md-column>Action</th>
+              </tr>
+            </thead>
+            <tbody md-body>
+              <tr md-row md-select="item" md-select-id="{{item._id}}" ng-repeat="item in filteredItems | orderBy: teamOrder | limitTo: query.limit: (query.page- 1) * query.limit">
+                <td md-cell>{{item.name}}</td>
+                <td md-cell>{{item.location}}</td>
+                <td md-cell>{{item.sponsor_name}}</td>
+                <td md-cell>{{item.default_category}}</td>
+                <td md-cell ng-click="showDialog('E', item, $event)"><md-icon>edit</md-icon></td>
+              </tr>
+            </tbody>
+          </table>
+        </md-table-container>
+        <md-table-pagination md-limit="query.limit" md-page="query.page" md-options="[10, 20, 50]" md-total="{{teams.length}}" md-page-select> </md-table-pagination>
+    </md-card>
+</div>
 
 <!-- edit dialogs -->
 <!--<div ng-include="team.details.html" id="editor.html"></div>-->

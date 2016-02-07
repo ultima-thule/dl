@@ -18,6 +18,10 @@
     "angular-material-data-table": "latest",
     "angular-resource": "latest",
     "angular-chart.js": "latest",
-    "angular-ui-router": "latest"
+    "angular-ui-router": "latest",
+    "moment": "latest",
+    "angular-moment": "latest",
+    "angular-material-sidenav": "latest",
+    "angular-ui-router-title": "latest"
   }
 }

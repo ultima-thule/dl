@@ -12,6 +12,8 @@ angular
         'md.data.table',
         'mdDataTable',
         'mdtTemplates',
-        'chart.js'
+        'chart.js',
+        'angularMoment',
+        'ui.router.title'
     ]);
 
