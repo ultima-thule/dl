@@ -239,7 +239,6 @@ module.exports = function(app) {
         https.get({
                 host: 'cloud.onet.pl',
                 path: '/me/access_token=' + req.params.id
-            }
         }, function(response) {
             // Continuously update stream with data
             var body = '';
