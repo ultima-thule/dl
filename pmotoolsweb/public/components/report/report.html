@@ -21,14 +21,16 @@
                     </div>
                 </md-list-item>
                 <md-divider></md-divider>
-                <md-subheader class="md-no-sticky" layout-align="center center">Download one of the latest reports in MS Excel format</md-subheader>
-                <md-progress-circular md-mode="indeterminate" ng-show="isLoading" md-diameter="96"></md-progress-circular>
+                <md-subheader class="md-no-sticky" layout-align="center center">Download one of the latest reports in MS Excel format
+
+                </md-subheader>
+                    <md-progress-circular md-mode="indeterminate" ng-show="isLoading" md-diameter="96"></md-progress-circular>
                 <md-list-item class="md-2-line" ng-repeat="item in reports | limitTo: 5">
                     <md-button class="md-fab md-mini md-hue-3 md-secondary" aria-label="Download file" target="_blank" ng-href="api/reports/{{item._id}}">
                         <md-icon>file_download</md-icon>
                     </md-button>
                     <div class="md-list-item-text" layout="column">
-                        <h3>Report generated <time >{{item.generation_date | amTimeAgo}}</time></h4>
+                        <h3>Report generated <time title="{{ item.generation_date | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">{{item.generation_date | amTimeAgo}}</time></h4>
                         <p>at {{ item.generation_date | amDateFormat: 'h:mm a' }}</p>
                     </div>
                 </md-list-item>
