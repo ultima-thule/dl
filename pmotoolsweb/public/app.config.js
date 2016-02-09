@@ -52,14 +52,39 @@ angular
 	    }); 
     };
 
-    runAuthenticate.$inject = ['$rootScope', '$state', '$cookies'];
-    function runAuthenticate ($rootScope, $state, $cookies) {
+    runAuthenticate.$inject = ['$rootScope', '$state', '$cookies', 'userFactory', 'userService', 'authService'];
+    function runAuthenticate ($rootScope, $state, $cookies, userFactory, userService, authService) {
         $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-            if (toState.authenticate && $cookies.get('pmo') === undefined){
-                // User isn’t authenticated
+            var token = $cookies.get('pmo');
+            // User isn’t authenticated
+            if (toState.authenticate && token===undefined){
+                userFactory.signOff ();
                 $state.transitionTo("login");
                 event.preventDefault();
             }
+            else if (toState.authenticate && token!==undefined && userFactory.isSignedIn()===false) {
+                    authService.getMe()
+                    .success(function(data){
+                        userService.get({id: data.info.upn}, function(user) {
+                            var userApp = user;
+                            if (userApp.upn === undefined) {
+                                userApp.upn = data.info.upn;
+                                userApp.avatar = '01';
+                            }
+                            userApp.token = token;
+                            userApp.last_login = Date.now();
+                            userApp.$update(function() {
+                                userFactory.setDisplayName (data.info.displayName);
+                                userFactory.setAvatar (userApp.avatar);
+                                userFactory.signIn ();
+                            });
+                        });
+                    })
+                    .error(function(data) {
+                        console.log('Error: ' + data);
+                    });
+
+                }
         });
     };
 

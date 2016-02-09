@@ -1,7 +1,7 @@
   <div class="md-padding" layout-xs="column" layout="row">
-    <div flex-xs flex-gt-xs="30" layout="column">
+    <div flex-xs flex-gt-xs="40" layout="column">
       <md-card>
-        <img ng-src="assets/images/avatars/av02.png" class="md-card-image" alt="Washed Out">
+        <img ng-src="{{'assets/images/avatars/av' + userApp.avatar + '.png'}}" class="md-card-image" alt="Avatar">
         <md-card-title>
           <md-card-title-text>
             <span class="md-headline">{{user.info.displayName}}</span>
@@ -42,7 +42,7 @@
         </md-card-actions>
       </md-card>
     </div>
-    <div flex-xs flex-gt-xs="70" layout="column">
+    <div flex-xs flex-gt-xs="60" layout="column">
       <md-card>
             <md-card-title>
           <md-card-title-text>

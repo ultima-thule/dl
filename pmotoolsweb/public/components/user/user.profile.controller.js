@@ -12,7 +12,8 @@
             authService.getMe()
             .success(function(data){
                 $scope.user = data;
-                $scope.userApp = userService.get({id: $scope.user.info.upn}, function() {
+                userService.get({id: $scope.user.info.upn}, function(user) {
+                    $scope.userApp = user;
                 });
             }).error(function(data) {
                 console.log('Error: ' + data);
