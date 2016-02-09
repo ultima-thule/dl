@@ -14,6 +14,7 @@
             $scope.title = "IT production reports";
 
             $scope.generateReport = function() {
+                $scope.isLoading = true;
                 reportService.generate ()
                 .success(function(data){
                     reportService.get('/api/reports')
@@ -22,8 +23,12 @@
                                 }).error(function(data2) {
                                     console.log('Error: ' + data2);
                                 });
-                }).error(function(data) {
+                })
+                .error(function(data) {
                     console.log('Error: ' + data);
+                })
+                .finally(function(data) {
+                    $scope.isLoading = false;
                 });
             }
 
@@ -57,11 +62,17 @@
                     console.log('Error: ' + data);
                 });
 
+                //show progress bar
+                $scope.isLoading = true;
                 reportService.get('/api/reports')
                     .success(function(data) {
                         $scope.reports = data;
-                    }).error(function(data) {
+                    })
+                    .error(function(data) {
                         console.log('Error: ' + data);
+                    })
+                    .finally(function() {
+                        $scope.isLoading = false;
                     });
             }
         };
