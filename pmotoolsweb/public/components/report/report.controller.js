@@ -20,14 +20,18 @@
                     reportService.get('/api/reports')
                                 .success(function(data2) {
                                     $scope.reports = data2;
-                                }).error(function(data2) {
+                                })
+                                .error(function(data2) {
                                     console.log('Error: ' + data2);
+                                })
+                                .finally(function() {
+                                    $scope.isLoading = false;
                                 });
                 })
                 .error(function(data) {
                     console.log('Error: ' + data);
                 })
-                .finally(function(data) {
+                .finally(function() {
                     $scope.isLoading = false;
                 });
             }
