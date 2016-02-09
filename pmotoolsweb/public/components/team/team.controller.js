@@ -39,7 +39,6 @@
             }
 
             function showDialog(operation, data, event) {
-                console.log(data);
                 var tempData = undefined;
                 if (data === undefined) {
                     tempData = {};

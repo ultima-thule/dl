@@ -5,9 +5,9 @@
         .module('UserProfileCtrl', [])
         .controller('UserProfileController', UserProfileController);
 
-        UserProfileController.$inject = ['$scope', '$cookies', '$mdDialog', '$mdToast', 'userService', 'authService'];
+        UserProfileController.$inject = ['$scope', '$cookies', '$mdDialog', '$mdToast', 'userService', 'authService', 'userFactory'];
 
-        function UserProfileController($scope, $cookies, $mdDialog, $mdToast, userService, authService) {
+        function UserProfileController($scope, $cookies, $mdDialog, $mdToast, userService, authService, userFactory) {
 
             authService.getMe()
             .success(function(data){
@@ -17,6 +17,10 @@
                 });
             }).error(function(data) {
                 console.log('Error: ' + data);
+            });
+
+            $scope.$watch(function () { return userFactory.getAvatar(); }, function (newValue, oldValue) {
+                $scope.avatar = newValue;
             });
 
             $scope.showAvatars = showAvatars;
@@ -33,7 +37,12 @@
                 );
             }
 
-            function showAvatars(data, ev) {
+            function showAvatars(upn, extData, ev) {
+                var tempData = {
+                    upn: upn,
+                    avatar: extData.avatar
+                };
+
                 $mdDialog.show({
                     templateUrl: 'avatars.html',
                     bindToController: true,
@@ -42,7 +51,8 @@
                     targetEvent: ev,
                     clickOutsideToClose: true,
                     locals: {
-                        selectedItem: data,
+                        oldData: tempData,
+                        selectedUser: extData
                     }
                 })
                 .then(
@@ -59,21 +69,26 @@
         }
 
         //Dialog's controller
-        function DialogAvatarsController($scope, $mdDialog, $mdToast, selectedItem) {
+        function DialogAvatarsController($scope, $mdDialog, $mdToast, userService, userFactory, oldData, selectedUser) {
             $scope.avatars = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
                             '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
 
-            $scope.selectedUser = selectedItem;
-            console.log(selectedItem);
+            $scope.oldData = oldData;
+            $scope.selectedUser = selectedUser;
 
             $scope.cancel = function() {
                 $mdDialog.cancel();
             };
 
             $scope.save = function() {
-                $scope.selectedUser.$update(function() {
-                    $mdDialog.hide('Your avatar was successfully updated.');
-                })
+                userService.get({id: $scope.oldData.upn}, function(user) {
+                    user.avatar = $scope.oldData.avatar;
+                    user.$update(function() {
+                        console.log($scope.oldData.avatar);
+                        userFactory.setAvatar ($scope.oldData.avatar);
+                        $mdDialog.hide('Your avatar was successfully updated.');
+                    });
+                });
             };
         }
 
