@@ -5,10 +5,13 @@
         .module('LogoutCtrl', [])
         .controller('LogoutController', LogoutController);
 
-        LogoutController.$inject = ['$scope', '$state', '$cookies'];
+        LogoutController.$inject = ['$scope', '$state', '$cookies', 'userFactory'];
 
-        function LogoutController($scope, $state, $cookies) {
+        function LogoutController($scope, $state, $cookies, userFactory) {
             $cookies.put('pmo', undefined);
-            $state.go('home');
+
+            userFactory.signOff ();
+
+            $state.go('login');
         }
 })();

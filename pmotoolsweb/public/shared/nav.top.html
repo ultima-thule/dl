@@ -1,11 +1,11 @@
 <md-toolbar >
-    <div class="md-toolbar-tools" layout-padding>
+    <div class="md-toolbar-tools" layout-padding ng-if="isLoggedIn">
         <md-button ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu">
             <md-icon>menu</md-icon>
         </md-button>
         <h3>{{ $title }}</h3>
         <span flex></span>
-        <img ng-src="{{'/assets/images/avatars/av' + userApp.avatar + 's.png'}}" class="user-avatar" />
+        <img ng-src="{{'/assets/images/avatars/av' + avatar + 's.png'}}" class="user-avatar" />
         <md-menu md-offset="0 65">
             <div ng-click="openMenu($mdOpenMenu, $event);">{{displayName}}</div>
             <md-menu-content width="4">

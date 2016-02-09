@@ -5,9 +5,9 @@
         .module('NavTopCtrl', [])
         .controller('NavTopController', NavTopController);
 
-        NavTopController.$inject = ['$rootScope', '$scope', '$cookies', '$mdSidenav', 'authService', 'userService'];
+        NavTopController.$inject = ['$rootScope', '$scope', '$cookies', '$mdSidenav', 'authService', 'userService', 'userFactory'];
 
-        function NavTopController($rootScope, $scope, $cookies, $mdSidenav, authService, userService){
+        function NavTopController($rootScope, $scope, $cookies, $mdSidenav, authService, userService, userFactory){
 
             $scope.loggedIn = $cookies.get("pmo") !== undefined;
 
@@ -21,19 +21,17 @@
                 $mdOpenMenu(ev);
             };
 
-
-            $scope.displayName = '';
-            authService.getMe()
-            .success(function(data){
-                userService.get({id: data.info.upn}, function(user) {
-                    $scope.userApp = user;
-                    $scope.displayName = $scope.userApp.upn || '';
-                });
-
-            }).error(function(data) {
-                console.log('Error: ' + data);
+            $scope.$watch(function () { return userFactory.getDisplayName(); }, function (newValue, oldValue) {
+                $scope.displayName = newValue;
             });
 
-            console.log($rootScope.currentUserSignedIn);
+            $scope.$watch(function () { return userFactory.getAvatar(); }, function (newValue, oldValue) {
+                $scope.avatar = newValue;
+            });
+
+            $scope.$watch(function () { return userFactory.isSignedIn(); }, function (newValue, oldValue) {
+                $scope.isLoggedIn = newValue;
+            });
+
         };
 })();

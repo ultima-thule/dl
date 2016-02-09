@@ -5,11 +5,13 @@
         .module('NavLeftCtrl', [])
         .controller('NavLeftController', NavLeftController);
 
-        NavLeftController.$inject = ['$scope', '$mdSidenav', '$location', '$cookies'];
+        NavLeftController.$inject = ['$scope', '$mdSidenav', '$location', '$cookies', 'userFactory'];
 
-        function NavLeftController($scope, $mdSidenav, $location, $cookies){
+        function NavLeftController($scope, $mdSidenav, $location, $cookies, userFactory) {
 
-            $scope.loggedIn = $cookies.get("pmo") !== undefined;
+            $scope.$watch(function () { return userFactory.isSignedIn(); }, function (newValue, oldValue) {
+                $scope.isLoggedIn = newValue;
+            });
 
             $scope.menu = [
                 {

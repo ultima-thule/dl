@@ -5,9 +5,9 @@
         .module('AuthCallbackCtrl', [])
         .controller('AuthCallbackController', AuthCallbackController);
 
-        AuthCallbackController.$inject = ['$rootScope', '$scope', '$location', '$cookies', '$state', 'userService', 'authService'];
+        AuthCallbackController.$inject = ['$scope', '$location', '$cookies', '$state', 'userService', 'authService', 'userFactory'];
 
-        function AuthCallbackController($rootScope, $scope, $location, $cookies, $state, userService, authService) {
+        function AuthCallbackController($scope, $location, $cookies, $state, userService, authService, userFactory) {
 
             var getQueryParameters = function(str) {
 	            return (str || document.location.search).replace(/(^\?)/,'').split("&").map(function(n){return n = n.split("="),this[n[0]] = n[1],this}.bind({}))[0];
@@ -27,15 +27,15 @@
                     $scope.userApp.token = queryParams.access_token;
                     $scope.userApp.last_login = Date.now();
                     $scope.userApp.$update(function() {
+                        userFactory.setDisplayName ($scope.user.info.displayName);
+                        userFactory.setAvatar ($scope.userApp.avatar);
+                        userFactory.signIn ();
                     });
-                    $rootScope.currentUserSignedIn = true;
-                    $rootScope.currentUser.name = $scope.user.info.displayName;
-                    console.log("root")
                 });
             }).error(function(data) {
                 console.log('Error: ' + data);
             });
 
-            //$state.go('home');
+            $state.go('home');
         }
 })();
