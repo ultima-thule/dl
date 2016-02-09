@@ -6,19 +6,13 @@
         <h3>{{ $title }}</h3>
         <span flex></span>
         <img ng-src="{{'/assets/images/avatars/av' + avatar + 's.png'}}" class="user-avatar" />
-        <md-menu md-offset="0 65">
-            <div ng-click="openMenu($mdOpenMenu, $event);">{{displayName}}</div>
+        <md-menu md-offset="0 50">
+            <div ng-click="openMenu($mdOpenMenu, $event);" class="pointer">{{displayName}} <md-icon>arrow_drop_down</md-icon></div>
             <md-menu-content width="4">
                 <md-menu-item>
                     <md-button ng-href="/users/2/profile">
                         <md-icon>face</md-icon>
                         View profile
-                    </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ng-href="/users/2/settings">
-                        <md-icon>settings</md-icon>
-                        Settings
                     </md-button>
                 </md-menu-item>
                 <md-menu-divider></md-menu-divider>

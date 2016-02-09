@@ -91,3 +91,7 @@ padding-right: 100px; }
     height: 85%;
 }
 
+/*For mouse over div*/
+.pointer {
+    cursor: pointer;
+}
