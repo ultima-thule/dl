@@ -30,8 +30,6 @@
                 })
                 .error(function(data) {
                     console.log('Error: ' + data);
-                })
-                .finally(function() {
                     $scope.isLoading = false;
                 });
             }
