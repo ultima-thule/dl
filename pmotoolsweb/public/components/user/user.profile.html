@@ -1,4 +1,94 @@
-<md-content>
+  <div class="md-padding" layout-xs="column" layout="row">
+    <div flex-xs flex-gt-xs="30" layout="column">
+      <md-card>
+        <img ng-src="assets/images/avatars/av02.png" class="md-card-image" alt="Washed Out">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">{{user.info.displayName}}</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <md-list>
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text">
+                        <h3>Mail</h3>
+                        <p>{{user.info.mail}}</p>
+                    </div>
+                </md-list-item>
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text">
+                        <h3>Position</h3>
+                        <p>{{user.info.description}}</p>
+                    </div>
+                </md-list-item>
+                <md-divider ></md-divider>
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text">
+                        <h3>Description</h3>
+                        <p>{{user.info.info}}</p>
+                    </div>
+                </md-list-item>
+                 <md-divider ></md-divider>
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text">
+                        <h3>Mobile</h3>
+                        <p>{{user.info.mobile}}</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+          <md-button ng-click="showAvatars(userApp, $event)">Change avatar</md-button>
+        </md-card-actions>
+      </md-card>
+    </div>
+    <div flex-xs flex-gt-xs="70" layout="column">
+      <md-card>
+            <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Latest activity</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <md-list>
+                <md-list-item class="md-3-line" ng-repeat="i in [1, 2, 3, 4, 5]">
+                    <md-icon class="material-icons md-48">track_changes</md-icon>
+                    <div class="md-list-item-text">
+                        <h3>This is test</h3>
+                        <h4>this is test</h4>
+                        This is an activity
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-card-content>
+      </md-card>
+    </div>
+  </md-content>
 
+<!-- edit avatars dialogs -->
 
-</md-content>
+<script type="text/ng-template" id="avatars.html">
+    <md-dialog aria-label="Select an avatar"  ng-cloak >
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Select an avatar</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon aria-label="Close dialog">close</md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content layout-wrap>
+                <md-radio-group ng-model="selectedAvatar" layout="row" layout-wrap layout-padding>
+                    <md-radio-button ng-repeat="av in avatars" ng-value="av" aria-label="av">
+                        <img ng-src="{{'/assets/images/avatars/av'+ av + 'm.png'}}" nc-click="select()">
+                    </md-radio-button>
+                </md-radio-group>
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <span flex></span>
+                <md-button ng-click="save()" md-autofocus ng-disabled="selectedAvatar===undefined">I want this!</md-button>
+                <md-button ng-click="cancel()">Cancel</md-button>
+            </md-dialog-actions>
+    </md-dialog>
+</script>

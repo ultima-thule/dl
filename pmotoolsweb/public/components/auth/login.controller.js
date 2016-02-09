@@ -8,6 +8,5 @@
         LoginController.$inject = ['$scope', '$state'];
 
         function LoginController($scope, $state) {
-
         }
 })();

@@ -6,10 +6,10 @@
         .module('AuthService', [])
         .factory('authService', authService);
 
-        function authService($http) {
+        function authService($http, $cookies) {
             return {
-                getMe : function(token) {
-                    return $http.get('/api/me/' + token);
+                getMe : function() {
+                    return $http.get('/api/me/' + $cookies.get("pmo"));
                 }
             }
         };

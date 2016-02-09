@@ -7,6 +7,7 @@ var ConfigParam = require('./model/configparam');
 var Card = require('./model/card');
 var Sponsor = require('./model/sponsor');
 var Board = require('./model/board');
+var UserApp  = require('./model/userApp');
 var LeanKitClient  = require("leankit-client");
 var https = require('https');
 
@@ -209,6 +210,33 @@ module.exports = function(app) {
         });
     });
 
+
+    // =========================== USER ================================
+    // create new user
+    app.put('/api/users', function(req, res) {
+        UserApp.create(req.body, function (err, small) {
+            if (err)
+                res.send(err);
+            res.send(200);
+        })
+    });
+
+    // get a single user
+    app.get('/api/users/:id', function(req, res) {
+        UserApp.findOne({upn : req.params.id}, function(err, user) {
+            if (err)
+                res.send(err);
+            res.json(user);
+        });
+    });
+
+
+    // update a single user
+    app.put('/api/users/:id', function(req, res) {
+        UserApp.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, function (err, user) {
+            res.send(user);
+        });
+    });
 
     // =========================== LEANKIT SYNCHRONIZATION ================================
 

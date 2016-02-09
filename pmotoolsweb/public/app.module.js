@@ -11,7 +11,8 @@ angular
         'SponsorCtrl', 'SponsorService', 'TeamCtrl', 'TeamService',
         'ReportCtrl', 'ReportService', 'ParamService', 'DashboardService',
         'AgileboardCtrl', 'AgileboardService', 'AgileboardDetailsCtrl',
-        'UserProfileCtrl', 'UserSettingsCtrl', 'LoginCtrl', 'LogoutCtrl',
+        'UserProfileCtrl', 'UserSettingsCtrl', 'UserService',
+        'LoginCtrl', 'LogoutCtrl',
         'AuthCallbackCtrl', 'AuthService'
     ]);
 
