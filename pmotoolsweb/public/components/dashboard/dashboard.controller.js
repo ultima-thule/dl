@@ -46,14 +46,21 @@
                         $scope.workflowData = result.data.map(function(work) {
                             return work.count;
                         });
-                        $scope.chartOptions = {
+                        $scope.chartPieOptions = {
+                            maintainAspectRatio: true,
                             tooltipEvents: [],
                             showTooltips: true,
                             tooltipCaretSize: 0,
                             onAnimationComplete: function () {
                                 this.showTooltip(this.segments, true);
                             },
+                            responsive: true
                         }
+                        $scope.chartBarOptions = {
+                            maintainAspectRatio: true,
+                            responsive: true
+                        }
+
                   });
         };
 })();

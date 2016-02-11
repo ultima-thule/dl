@@ -86,11 +86,6 @@ padding-right: 100px; }
 .gridListdemoBasicUsage md-grid-tile {
   transition: all 400ms ease-out 50ms; }
 
-.gridListdemoBasicUsage md-grid-tile .chart-container {
-    width: 85%;
-    height: 85%;
-}
-
 /*For mouse over div*/
 .pointer {
     cursor: pointer;

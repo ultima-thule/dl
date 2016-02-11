@@ -42,7 +42,9 @@
                     <span class="md-title">Active initiatives per business</span>
                 </md-card-header-text>
             </md-card-header>
-            <canvas id="workflow-bar" class="chart chart-bar" chart-data="sponsorData" chart-labels="sponsorLabels"></canvas>
+            <md-card-content>
+                <canvas id="workflow-bar" class="chart chart-bar" chart-data="sponsorData" chart-labels="sponsorLabels" chart-options="chartBarOptions"></canvas>
+            </md-card-content>
         </md-card>
     </md-grid-tile>
 
@@ -53,7 +55,9 @@
                     <span class="md-title">Initiatives in status</span>
                 </md-card-header-text>
             </md-card-header>
-            <canvas id="workflow-pie" class="chart chart-pie" chart-data="workflowData" chart-labels="workflowLabels" chart-options="chartOptions"></canvas>
+            <md-card-content>
+                <canvas id="workflow-pie" class="chart chart-pie" chart-data="workflowData" chart-labels="workflowLabels" chart-options="chartPieOptions"  chart-legend="true"></canvas>
+            </md-card-content>
         </md-card>
     </md-grid-tile>
 
