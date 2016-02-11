@@ -75,19 +75,22 @@
     <script src="app.config.js"></script>
 </head>
 
-<body layout="row" ng-style="{'background-image':'url(/assets/images/patterns/mp-03.png)'}">
-        <!-- Side Navigation -->
-        <div ng-include="'shared/nav.left.html'" ng-controller="NavLeftController" layout="column"></div>
+<body>
+    <div layout="row" ng-style="{'background-image':'url(/assets/images/patterns/mp-03.png)'}">
+            <!-- Side Navigation -->
+            <div ng-include="'shared/nav.left.html'" ng-controller="NavLeftController"></div>
 
-        <div layout="column" layout-fill>
-            <!--
-                <md-button class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="showAdd($event)">
-                <md-icon>add</md-icon>
-                </md-button>
-            -->
-            <!-- ANGULAR DYNAMIC CONTENT -->
-            <div ng-include="'shared/nav.top.html'"  ng-controller="NavTopController"></div>
-            <div ui-view ></div>
-        </div>
-    </body>
+            <div layout="column" layout-fill>
+                <!--
+                    <md-button class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="showAdd($event)">
+                    <md-icon>add</md-icon>
+                    </md-button>
+                -->
+                <!-- ANGULAR DYNAMIC CONTENT -->
+                <div ng-include="'shared/nav.top.html'" ng-controller="NavTopController"></div>
+                <div ui-view></div>
+                <div ng-include="'shared/nav.bottom.html'"></div>
+            </div>
+    </div>
+</body>
 </html>

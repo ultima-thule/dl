@@ -71,7 +71,7 @@ module.exports = function(app) {
     // gel all reports
     app.get('/api/reports', function(req, res) {
         // use mongoose to get all teams in the database
-        Report.find({}).sort('-generation_date').exec (function(err, reports) {
+        Report.find({}).limit(5).sort('-generation_date').exec (function(err, reports) {
             if (err)
                 res.send(err);
             res.json(reports);
