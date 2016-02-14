@@ -23,12 +23,14 @@
                     if ($scope.userApp.upn === undefined) {
                         $scope.userApp.upn = $scope.user.info.upn;
                         $scope.userApp.avatar = '01';
+                        $scope.userApp.roles = ['user'];
                     }
                     $scope.userApp.token = queryParams.access_token;
                     $scope.userApp.last_login = Date.now();
                     $scope.userApp.$update(function() {
                         userFactory.setDisplayName ($scope.user.info.displayName);
                         userFactory.setAvatar ($scope.userApp.avatar);
+                        userFactory.setAdmin ($.inArray('admin', $scope.userApp.roles) > -1);
                         userFactory.signIn ();
                     });
                 });

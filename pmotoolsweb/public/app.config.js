@@ -70,12 +70,14 @@ angular
                             if (userApp.upn === undefined) {
                                 userApp.upn = data.info.upn;
                                 userApp.avatar = '01';
+                                userApp.roles = ['user'];
                             }
                             userApp.token = token;
                             userApp.last_login = Date.now();
                             userApp.$update(function() {
                                 userFactory.setDisplayName (data.info.displayName);
                                 userFactory.setAvatar (userApp.avatar);
+                                userFactory.setAdmin ($.inArray('admin', userApp.roles) > -1);
                                 userFactory.signIn ();
                             });
                         });

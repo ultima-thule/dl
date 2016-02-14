@@ -20,7 +20,8 @@
             var data = {
                 signedIn: false,
                 displayName: '',
-                avatar: '0'
+                avatar: '01',
+                isAdmin: false
             };
 
             return {
@@ -36,6 +37,12 @@
                 setAvatar: function (name) {
                     data.avatar = name;
                 },
+                getAdmin: function () {
+                    return data.isAdmin;
+                },
+                setAdmin: function (isAdmin) {
+                    data.isAdmin = isAdmin;
+                },
                 isSignedIn: function () {
                     return data.signedIn;
                 },
@@ -45,7 +52,8 @@
                 signOff: function () {
                     data.signedIn = false;
                     data.displayName = '';
-                    data.avatar = '0';
+                    data.avatar = '01';
+                    data.isAdmin = false;
                 }
             };
         };

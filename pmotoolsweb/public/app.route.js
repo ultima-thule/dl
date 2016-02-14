@@ -28,7 +28,16 @@
                 resolve: {
                   $title: function() { return 'Initiatives'; }
                 }
+            })
 
+            .state('cards.bysponsor', {
+                url: '/cards',
+                templateUrl: 'components/card/card.html',
+                controller: 'CardController',
+                authenticate: true,
+                resolve: {
+                  $title: function() { return 'Initiatives by sponsor'; }
+                }
             })
 
             // SPONSORS STATES =================================
@@ -87,7 +96,7 @@
 
 
             .state('userprofile', {
-                url: '/users/:id/profile',
+                url: '/users/profile',
                 templateUrl: 'components/user/user.profile.html',
                 controller: 'UserProfileController',
                 authenticate: true,

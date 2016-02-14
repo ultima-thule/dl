@@ -6,11 +6,18 @@
         .module('DashboardCtrl', [])
         .controller('DashboardController', DashboardController);
 
-        DashboardController.$inject = ['$scope', '$mdBottomSheet', '$mdSidenav', '$mdDialog', '$location', '$log',
+        DashboardController.$inject = ['$scope', '$mdBottomSheet', '$mdSidenav', '$mdDialog', '$location', '$log', '$state',
                                         'dashboardService', 'sponsorService', 'paramService'];
 
-        function DashboardController($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location, $log,
+        function DashboardController($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location, $log, $state,
                                         dashboardService, sponsorService, paramService) {
+
+            $scope.clickToSponsor =  function (event) {
+                if (event !== undefined){
+                    console.log(event[0].label)
+                    $state.go('cards.bysponsor', {sponsorName: event[0].label});
+                }
+            }
 
 
             var data = paramService.getId('last_leankit_synchro')
@@ -62,5 +69,6 @@
                         }
 
                   });
+
         };
 })();

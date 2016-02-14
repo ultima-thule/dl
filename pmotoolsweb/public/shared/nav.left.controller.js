@@ -13,6 +13,10 @@
                 $scope.isLoggedIn = newValue;
             });
 
+            $scope.$watch(function () { return userFactory.getAdmin(); }, function (newValue, oldValue) {
+                $scope.isAdmin = newValue;
+            });
+
             $scope.menu = [
                 {
                   link : '/',
