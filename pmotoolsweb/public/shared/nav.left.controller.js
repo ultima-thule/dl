@@ -25,8 +25,13 @@
                 },
                 {
                   link : '/reports',
-                  title: 'Reports',
+                  title: 'Production reports',
                   icon: 'insert_chart'
+                },
+                {
+                  link : '/agenda',
+                  title: 'Agenda reports',
+                  icon: 'schedule'
                 },
                 {
                   link : '/cards',

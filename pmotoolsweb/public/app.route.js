@@ -80,6 +80,17 @@
                 authenticate: true
             })
 
+            // reports page that will use the SponsorController
+            .state('agenda', {
+                url: '/agenda',
+                templateUrl: 'components/agenda/agenda.html',
+                controller: 'AgendaController',
+                authenticate: true,
+                resolve: {
+                  $title: function() { return 'Agenda planning reports'; }
+                }
+            })
+
             .state('agileboards', {
                 url: '/agileboards',
                 templateUrl: 'components/agileboard/agileboard.html',

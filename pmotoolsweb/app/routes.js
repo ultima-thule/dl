@@ -71,7 +71,18 @@ module.exports = function(app) {
     // gel all reports
     app.get('/api/reports', function(req, res) {
         // use mongoose to get all teams in the database
-        Report.find({}).limit(5).sort('-generation_date').exec (function(err, reports) {
+        Report.find({is_plan: false}).limit(5).sort('-generation_date').exec (function(err, reports) {
+            if (err)
+                res.send(err);
+            res.json(reports);
+        });
+    });
+
+
+    // gel all reports
+    app.get('/api/agendareports', function(req, res) {
+        // use mongoose to get all teams in the database
+        Report.find({is_plan: true}).limit(5).sort('-generation_date').exec (function(err, reports) {
             if (err)
                 res.send(err);
             res.json(reports);
@@ -95,6 +106,25 @@ module.exports = function(app) {
             return res.send(200, output)
         });
     });
+
+    // generate new report with python script
+    app.get('/api/genreportplan', function(req, res) {
+
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_plan.py']);
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/py_gen_plan.py']);
+        //var python = require('child_process').spawn('C://python34//python.exe', ["C://Users//jgrzywna//PycharmProjects//dl//pmotoolsweb//public//python//py_gen_plan.py"]);
+
+        var output = "";
+        python.stdout.on('data', function(){ output += data });
+        python.on('close', function(code)
+        {
+            console.log(code)
+            if (code !== 0) {  return res.send(500, code); }
+            return res.send(200, output)
+        });
+    });
+
+
 
     // =========================== CONFIG ================================
 

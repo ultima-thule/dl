@@ -6,5 +6,6 @@ var mongoose = require('mongoose');
 
 module.exports = mongoose.model('report', {
     xls_data : Buffer,
-    generation_date: Date
+    generation_date: Date,
+    is_plan: Boolean
 }, 'report');

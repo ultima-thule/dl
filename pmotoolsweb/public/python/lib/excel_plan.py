@@ -6,11 +6,11 @@ import datetime
 import io
 import re
 
-glNumberOfWraps = 8
+glNumberOfWraps = 11
 glColWidth = []
 
 
-class ExcelReport (object):
+class ExcelPlanReport (object):
 
     def __init__(self, workbook_name, worksheet_name):
         self.output = io.BytesIO()
@@ -114,8 +114,9 @@ class ExcelReport (object):
         global glNumberOfWraps
         global glColWidth
 
-        headers = ["Business initiative", "Actual cost", "Estimated cost", "Budget percentage",
-                   "Budget status", "Planned release date", "Release status", "Risks & notes"]
+        headers = ["BO", "Initiative", "Description", "Team", "SM", "Type", "Is support?",
+                   "Estimated cost", "Planned release date",
+                   "Grooming problem?", "Risks & notes"]
         glNumberOfWraps = len(headers)
 
         glColWidth = [len(headers[x]) for x in range(glNumberOfWraps)]
@@ -158,36 +159,6 @@ class ExcelReport (object):
         self._write_cell(0, "", None, True)
 
 
-    def writeSingleCard (self, card):
-            strComment = ""
-            cellFormatTxt = None
-            cellFormatNum = None
-
-            if card.is_blocked:
-                strComment = card.block_reason
-                cellFormatTxt = self._format_risk_medium
-                cellFormatNum = self._format_risk_medium_num
-            elif (len(card.comments) > 0):
-                strComment = re.sub("<.*?>", "", card.comments[0].text)
-                if card.type.name ==  'Progress: Risk identified':
-                    cellFormatTxt = self._format_risk_medium
-                    cellFormatNum = self._format_risk_medium_num
-                elif card.type.name ==  'Progress: High risk':
-                    cellFormatTxt = self._format_risk_high
-                    cellFormatNum = self._format_risk_high_num
-
-
-            self._write_cell(0, card.title, cellFormatTxt)
-            self._write_cell(1, str(card.task_board_completed_card_size), cellFormatNum)
-            self._write_cell(2, str(card.task_board_total_size), cellFormatNum)
-            self._write_cell(3, str(card.task_board_completed_card_size / card.task_board_total_size), cellFormatNum) #budget %
-            self._write_cell(4, "", cellFormatTxt) #budget status
-            self._write_cell(5, card.due_date, cellFormatTxt)
-            self._write_cell(6, "", cellFormatTxt) #release status
-            self._write_cell(7, strComment, cellFormatTxt)
-            self._write_cell(0, "", None, True)
-
-
     def writeTeam (self, team):
         global glNumberOfWraps
         self._write_merged_cell (team.name, glNumberOfWraps, self._format_lane, True)
@@ -197,16 +168,6 @@ class ExcelReport (object):
         global glNumberOfWraps
 
         self._write_merged_cell(self.sponsors_dict.get(sponsor_name, ""), glNumberOfWraps, self._format_lane, True)
-
-
-    def getBudgetStatusName(self, card):
-        budgetTolerance = 1 + (int(self.params_dict["report_budget_tolerance"]) / 100)
-
-        if card.taskboard_completed_card_size is None or card.size is None or card.size == 0:
-            return ""
-        if card.taskboard_completed_card_size <= (budgetTolerance * card.size):
-            return "in budget"
-        return "budget exceeded"
 
 
     def getReleaseStatusName(self, card):
@@ -234,53 +195,47 @@ class ExcelReport (object):
 
     def writeCard (self, card):
 
-        self._write_cell(0, card.title)
-        self._write_cell(1, self.getInCurrency(card.taskboard_completed_card_size), self._format_currency)
-        self._write_cell(2, self.getInCurrency(card.size), self._format_currency)
-        percentage = 0
-        if card.size > 0:
-            percentage = card.taskboard_completed_card_size / card.size
-        self._write_cell(3, percentage, self._format_percent)
+        self._write_cell(0, self.sponsors_dict.get(card.extended_data.sponsor_name, ""))
+        self._write_cell(1, card.title)
+        self._write_cell(2, re.sub("<.*?>", "", card.description))
+        self._write_cell(3, card.team_name)
+        self._write_cell(4, card.assigned_user_name)
 
-        budgetTxt = self.getBudgetStatusName(card)
-        cellFormatTxt = None
-        if budgetTxt == "budget exceeded":
-            cellFormatTxt = self._format_risk_high
-        self._write_cell(4, budgetTxt, cellFormatTxt) #budget status
+        initType = ""
+        isSupport = "no"
+        if card.type_name == "Plan: new initiative" or card.type_name == "Plan: new initiative from Product Owner":
+            initType = "New"
+        elif card.type_name == "Plan: initiative continuation":
+            initType = "Continuation"
+        elif card.type_name == "Plan: support":
+            isSupport = "yes"
+
+        if card.external_card_id is not None and card.external_card_id.lstrip().lower().startswith("support"):
+            isSupport = "yes"
+
+        self._write_cell(5, initType)
+        self._write_cell(6, isSupport)
+        self._write_cell(7, card.size, self._format_currency)
 
         if card.due_date is not None:
-            self._write_cell(5, card.due_date.strftime("%Y/%m/%d"))
+            self._write_cell(8, card.due_date.strftime("%Y/%m/%d"))
         else:
-            self._write_cell(5, "")
-        releaseTxt = self.getReleaseStatusName(card)
-        cellFormatTxt = None
-        if releaseTxt == "term exceeded":
-            cellFormatTxt = self._format_risk_high
-        self._write_cell(6, releaseTxt, cellFormatTxt) #release status
+            self._write_cell(8, "")
 
+        groomingProblem = "no"
         strComment = ""
-        if card.is_blocked:
-            strComment = card.block_reason
-        elif len(card.comments) > 0 and (card.type_name == 'Progress: Risk identified' or card.type_name == 'Progress: High risk'):
-            strComment = re.sub("<.*?>", "", card.comments[0].text)
-        self._write_cell(7, strComment)
+
+        if card.class_of_service_title == "Grooming: No scope" or card.is_blocked:
+            groomingProblem = "yes"
+            if card.is_blocked:
+                strComment = card.block_reason
+            elif len(card.comments) > 0 :
+                strComment = re.sub("<.*?>", "", card.comments[0].text)
+
+        self._write_cell(9, groomingProblem)
+        self._write_cell(10, strComment)
 
         self._write_cell(0, "", None, True)
-
-
-    def writeSummary (self, in_progress, total, label):
-            self._write_cell(0, label, self._format_lane)
-            self._write_cell(1, self.getInCurrency(in_progress), self._format_lane_currency)
-            self._write_cell(2, self.getInCurrency(total), self._format_lane_currency)
-            percentage = 0
-            if total > 0:
-                percentage = in_progress / total
-            self._write_cell(3, percentage, self._format_lane_percent)
-            self._write_cell(4, "", self._format_lane)
-            self._write_cell(5, "", self._format_lane)
-            self._write_cell(6, "", self._format_lane)
-            self._write_cell(7, "", self._format_lane)
-            self._write_cell(0, "", None, True)
 
 
     def getMaxSize (self, card_size, taskboard_size):

@@ -194,7 +194,7 @@ class LeankitCard(Converter):
     optional_attributes = ['Active', 'AssignedUserId', 'AssignedUserIds', 'AssignedUserName', 'AttachmentsCount',
                             'BlockReason', 'BlockStateChangeDate', 'BoardId', 'BoardTitle', 'ClassOfServiceId',
                             'ClassOfServiceTitle', 'CommentsCount', 'CurrentTaskBoardId', 'CreateDate',
-                            'DateArchived', 'DueDate', 'ExternalCardId', 'ExternalSystemName',
+                            'DateArchived', 'DueDate', 'ExternalCardID', 'ExternalSystemName',
                             'ExternalSystemUrl', 'Index', 'IsBlocked', 'LaneId', 'LastActivity', 'LastComment',
                             'LastMove', 'ParentCardId', 'PriorityText', 'Size', 'StartDate',
                             'TaskBoardCompletedCardCount', 'TaskBoardCompletedCardSize',
@@ -336,9 +336,15 @@ class LeankitBoard(Converter):
         self.details = self.connector.get(
             self.base_uri + str(self.id)).ReplyData[0]
 
+        self._backlog = self.connector.get(
+            "/Board/" + str(self.id) + "/Backlog").ReplyData[0]
+
+
         self._populateUsers(self.details['BoardUsers'])
         self._populateCardTypes(self.details['CardTypes'])
-        self._populateLanes(self.details['Lanes'])
+        self._populateLanes(self.details['Lanes'] + self._backlog)
+
+
 
     def fetchCardDetails(self, card_id):
         resp_data = self.connector.get(
