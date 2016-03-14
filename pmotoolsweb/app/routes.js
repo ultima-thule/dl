@@ -82,6 +82,7 @@ module.exports = function(app) {
     // generate new report with python script
     app.get('/api/genreport', function(req, res) {
 
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen.py']);
         var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/py_gen.py']);
         //var python = require('child_process').spawn('C://python34//python.exe', ["C://Users//jgrzywna//PycharmProjects//dl//pmotoolsweb//public//python//py_gen.py"]);
 
@@ -89,6 +90,7 @@ module.exports = function(app) {
         python.stdout.on('data', function(){ output += data });
         python.on('close', function(code)
         {
+            console.log(code)
             if (code !== 0) {  return res.send(500, code); }
             return res.send(200, output)
         });
@@ -97,13 +99,48 @@ module.exports = function(app) {
     // =========================== CONFIG ================================
 
     // get a single config param
-    app.get('/api/params/:id', function(req, res) {
+    app.get('/api/namedparams/:id', function(req, res) {
         ConfigParam.find({param_key: req.params.id}, function(err, configparams) {
             if (err)
                 res.send(err);
             res.json (configparams);
           });
     });
+
+    // get all params
+    app.get('/api/params', function(req, res) {
+        ConfigParam.find(function(err, params) {
+            if (err)
+                res.send(err);
+            res.json(params);
+        });
+    });
+
+    // get a single param D
+    app.get('/api/params/:id', function(req, res) {
+        ConfigParam.findOne({param_key : req.params.id}, function(err, param) {
+            if (err)
+                res.send(err);
+            res.json(param);
+        });
+    });
+
+    // create new sponsor
+    app.post('/api/params', function(req, res) {
+        ConfigParam.create(req.body, function (err, param) {
+            if (err)
+                res.send(err);
+            res.send(200);
+        })
+    });
+
+    // update a single param
+    app.put('/api/params/:id', function(req, res) {
+        ConfigParam.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, function (err, param) {
+            res.send(param);
+        });
+    });
+
 
     // =========================== CARD ================================
 

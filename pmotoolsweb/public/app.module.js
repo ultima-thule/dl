@@ -12,6 +12,7 @@ angular
         'ReportCtrl', 'ReportService', 'ParamService', 'DashboardService',
         'AgileboardCtrl', 'AgileboardService', 'AgileboardDetailsCtrl',
         'UserProfileCtrl', 'UserSettingsCtrl', 'UserService',
+        'ParamCtrl', 'ParamService',
         'LoginCtrl', 'LogoutCtrl',
         'AuthCallbackCtrl', 'AuthService'
     ]);

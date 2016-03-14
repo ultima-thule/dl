@@ -7,10 +7,10 @@
         .controller('DashboardController', DashboardController);
 
         DashboardController.$inject = ['$scope', '$mdBottomSheet', '$mdSidenav', '$mdDialog', '$location', '$log', '$state',
-                                        'dashboardService', 'sponsorService', 'paramService'];
+                                        'dashboardService', 'sponsorService', 'namedParamService'];
 
         function DashboardController($scope, $mdBottomSheet, $mdSidenav, $mdDialog, $location, $log, $state,
-                                        dashboardService, sponsorService, paramService) {
+                                        dashboardService, sponsorService, namedParamService) {
 
             $scope.clickToSponsor =  function (event) {
                 if (event !== undefined){
@@ -20,7 +20,7 @@
             }
 
 
-            var data = paramService.getId('last_leankit_synchro')
+            var data = namedParamService.getByKey('last_leankit_synchro')
             .success(function(data){
                 if (data.length > 0)
                     $scope.lastLeankitDate = data[0].param_value_date

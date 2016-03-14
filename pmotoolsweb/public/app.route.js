@@ -115,6 +115,16 @@
                 }
             })
 
+            .state('params', {
+                url: '/params',
+                templateUrl: 'components/param/param.html',
+                controller: 'ParamController',
+                authenticate: true,
+                resolve: {
+                  $title: function() { return 'System parameters'; }
+                }
+            })
+
             .state('authcallback', {
                 url: '/auth/callback',
                 templateUrl: 'components/auth/auth.callback.html',

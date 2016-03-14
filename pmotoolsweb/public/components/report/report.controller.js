@@ -7,9 +7,9 @@
         .module('ReportCtrl', [])
         .controller('ReportController', ReportController);
 
-        ReportController.$inject = ['$scope', '$http', '$routeParams', '$location', 'reportService', 'FileSaver', 'Blob', 'paramService'];
+        ReportController.$inject = ['$scope', '$http', '$routeParams', '$location', 'reportService', 'FileSaver', 'Blob', 'namedParamService'];
 
-        function ReportController($scope, $http, $routeParams, $location, reportService, FileSaver, Blob, paramService) {
+        function ReportController($scope, $http, $routeParams, $location, reportService, FileSaver, Blob, namedParamService) {
 
             $scope.title = "IT production reports";
 
@@ -56,7 +56,7 @@
             else
             {
                 // when landing on the page, get all reports and show them
-                var data = paramService.getId('last_leankit_synchro')
+                var data = namedParamService.getByKey('last_leankit_synchro')
                 .success(function(data){
                     if (data.length > 0)
                         $scope.lastLeankitDate = data[0].param_value_date

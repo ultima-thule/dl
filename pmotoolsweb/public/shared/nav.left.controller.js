@@ -50,6 +50,11 @@
                   link : '/teams',
                   title: 'Teams',
                   icon: 'people'
+                },
+                {
+                    link: '/params',
+                    title: 'Parameters',
+                    icon: 'settings'
                 }
             ];
         };

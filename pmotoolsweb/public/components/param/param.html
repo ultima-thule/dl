@@ -1,0 +1,90 @@
+<!-- public/components/param/param.html -->
+<!-- table 2-->
+
+<div flex md-scroll-y layout="column" layout-fill layout-padding>
+    <md-card >
+        <md-input-container style="margin:15px;">
+            <label>Filter parameter by search</label>
+            <input type="text" ng-model="filterName">
+        </md-input-container>
+
+        <div ng-hide="true">
+            {{(filteredItems = (params | filter: filterName))}}
+        </div>
+    </md-card>
+    <md-card >
+        <md-table-container>
+          <table md-table md-progress="promise">
+            <thead md-head md-order="paramOrder">
+              <tr md-row>
+                <th md-column md-order-by="param_key"><span>Key</span></th>
+                <th md-column md-order-by="param_description"><span>Description</span></th>
+                <th md-column md-order-by="param_value_date"><span>Value - date</span></th>
+                <th md-column md-order-by="param_value_string">Value - string</th>
+                <th md-column>Action</th>
+              </tr>
+            </thead>
+            <tbody md-body>
+              <tr md-row md-select="item" md-select-id="{{item._id}}" ng-repeat="item in filteredItems | orderBy: paramOrder | limitTo: query.limit: (query.page- 1) * query.limit">
+                <td md-cell>{{item.param_key}}</td>
+                <td md-cell>{{item.param_description}}</td>
+                  <td md-cell>{{item.param_value_date}}</td>
+                <td md-cell>{{item.param_value_string}}</td>
+                <td md-cell ng-click="showDialog('E', item, $event)"><md-icon>edit</md-icon></td>
+              </tr>
+            </tbody>
+          </table>
+        </md-table-container>
+        <md-table-pagination md-limit="query.limit" md-page="query.page" md-options="[10, 20, 50]" md-total="{{param.length}}" md-page-select> </md-table-pagination>
+    </md-card>
+    <md-button class="md-fab" aria-label="Create" ng-click="showDialog('C', undefined, $event)">
+        <md-icon>add</md-icon>
+    </md-button>
+</div>
+
+<!-- edit dialogs -->
+<!--<div ng-include="param.details.html" id="editor.html"></div>-->
+<script type="text/ng-template" id="editor.html">
+        <md-dialog aria-label="Edit" class="dialog-70">
+        <form name="inputForm" novalidate>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <md-button class="md-icon-button" ng-click="back()">
+                        <md-icon aria-label="Back">arrow_back</md-icon>
+                        <md-tooltip md-delay="1500" md-autohide="true">Back</md-tooltip>
+                    </md-button>
+                    <h2>{{view.operation}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="save()" ng-show="view.operation === 'Create' || view.operation === 'Edit'" ng-disabled="inputForm.$invalid">
+                        <md-icon aria-label="Save">save</md-icon>
+                        <md-tooltip md-delay="1500" md-autohide="true">Save</md-tooltip>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <md-content layout-padding ng-cloak>
+                    <div layout-gt-sm="row">
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Key</label>
+                            <input type="text" name="param_key" ng-model="view.selectedItem.param_key" />
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Description</label>
+                            <input type="text" name="param_description" ng-model="view.selectedItem.param_description" />
+                        </md-input-container>
+                    </div>
+                    <div layout-gt-sm="row">
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>Date value</label>
+                            <input type="text" name="param_value_date" disabled ng-model="view.selectedItem.param_value_date" />
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>String value</label>
+                            <input type="text" name="param_value_string" ng-model="view.selectedItem.param_value_string" />
+                        </md-input-container>
+                    </div>
+                </md-content>
+            </md-dialog-content>
+        </form>
+    </md-dialog>
+</script>

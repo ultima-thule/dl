@@ -18,6 +18,23 @@ def _initSponsorsDict ():
         spons_dict[i.tag] = i.name + " (" + i.bo_name + ")"
     return spons_dict
 
+def _initReportParams():
+    key_budget_tolerance = "report_budget_tolerance"
+    key_date_tolerance = "report_date_tolerance"
+
+    params_dict = {}
+    params_dict[key_budget_tolerance] = 0
+    params_dict[key_date_tolerance] = 0
+
+    configparams = lib.mongoLeankit.Configparam.objects()
+    for i in configparams:
+        if i.param_key == key_budget_tolerance:
+            params_dict[key_budget_tolerance] = i.param_value_string
+        elif i.param_key == key_date_tolerance:
+            params_dict[key_date_tolerance] = i.param_value_string
+
+    return params_dict
+
 
 def writeCollection(collection, excelReport):
     global sum_in_progress
@@ -55,7 +72,7 @@ if __name__ == '__main__':
 
     excelReport = lib.excel.ExcelReport(datetime.datetime.now().strftime("Status_%Y-%m-%d-%H-%M-%S.xlsx"),
                          "Portfolio DreamLab")
-    excelReport.initReport(_initSponsorsDict ())
+    excelReport.initReport(_initSponsorsDict (), _initReportParams())
 
 
     # write all cards with set up sponsor
