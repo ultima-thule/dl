@@ -6,7 +6,7 @@ import datetime
 import io
 import re
 
-glNumberOfWraps = 11
+glNumberOfWraps = 12
 glColWidth = []
 
 
@@ -114,7 +114,7 @@ class ExcelPlanReport (object):
         global glNumberOfWraps
         global glColWidth
 
-        headers = ["BO", "Initiative", "Description", "Team", "SM", "Type", "Is support?",
+        headers = ["BO", "Initiative", "Description", "Team", "SM", "Type", "Is recommended?", "Is support?",
                    "Estimated cost", "Planned release date",
                    "Grooming problem?", "Risks & notes"]
         glNumberOfWraps = len(headers)
@@ -213,14 +213,19 @@ class ExcelPlanReport (object):
         if card.external_card_id is not None and card.external_card_id.lstrip().lower().startswith("support"):
             isSupport = "yes"
 
+        isRecommended = "no"
+        if card.class_of_service_title == "Grooming: IT Recommendation":
+            isRecommended = "yes"
+
         self._write_cell(5, initType)
-        self._write_cell(6, isSupport)
-        self._write_cell(7, card.size, self._format_currency)
+        self._write_cell(6, isRecommended)
+        self._write_cell(7, isSupport)
+        self._write_cell(8, card.size, self._format_currency)
 
         if card.due_date is not None:
-            self._write_cell(8, card.due_date.strftime("%Y/%m/%d"))
+            self._write_cell(9, card.due_date.strftime("%Y/%m/%d"))
         else:
-            self._write_cell(8, "")
+            self._write_cell(9, "")
 
         groomingProblem = "no"
         strComment = ""
@@ -232,8 +237,8 @@ class ExcelPlanReport (object):
             elif len(card.comments) > 0 :
                 strComment = re.sub("<.*?>", "", card.comments[0].text)
 
-        self._write_cell(9, groomingProblem)
-        self._write_cell(10, strComment)
+        self._write_cell(10, groomingProblem)
+        self._write_cell(11, strComment)
 
         self._write_cell(0, "", None, True)
 
