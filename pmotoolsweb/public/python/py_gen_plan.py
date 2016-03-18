@@ -59,12 +59,14 @@ if __name__ == '__main__':
     # write all cards with set up sponsor
     cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
                                   & Q(board_masterlane_title='Development backlog')
+                                  & Q(workflow_status_name='Next quarter development plan')
                                   & Q(extended_data__sponsor_name__ne ='')).order_by('extended_data__sponsor_name', 'title')
     writeCollection(cards, excelReport)
 
     # writa all cards without sponsor
     cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
                                   & Q(board_masterlane_title='Development backlog')
+                                  & Q(workflow_status_name='Next quarter development plan')
                                   & Q(extended_data__sponsor_name ='')).order_by('title')
     writeCollection(cards, excelReport)
 
