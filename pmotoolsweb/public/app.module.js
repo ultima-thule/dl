@@ -11,6 +11,7 @@ angular
         'SponsorCtrl', 'SponsorService', 'TeamCtrl', 'TeamService',
         'ReportCtrl', 'ReportService',
         'AgendaCtrl', 'AgendaService',
+        'AgendabyteamCtrl', 'AgendabyteamService',
         'ParamService', 'DashboardService',
         'AgileboardCtrl', 'AgileboardService', 'AgileboardDetailsCtrl',
         'UserProfileCtrl', 'UserSettingsCtrl', 'UserService',

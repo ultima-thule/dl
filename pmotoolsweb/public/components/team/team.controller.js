@@ -9,7 +9,7 @@
 
         TeamController.$inject = ['$scope', '$http', '$mdDialog', '$mdToast', 'teamService'];
         TeamDetailsController.$inject = ['$scope', '$filter', '$resource', '$mdDialog', '$mdToast',
-            'operation', 'selectedItem', 'dataCollection', 'teamService', 'sponsorService'];
+            'operation', 'selectedItem', 'dataCollection', 'teamService', 'sponsorService', 'userLKService'];
 
 
         function TeamController($scope, $http, $mdDialog, $mdToast, teamService) {
@@ -48,7 +48,11 @@
                         name: data.name,
                         location: data.location,
                         default_category: data.default_category,
-                        sponsor_name: data.sponsor_name
+                        sponsor_name: data.sponsor_name,
+                        coordinator: data.coordinator,
+                        sm: data.sm,
+                        pmo: data.pmo,
+                        pmoBoss: data.pmoBosso
                     };
                 }
                 $mdDialog.show({
@@ -78,7 +82,7 @@
         };
 
         //Dialog's controller
-        function TeamDetailsController ($scope, $filter, $resource, $mdDialog, $mdToast, operation, selectedItem, dataCollection, teamService, sponsorService) {
+        function TeamDetailsController ($scope, $filter, $resource, $mdDialog, $mdToast, operation, selectedItem, dataCollection, teamService, sponsorService, userLKService) {
             $scope.view = {
                 dataCollection: dataCollection,
                 selectedItem: selectedItem,
@@ -95,6 +99,9 @@
 
             $scope.pmos = ('PMO Asia;PMO Sławek').split(';').map(function(pmo) {
                     return {name: pmo};
+            });
+
+            $scope.sms =  $scope.coordinators =userLKService.query(function() {
             });
 
             $scope.sponsors = sponsorService.query(function() {

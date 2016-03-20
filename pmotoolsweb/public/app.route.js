@@ -80,7 +80,6 @@
                 authenticate: true
             })
 
-            // reports page that will use the SponsorController
             .state('agenda', {
                 url: '/agenda',
                 templateUrl: 'components/agenda/agenda.html',
@@ -88,6 +87,16 @@
                 authenticate: true,
                 resolve: {
                   $title: function() { return 'Agenda planning reports'; }
+                }
+            })
+
+            .state('agendabyteam', {
+                url: '/agendabyteam',
+                templateUrl: 'components/agendabyteam/agendabyteam.html',
+                controller: 'AgendabyteamController',
+                authenticate: true,
+                resolve: {
+                  $title: function() { return 'Agenda by teams'; }
                 }
             })
 

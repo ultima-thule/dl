@@ -1,0 +1,56 @@
+<!-- public/components/report/report.html -->
+<div layout="row" layout-xs="column" layout-padding >
+   <md-card layout-fill >
+        <md-card-content>
+            <div class="md-list-item-text" layout="column">
+                <md-input-container style="margin-right: 10px;">
+                    <label>Select team</label>
+                    <md-select ng-model="selectedTeam" ng-change="loadInitiatives()">
+                        <md-option ng-repeat="team in teams | orderBy: 'name'" ng-value="team">{{team.name}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <md-list>
+                <md-list-item class="md-3-line">
+                    <img ng-src="assets\images\avatars\av01m.png" alt="team_type" />
+                    <div class="md-list-item-text">
+                        <h3>{{selectedTeam.name}}</h3>
+                        <h4>{{selectedTeam.location}}</h4>
+                        <p>SM: {{selectedTeam.sm}} / Coordinator: {{selectedTeam.coordinator}}</p>
+                    </div>
+                </md-list-item>
+                <md-divider></md-divider>
+                <md-subheader class="md-no-sticky" layout-align="center center">See all team initiatives for upcoming quarter
+                </md-subheader>
+                <md-list-item class="md-3-line" ng-repeat="card in initiatives | orderBy: 'type_name'" >
+                    <md-icon>done</md-icon>
+                    <div class="md-list-item-text" layout="column">
+                        <h3>{{card.title}}</h3>
+                        <p>Type: {{card.type_name}}</p>
+                        <p>Cost in team [h]: {{card.size}}</p>
+                        <p>Recommendation: {{card.class_of_service_title}}</p>
+                        <!--<p>Total cost [h]: {{card.size}}</p>-->
+                         <!--<md-list>-->
+                             <!--<md-list-item>-->
+                                <!--<div class="md-list-item-text" layout="column">-->
+                                  <!--<div class="md-list-item-text" layout="column">-->
+                                    <!--<h3>Support name</h3>-->
+                                    <!--<p>Cost in team [h]: </p>-->
+                                  <!--</div>-->
+                                <!--</div>-->
+                             <!--</md-list-item>-->
+                             <!--<md-list-item>-->
+                                <!--<div class="md-list-item-text" layout="column">-->
+                                  <!--<div class="md-list-item-text" layout="column">-->
+                                    <!--<h3>Support name</h3>-->
+                                    <!--<p>Cost in team [h]: </p>-->
+                                  <!--</div>-->
+                                <!--</div>-->
+                             <!--</md-list-item>-->
+                         <!--</md-list>-->
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-card-content>
+    </md-card>
+</div>

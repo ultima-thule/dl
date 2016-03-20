@@ -30,8 +30,13 @@
                 },
                 {
                   link : '/agenda',
-                  title: 'Agenda reports',
+                  title: 'Agenda planning reports',
                   icon: 'schedule'
+                },
+                {
+                  link : '/agendabyteam',
+                  title: 'Agenda by teams',
+                  icon: 'storage'
                 },
                 {
                   link : '/cards',

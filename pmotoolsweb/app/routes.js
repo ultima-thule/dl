@@ -8,6 +8,7 @@ var Card = require('./model/card');
 var Sponsor = require('./model/sponsor');
 var Board = require('./model/board');
 var UserApp  = require('./model/userApp');
+var User  = require('./model/user');
 var LeanKitClient  = require("leankit-client");
 var https = require('https');
 
@@ -201,6 +202,17 @@ module.exports = function(app) {
         });
     });
 
+    // get all planned initiatives by team
+    app.get('/api/agendabyteam/:id', function(req, res) {
+        Card.find({team_name: req.params.id, board_masterlane_title: "Development backlog", workflow_status_name: "Next quarter development plan"},
+        'title description extended_data team_name size due_date class_of_service_title type_name external_card_id',
+        function(err, cards) {
+            if (err)
+                res.send(err);
+            res.json(cards);
+        });
+    });
+
     // =========================== CHARTS ================================
 
     app.get('/api/dashboard/cardbysponsor', function(req, res){
@@ -279,7 +291,35 @@ module.exports = function(app) {
 
 
     // =========================== USER ================================
-    // create new user
+
+    // get all users
+    app.get('/api/usersLeankit', function(req, res) {
+        User.find(function(err, users) {
+            if (err)
+                res.send(err);
+            res.json(users);
+        });
+    });
+
+    // get a single user
+    app.get('/api/usersLeankit/:id', function(req, res) {
+        User.findOne({upn : req.params.id}, function(err, user) {
+            if (err)
+                res.send(err);
+            res.json(user);
+        });
+    });
+
+
+    // update a single user
+    app.put('/api/usersLeankit/:id', function(req, res) {
+        User.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, function (err, user) {
+            res.send(user);
+        });
+    });
+
+    // =========================== USER APP================================
+    // create new user app
     app.put('/api/users', function(req, res) {
         UserApp.create(req.body, function (err, small) {
             if (err)
@@ -288,7 +328,7 @@ module.exports = function(app) {
         })
     });
 
-    // get a single user
+    // get a single user app
     app.get('/api/users/:id', function(req, res) {
         UserApp.findOne({upn : req.params.id}, function(err, user) {
             if (err)
@@ -298,7 +338,7 @@ module.exports = function(app) {
     });
 
 
-    // update a single user
+    // update a single user app
     app.put('/api/users/:id', function(req, res) {
         UserApp.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, function (err, user) {
             res.send(user);

@@ -9,5 +9,8 @@ module.exports = mongoose.model('team', {
     location: String,
     default_category: String,
     pmo: String,
-    sponsor_name: String
+    pmoBoss: String,
+    sponsor_name: String,
+    coordinator: String,
+    sm: String
 }, 'team');

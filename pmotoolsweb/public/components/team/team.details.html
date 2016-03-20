@@ -49,6 +49,24 @@
                         </md-select>
                     </md-input-container>
                 </div>
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Scrum master</label>
+                        <md-select ng-model="view.selectedItem.sm">
+                            <md-option ng-repeat="sm in sms" value="{{sm.full_name}}">
+                                {{sm.full_name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Coordinator</label>
+                        <md-select ng-model="view.selectedItem.coordinator">
+                            <md-option ng-repeat="coord in coordinators | orderBy: 'name'" value="{{coord.full_name}}">
+                                {{coord.full_name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
             </md-content>
         </md-dialog-content>
     </form>

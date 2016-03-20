@@ -5,10 +5,19 @@
     angular
         .module('UserService', [])
         .factory('userService', userService)
+        .factory('userLKService', userLKService)
         .factory('userFactory', userFactory);
 
         function userService($resource) {
             return $resource('/api/users/:id', { id: '@_id' }, {
+                update: {method: 'PUT'},
+                query: {method: 'GET', isArray: true},
+                get: {method: 'GET'},
+            });
+        };
+
+        function userLKService($resource) {
+            return $resource('/api/usersLeankit/:id', { id: '@_id' }, {
                 update: {method: 'PUT'},
                 query: {method: 'GET', isArray: true},
                 get: {method: 'GET'},
