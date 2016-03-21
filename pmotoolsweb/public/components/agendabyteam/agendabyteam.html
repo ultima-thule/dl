@@ -1,56 +1,140 @@
 <!-- public/components/report/report.html -->
-<div layout="row" layout-xs="column" layout-padding >
-   <md-card layout-fill >
-        <md-card-content>
-            <div class="md-list-item-text" layout="column">
-                <md-input-container style="margin-right: 10px;">
-                    <label>Select team</label>
-                    <md-select ng-model="selectedTeam" ng-change="loadInitiatives()">
-                        <md-option ng-repeat="team in teams | orderBy: 'name'" ng-value="team">{{team.name}}</md-option>
-                    </md-select>
+<div flex md-scroll-y layout="column" layout-fill layout-padding>
+   <md-card >
+        <div class="md-list-item-text" layout="column" style="margin:15px;">
+            <md-input-container >
+                <label>Select team</label>
+                <md-select ng-model="selectedTeam" ng-change="loadInitiatives()">
+                    <md-option ng-repeat="team in teams | orderBy: 'name'" ng-value="team">{{team.name}}</md-option>
+                </md-select>
+            </md-input-container>
+            <div layout-gt-sm="row" ng-if="selectedTeam">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Scrum Master</label>
+                    <input type="text" name="name" disabled ng-model="selectedTeam.sm" />
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Coordinator</label>
+                    <input type="text" name="name" disabled ng-model="selectedTeam.coordinator" />
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Total capacity</label>
+                    <input type="text" name="name" disabled ng-model="selectedTeam.capacity" />
                 </md-input-container>
             </div>
-            <md-list>
-                <md-list-item class="md-3-line">
-                    <img ng-src="assets\images\avatars\av01m.png" alt="team_type" />
-                    <div class="md-list-item-text">
-                        <h3>{{selectedTeam.name}}</h3>
-                        <h4>{{selectedTeam.location}}</h4>
-                        <p>SM: {{selectedTeam.sm}} / Coordinator: {{selectedTeam.coordinator}}</p>
+            <div ng-if="selectedTeam">
+                <span ng-repeat="(key, value) in totalByRecommendation" layout-padding>
+                    <md-icon class="material-icons md-18" style="{{legendStyles[value._id].style}}">{{legendStyles[value._id].icon}}</md-icon>{{value.total}} h {{legendStyles[value._id].text}}
+                </span>
+            </div>
+        </div>
+    </md-card>
+    <md-card ng-if="selectedTeam">
+        <md-card-content layout="row" layout-xs="column" ng-cloak >
+            <div flex-gt-sm="50" flex>
+                <md-toolbar layout="row" class="md-hue-1">
+                    <div class="md-toolbar-tools">
+                        <span>Continuations</span>
                     </div>
-                </md-list-item>
-                <md-divider></md-divider>
-                <md-subheader class="md-no-sticky" layout-align="center center">See all team initiatives for upcoming quarter
-                </md-subheader>
-                <md-list-item class="md-3-line" ng-repeat="card in initiatives | orderBy: 'type_name'" >
-                    <md-icon>done</md-icon>
-                    <div class="md-list-item-text" layout="column">
-                        <h3>{{card.title}}</h3>
-                        <p>Type: {{card.type_name}}</p>
-                        <p>Cost in team [h]: {{card.size}}</p>
-                        <p>Recommendation: {{card.class_of_service_title}}</p>
-                        <!--<p>Total cost [h]: {{card.size}}</p>-->
-                         <!--<md-list>-->
-                             <!--<md-list-item>-->
-                                <!--<div class="md-list-item-text" layout="column">-->
-                                  <!--<div class="md-list-item-text" layout="column">-->
-                                    <!--<h3>Support name</h3>-->
-                                    <!--<p>Cost in team [h]: </p>-->
-                                  <!--</div>-->
-                                <!--</div>-->
-                             <!--</md-list-item>-->
-                             <!--<md-list-item>-->
-                                <!--<div class="md-list-item-text" layout="column">-->
-                                  <!--<div class="md-list-item-text" layout="column">-->
-                                    <!--<h3>Support name</h3>-->
-                                    <!--<p>Cost in team [h]: </p>-->
-                                  <!--</div>-->
-                                <!--</div>-->
-                             <!--</md-list-item>-->
-                         <!--</md-list>-->
+                </md-toolbar>
+                 <md-content>
+                    <md-list flex class="md-dense" >
+                        <md-list-item class="md-2-line" ng-repeat="card in initiatives | filter: {type_name: 'Plan: initiative continuation'} | orderBy: '-class_of_service_title'" >
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == recommKey" style="{{legendStyles[recommKey].style}}">check_box</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == noRecommKey" style="{{legendStyles[noRecommKey].style}}">error_outline</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == emptyKey">highlight_off</md-icon>
+                             <div class="md-list-item-text" layout="column">
+                                <h4>{{card.title }}</h4>
+                                <p>{{card.size}} h in this team / {{allSumed[card.title].total}} h total</p>
+                            </div>
+                            <md-button class="md-secondary" ng-click="showDialog(card, allSumed[card.title].total, $event)" aria-label="supports">More</md-button>
+                        </md-list-item>
+                    </md-list>
+                 </md-content>
+                <md-divider ></md-divider>
+                <md-toolbar layout="row" class="md-hue-1">
+                    <div class="md-toolbar-tools">
+                        <span>New</span>
                     </div>
-                </md-list-item>
-            </md-list>
+                </md-toolbar>
+                 <md-content>
+                    <md-list flex class="md-dense" >
+                        <md-list-item class="md-2-line" ng-repeat="card in initiatives | filter: {type_name: 'Plan: new initiative'}  | orderBy: '-class_of_service_title'" >
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == recommKey" style="{{legendStyles[recommKey].style}}">check_box</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == noRecommKey" style="{{legendStyles[noRecommKey].style}}">error_outline</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == emptyKey">highlight_off</md-icon>
+                             <div class="md-list-item-text" layout="column">
+                                <h4>{{card.title }}</h4>
+                                <p>{{card.size}} h in this team / {{allSumed[card.title].total}} h total</p>
+                            </div>
+                            <md-button class="md-secondary" ng-click="showDialog(card, allSumed[card.title].total, $event)" aria-label="supports">More</md-button>
+                        </md-list-item>
+                    </md-list>
+                 </md-content>
+            </div>
+            <div flex-gt-sm="50" flex>
+                <md-toolbar layout="row" class="md-hue-1">
+                    <div class="md-toolbar-tools">
+                        <span>Supports</span>
+                    </div>
+                </md-toolbar>
+                 <md-content>
+                    <md-list flex class="md-dense" >
+                        <md-list-item class="md-2-line" ng-repeat="card in initiatives | filter: {type_name: 'Plan: support'} | orderBy: '-class_of_service_title'" >
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == recommKey" style="{{legendStyles[recommKey].style}}">check_box</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == noRecommKey" style="{{legendStyles[noRecommKey].style}}">error_outline</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == emptyKey">highlight_off</md-icon>
+                             <div class="md-list-item-text" layout="column">
+                                <h4>{{card.title }}</h4>
+                                <p>{{card.size}} h in this team / {{allSumed[card.title].total}} h total</p>
+                            </div>
+                            <md-button class="md-secondary" ng-click="showDialog(card, allSumed[card.title].total, $event)" aria-label="supports">More</md-button>
+                        </md-list-item>
+                    </md-list>
+                 </md-content>
+            </div>
         </md-card-content>
     </md-card>
 </div>
+
+
+<!-- edit dialogs -->
+<!--<div ng-include="team.details.html" id="editor.html"></div>-->
+<script type="text/ng-template" id="editor.html">
+        <md-dialog aria-label="Edit" class="dialog-70">
+        <form name="inputForm" novalidate>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <md-button class="md-icon-button" ng-click="back()">
+                        <md-icon aria-label="Back">arrow_back</md-icon>
+                        <md-tooltip md-delay="1500" md-autohide="true">Back</md-tooltip>
+                    </md-button>
+                    <h2>{{view.selectedItem.title}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="save()" ng-show="view.operation === 'Edit'" ng-disabled="inputForm.$invalid">
+                        <md-icon aria-label="Save">save</md-icon>
+                        <md-tooltip md-delay="1500" md-autohide="true">Save</md-tooltip>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <md-content layout-gt-sm="column" layout-margin>
+                    <h3></h3>
+                    <h4>{{view.selectedItem.size}} h in this team / {{view.selectedItem.totalSize}} h total</h4>
+                    <span ng-bind-html="view.selectedItem.description"></span>
+                    <md-list flex class="md-dense" >
+                        <md-list-item class="md-2-line" ng-repeat="support in allSupports | orderBy: '-class_of_service_title'" >
+                            <md-icon class="material-icons md-18" ng-if="support.class_of_service_title == recommKey" style="{{legendStyles[recommKey].style}}">check_box</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="support.class_of_service_title == noRecommKey" style="{{legendStyles[noRecommKey].style}}">error_outline</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="support.class_of_service_title == emptyKey">highlight_off</md-icon>
+                             <div class="md-list-item-text" layout="column">
+                                 <h4>{{support.team_name}}</h4>
+                                <p>{{support.size}} h in this team</p>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+            </md-dialog-content>
+        </form>
+    </md-dialog>
+</script>

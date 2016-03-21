@@ -6,7 +6,6 @@
             <label>Filter by search</label>
             <input type="text" ng-model="filterName">
         </md-input-container>
-
         <div ng-hide="true">
             {{(filteredItems = (cards | filter: filterName))}}
         </div>

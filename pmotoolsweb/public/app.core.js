@@ -5,6 +5,7 @@ angular
         'ngMaterial',
         'ngResource',
         'ngCookies',
+        'ngSanitize',
         /* Cross-app modules */
         'app.route',
         'ui.router',

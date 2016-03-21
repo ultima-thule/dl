@@ -213,6 +213,53 @@ module.exports = function(app) {
         });
     });
 
+     app.get('/api/agendabyteamtotal/:id', function(req, res){
+        Card.aggregate([{
+                    $match: {
+                        team_name: req.params.id,
+                        board_masterlane_title: "Development backlog",
+                        workflow_status_name: "Next quarter development plan" }
+                    },
+                    {
+                    $group: { _id: '$class_of_service_title',
+                        total: {$sum: '$size'} }
+                    },
+                    { $sort: {total: -1} }
+                ], function (err, result) {
+                    if (err)
+                        res.send(err);
+                    res.json(result);
+            });
+        });
+
+     app.get('/api/agendabyinitiative', function(req, res){
+        Card.aggregate([{
+                    $match: {
+                        board_masterlane_title: "Development backlog",
+                        workflow_status_name: "Next quarter development plan" }
+                    },
+                    {
+                    $group: { _id: '$title',
+                        total: {$sum: '$size'} }
+                    },
+                    { $sort: {total: -1} }
+                ], function (err, result) {
+                    if (err)
+                        res.send(err);
+                    res.json(result);
+            });
+        });
+
+     app.get('/api/agendaallsupports/:id', function(req, res){
+         Card.find({title: req.params.id, board_masterlane_title: "Development backlog", workflow_status_name: "Next quarter development plan"},
+        'title team_name size class_of_service_title type_name external_card_id',
+        function(err, cards) {
+            if (err)
+                res.send(err);
+            res.json(cards);
+        });
+     });
+
     // =========================== CHARTS ================================
 
     app.get('/api/dashboard/cardbysponsor', function(req, res){
