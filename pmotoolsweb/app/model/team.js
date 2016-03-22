@@ -12,5 +12,6 @@ module.exports = mongoose.model('team', {
     pmoBoss: String,
     sponsor_name: String,
     coordinator: String,
-    sm: String
+    sm: String,
+    capacity: Number
 }, 'team');
