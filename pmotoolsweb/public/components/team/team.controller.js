@@ -52,7 +52,8 @@
                         coordinator: data.coordinator,
                         sm: data.sm,
                         pmo: data.pmo,
-                        pmoBoss: data.pmoBosso
+                        pmoBoss: data.pmoBoss,
+                        capacity: data.capacity
                     };
                 }
                 $mdDialog.show({
