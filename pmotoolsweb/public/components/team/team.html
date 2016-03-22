@@ -21,6 +21,7 @@
                 <th md-column md-order-by="location"><span>Location</span></th>
                 <th md-column md-order-by="sponsor_name">Sponsor</th>
                 <th md-column md-order-by="default_category">Category</th>
+                  <th md-column md-order-by="capacity">Category</th>
                 <th md-column>Action</th>
               </tr>
             </thead>
@@ -30,6 +31,7 @@
                 <td md-cell>{{item.location}}</td>
                 <td md-cell>{{item.sponsor_name}}</td>
                 <td md-cell>{{item.default_category}}</td>
+                  <td md-cell>{{item.capacity}}</td>
                 <td md-cell ng-click="showDialog('E', item, $event)"><md-icon>edit</md-icon></td>
               </tr>
             </tbody>
