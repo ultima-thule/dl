@@ -23,7 +23,7 @@ def _insertBoards (boards):
 
         b.save()
 
-def _insertUsers (users, board_id):
+def _insertUsers (users):
     for k, v in users.items():
         u = lib.mongoLeankit.User()
 
@@ -34,7 +34,6 @@ def _insertUsers (users, board_id):
         u.role = v.role
         u.role_name = v.role_name
         u.user_name = v.user_name
-        u.board_id = board_id
 
         u.save()
 
@@ -238,6 +237,12 @@ def _insertAllTeamsForBoard(board):
 def _cleanBoard(board_id):
     lib.mongoLeankit.Card.objects(board_id=board_id).delete()
 
+def _cleanUsers():
+    lib.mongoLeankit.User.objects().delete()
+
+def _cleanTeams():
+    lib.mongoLeankit.Team.objects().delete()
+
 def _insertParamInfo(key):
     param = lib.mongoLeankit.Configparam.objects(param_key=key).modify(upsert=True, new=True,
                                                                set__param_value_date=datetime.datetime.now())
@@ -253,10 +258,13 @@ if __name__ == '__main__':
     # parse arguments
     parser = argparse.ArgumentParser(description='Synchronize with LeanKit account.')
     parser.add_argument('-b', '--board', help='board (id) to be synchronized', type=int)
+    parser.add_argument('-r', '--regenerate', help='regenerate board', default=False)
     parser.add_argument('-c', '--comments', help='fetch comments', default=False)
+    parser.add_argument('-u', '--users', help='regenerate users for board', default=False)
+    parser.add_argument('-t', '--teams', help='regenerate teams for board', default=False)
     args = parser.parse_args()
 
-    if args.board is not None and args.comments is not None:
+    if args.board is not None:
         # init kanban
         kanban = lib.leankitwrapper.LeankitKanban('dreamlab', 'joanna.grzywna@grupaonet.pl',
                                            'piotrek2003')
@@ -265,12 +273,25 @@ if __name__ == '__main__':
         board = kanban.getBoard(board_id=args.board)
 
         if board is not None:
-            if args.comments:
-                for card in board.cards:
-                    card.fetchComments()
-            _cleanBoard(args.board)
-            _insertAllCardsForBoard(board.root_lane.child_lanes, '')
-            _insertParamInfo("last_leankit_synchro")
+            if args.regenerate is not None and args.regenerate:
+                print("Regenerating board '%s'..." % args.board)
+                if args.comments is not None and args.comments:
+                    for card in board.cards:
+                        card.fetchComments()
+                _cleanBoard(args.board)
+                _insertAllCardsForBoard(board.root_lane.child_lanes, '')
+                _insertParamInfo("last_leankit_synchro")
+
+            if args.users is not None and args.users:
+                print("Regenerating users for board '%s'..." % args.board)
+                _cleanUsers()
+                _insertUsers(board.users)
+
+            if args.teams is not None and args.teams:
+                print("Regenerating teams for board '%s'..." % args.board)
+                _cleanTeams()
+                _insertAllTeamsForBoard(board)
+
 
     print("Ending script")
     print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
