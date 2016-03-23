@@ -37,11 +37,6 @@
                   link : '/agendabyteam',
                   title: 'Agenda planning by teams',
                   icon: 'storage'
-                },
-                {
-                  link : '/cards',
-                  title: 'Initiatives',
-                  icon: 'message'
                 }
 //                {
 //                  link : '/agileboards',
@@ -51,6 +46,11 @@
             ];
 
             $scope.admin = [
+                {
+                  link : '/cards',
+                  title: 'Initiatives',
+                  icon: 'message'
+                },
                 {
                   link : '/sponsors',
                   title: 'Sponsors',
