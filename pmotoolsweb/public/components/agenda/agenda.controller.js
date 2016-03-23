@@ -99,7 +99,8 @@
                 agendabyteamService.getRecommendedByTeam()
                     .success(function(data) {
                         for (var i = 0, len = data.length; i < len; i++) {
-                            if (data[i].teamagg[0]!== undefined && data[i].total > data[i].teamagg[0].capacity)
+                            if (data[i].teamagg[0]!== undefined && data[i].teamagg[0].capacity!== undefined
+                                && data[i].teamagg[0].capacity > 0 && data[i].total > data[i].teamagg[0].capacity)
                             {
                                 $scope.teamOverrun.push (data[i]);
                             }
