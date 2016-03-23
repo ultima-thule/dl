@@ -18,7 +18,7 @@
             <thead md-head md-order="teamOrder">
               <tr md-row>
                 <th md-column md-order-by="name"><span>Name</span></th>
-                <th md-column md-order-by="location"><span>Location</span></th>
+                <th md-column md-order-by="pmo"><span>PMO</span></th>
                 <th md-column md-order-by="sponsor_name">Sponsor</th>
                 <th md-column md-order-by="default_category">Category</th>
                   <th md-column md-order-by="capacity">Capacity</th>
@@ -28,7 +28,7 @@
             <tbody md-body>
               <tr md-row md-select="item" md-select-id="{{item._id}}" ng-repeat="item in filteredItems | orderBy: teamOrder | limitTo: query.limit: (query.page- 1) * query.limit">
                 <td md-cell>{{item.name}}</td>
-                <td md-cell>{{item.location}}</td>
+                <td md-cell>{{item.pmo}}</td>
                 <td md-cell>{{item.sponsor_name}}</td>
                 <td md-cell>{{item.default_category}}</td>
                   <td md-cell>{{item.capacity}}</td>
