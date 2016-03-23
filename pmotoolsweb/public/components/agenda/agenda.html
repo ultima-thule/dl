@@ -119,7 +119,24 @@
                         </md-list-item>
                     </md-list>
                     <md-list flex class="md-dense"  ng-if="view.listType==='COSTZERO'">
-                        <md-list-item class="md-2-line" ng-repeat="element in view.listData" >
+                        <md-subheader class="md-hue-1">Kraków</md-subheader>
+                        <md-list-item class="md-2-line" ng-repeat="element in view.listData | filter: 'KRK'" >
+                             <div class="md-list-item-text" layout="column">
+                                <h4>{{element.title}}</h4>
+                                <p>{{element.team_name}} / SM: {{element.assigned_user_name}}</p>
+                            </div>
+                            <md-divider ng-if="!$last"></md-divider>
+                        </md-list-item>
+                        <md-subheader class="md-hue-1">Warszawa</md-subheader>
+                        <md-list-item class="md-2-line" ng-repeat="element in view.listData | filter: 'WAW'" >
+                             <div class="md-list-item-text" layout="column">
+                                <h4>{{element.title}}</h4>
+                                <p>{{element.team_name}} / SM: {{element.assigned_user_name}}</p>
+                            </div>
+                            <md-divider ng-if="!$last"></md-divider>
+                        </md-list-item>
+                        <md-subheader class="md-hue-1">Wrocław</md-subheader>
+                        <md-list-item class="md-2-line" ng-repeat="element in view.listData | filter: 'WRO'" >
                              <div class="md-list-item-text" layout="column">
                                 <h4>{{element.title}}</h4>
                                 <p>{{element.team_name}} / SM: {{element.assigned_user_name}}</p>
@@ -128,7 +145,24 @@
                         </md-list-item>
                     </md-list>
                     <md-list flex class="md-dense"  ng-if="view.listType==='OVERRUN'">
-                        <md-list-item class="md-2-line" ng-repeat="element in view.listData" >
+                        <md-subheader class="md-hue-1">Kraków</md-subheader>
+                        <md-list-item class="md-2-line" ng-repeat="element in view.listData | filter: 'KRK'" >
+                             <div class="md-list-item-text" layout="column">
+                                <h4>{{element.teamagg[0].name}}</h4>
+                                <p>Planned {{element.total}} / Available {{element.teamagg[0].capacity}} ({{element.total / element.teamagg[0].capacity * 100 | number:0}}%)</p>
+                            </div>
+                            <md-divider ng-if="!$last"></md-divider>
+                        </md-list-item>
+                        <md-subheader class="md-hue-1">Warszawa</md-subheader>
+                        <md-list-item class="md-2-line" ng-repeat="element in view.listData | filter: 'WAW'" >
+                             <div class="md-list-item-text" layout="column">
+                                <h4>{{element.teamagg[0].name}}</h4>
+                                <p>Planned {{element.total}} / Available {{element.teamagg[0].capacity}} ({{element.total / element.teamagg[0].capacity * 100 | number:0}}%)</p>
+                            </div>
+                            <md-divider ng-if="!$last"></md-divider>
+                        </md-list-item>
+                        <md-subheader class="md-hue-1">Wrocław</md-subheader>
+                        <md-list-item class="md-2-line" ng-repeat="element in view.listData | filter: 'WRO'" >
                              <div class="md-list-item-text" layout="column">
                                 <h4>{{element.teamagg[0].name}}</h4>
                                 <p>Planned {{element.total}} / Available {{element.teamagg[0].capacity}} ({{element.total / element.teamagg[0].capacity * 100 | number:0}}%)</p>
