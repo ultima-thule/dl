@@ -14,16 +14,22 @@
 
         function AgendabyteamController($scope, $mdDialog, $sanitize, agendabyteamService, teamService) {
 
-            $scope.totalSize = 0;
-            $scope.initiatives = [];
-            $scope.totalByRecommendation = [];
-            $scope.allSumed = {};
+            $scope.reinit = function ()
+            {
+                $scope.totalSize = 0;
+                $scope.initiatives = [];
+                $scope.totalByRecommendation = [];
+                $scope.allSumed = {};
+                $scope.recommendedInfo = 0;
+            }
+
+            $scope.reinit();
 
             $scope.showDialog = showDialog;
 
-            $scope.recommKey = 'Grooming: IT Recommendation';
-            $scope.noRecommKey = 'Grooming: No scope';
-            $scope.emptyKey = '';
+            $scope.recommended = 'Grooming: IT Recommendation';
+            $scope.noScope = 'Grooming: No scope';
+            $scope.notRecommended = '';
 
             $scope.legendStyles = {
                 'Grooming: IT Recommendation' : {style: 'color:limegreen', icon: 'check_box', text: 'recommended initiatives'},
@@ -35,13 +41,21 @@
             });
 
             $scope.loadInitiatives = function () {
+                $scope.reinit();
                 agendabyteamService.getForTeam($scope.selectedTeam.name)
                     .success(function(data) {
                         $scope.initiatives = data;
 
                         agendabyteamService.getTotalByRecommendation($scope.selectedTeam.name)
                             .success(function(data2) {
-                                $scope.totalByRecommendation = data2;
+                                for (var i = 0, len = data2.length; i < len; i++) {
+                                    $scope.totalByRecommendation[data2[i]._id] = data2[i];
+                                }
+                                if ($scope.totalByRecommendation[$scope.recommended] !== undefined)
+                                {
+                                    $scope.recommendedInfo = (Number($scope.totalByRecommendation[$scope.recommended].total) / Number($scope.selectedTeam.capacity) * 100) || 0;
+                                }
+
 
                                 agendabyteamService.getAllInitiativesSumed()
                                     .success(function(data3) {
@@ -94,9 +108,9 @@
             $scope.allSupports = [];
             $scope.back = back;
 
-            $scope.recommKey = 'Grooming: IT Recommendation';
-            $scope.noRecommKey = 'Grooming: No scope';
-            $scope.emptyKey = '';
+            $scope.recommended = 'Grooming: IT Recommendation';
+            $scope.noScope = 'Grooming: No scope';
+            $scope.notRecommended = '';
 
             $scope.legendStyles = {
                 'Grooming: IT Recommendation' : {style: 'color:limegreen', icon: 'check_box', text: 'recommended initiatives'},

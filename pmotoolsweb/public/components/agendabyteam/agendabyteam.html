@@ -10,6 +10,10 @@
             </md-input-container>
             <div layout-gt-sm="row" ng-if="selectedTeam">
                 <md-input-container class="md-block" flex-gt-sm>
+                    <label>PMO</label>
+                    <input type="text" name="name" disabled ng-model="selectedTeam.pmo" />
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
                     <label>Scrum Master</label>
                     <input type="text" name="name" disabled ng-model="selectedTeam.sm" />
                 </md-input-container>
@@ -18,77 +22,79 @@
                     <input type="text" name="name" disabled ng-model="selectedTeam.coordinator" />
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-sm>
-                    <label>Total capacity</label>
+                    <label>Capacity in upcoming quarter</label>
                     <input type="text" name="name" disabled ng-model="selectedTeam.capacity" />
                 </md-input-container>
             </div>
-            <div ng-if="selectedTeam">
-                <span ng-repeat="(key, value) in totalByRecommendation" layout-padding>
-                    <md-icon class="material-icons md-18" style="{{legendStyles[value._id].style}}">{{legendStyles[value._id].icon}}</md-icon>{{value.total}} h {{legendStyles[value._id].text}}
-                </span>
+            <div ng-if="selectedTeam" layout-gt-sm="row">
+                <div flex-gt-sm>
+                    <md-icon class="material-icons md-18" style="{{legendStyles[recommended].style}}"> {{legendStyles[recommended].icon}}</md-icon>
+                    {{totalByRecommendation[recommended].total || 0}} h {{legendStyles[recommended].text}}
+                    (<md-icon ng-if="recommendedInfo > 100" style="{{legendStyles[noScope].style}}">warning</md-icon>{{recommendedInfo | number:0}} % of capacity)
+                </div>
+                <div flex-gt-sm><md-icon class="material-icons md-18" style="{{legendStyles[notRecommended].style}}"> {{legendStyles[notRecommended].icon}}</md-icon>
+                    {{totalByRecommendation[notRecommended].total || 0}} h {{legendStyles[notRecommended].text}}
+                </div>
+                <div flex-gt-sm>
+                    <md-icon class="material-icons md-18" style="{{legendStyles[noScope].style}}"> {{legendStyles[noScope].icon}}</md-icon>
+                    {{totalByRecommendation[noScope].total || 0}} h {{legendStyles[noScope].text}}
+                </div>
             </div>
         </div>
     </md-card>
     <md-card ng-if="selectedTeam">
-        <md-card-content layout="row" layout-xs="column" ng-cloak >
+        <md-card-content layout="row" layout-xs="column" ng-cloak layout-padding>
             <div flex-gt-sm="50" flex>
-                <md-toolbar layout="row" class="md-hue-1">
-                    <div class="md-toolbar-tools">
-                        <span>Continuations</span>
-                    </div>
-                </md-toolbar>
                  <md-content>
-                    <md-list flex class="md-dense" >
+                    <md-list flex class="md-dense">
+                        <md-divider></md-divider>
+                        <md-subheader class="md-hue-1">Continuations</md-subheader>
                         <md-list-item class="md-2-line" ng-repeat="card in initiatives | filter: {type_name: 'Plan: initiative continuation'} | orderBy: '-class_of_service_title'" >
-                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == recommKey" style="{{legendStyles[recommKey].style}}">check_box</md-icon>
-                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == noRecommKey" style="{{legendStyles[noRecommKey].style}}">error_outline</md-icon>
-                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == emptyKey">highlight_off</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == recommended" style="{{legendStyles[recommended].style}}">check_box</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == noScope" style="{{legendStyles[noScope].style}}">error_outline</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == notRecommended">highlight_off</md-icon>
                              <div class="md-list-item-text" layout="column">
                                 <h4>{{card.title }}</h4>
                                 <p>{{card.size}} h in this team / {{allSumed[card.title].total}} h total</p>
                             </div>
                             <md-button class="md-secondary" ng-click="showDialog(card, allSumed[card.title].total, $event)" aria-label="supports">More</md-button>
+                            <md-divider md-inset ng-if="!$last"></md-divider>
                         </md-list-item>
                     </md-list>
                  </md-content>
-                <md-divider ></md-divider>
-                <md-toolbar layout="row" class="md-hue-1">
-                    <div class="md-toolbar-tools">
-                        <span>New</span>
-                    </div>
-                </md-toolbar>
                  <md-content>
                     <md-list flex class="md-dense" >
+                        <md-divider></md-divider>
+                        <md-subheader class="md-hue-1">New initiatives</md-subheader>
                         <md-list-item class="md-2-line" ng-repeat="card in initiatives | filter: {type_name: 'Plan: new initiative'}  | orderBy: '-class_of_service_title'" >
-                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == recommKey" style="{{legendStyles[recommKey].style}}">check_box</md-icon>
-                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == noRecommKey" style="{{legendStyles[noRecommKey].style}}">error_outline</md-icon>
-                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == emptyKey">highlight_off</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == recommended" style="{{legendStyles[recommended].style}}">check_box</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == noScope" style="{{legendStyles[noScope].style}}">error_outline</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == notRecommended">highlight_off</md-icon>
                              <div class="md-list-item-text" layout="column">
                                 <h4>{{card.title }}</h4>
                                 <p>{{card.size}} h in this team / {{allSumed[card.title].total}} h total</p>
                             </div>
                             <md-button class="md-secondary" ng-click="showDialog(card, allSumed[card.title].total, $event)" aria-label="supports">More</md-button>
+                            <md-divider md-inset ng-if="!$last"></md-divider>
                         </md-list-item>
                     </md-list>
                  </md-content>
             </div>
             <div flex-gt-sm="50" flex>
-                <md-toolbar layout="row" class="md-hue-1">
-                    <div class="md-toolbar-tools">
-                        <span>Supports</span>
-                    </div>
-                </md-toolbar>
                  <md-content>
                     <md-list flex class="md-dense" >
+                        <md-divider></md-divider>
+                        <md-subheader class="md-hue-1">Supports for other teams</md-subheader>
                         <md-list-item class="md-2-line" ng-repeat="card in initiatives | filter: {type_name: 'Plan: support'} | orderBy: '-class_of_service_title'" >
-                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == recommKey" style="{{legendStyles[recommKey].style}}">check_box</md-icon>
-                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == noRecommKey" style="{{legendStyles[noRecommKey].style}}">error_outline</md-icon>
-                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == emptyKey">highlight_off</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == recommended" style="{{legendStyles[recommended].style}}">check_box</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == notRecommended">highlight_off</md-icon>
+                            <md-icon class="material-icons md-18" ng-if="card.class_of_service_title == noScope" style="{{legendStyles[noScope].style}}">error_outline</md-icon>
                              <div class="md-list-item-text" layout="column">
                                 <h4>{{card.title }}</h4>
                                 <p>{{card.size}} h in this team / {{allSumed[card.title].total}} h total</p>
                             </div>
                             <md-button class="md-secondary" ng-click="showDialog(card, allSumed[card.title].total, $event)" aria-label="supports">More</md-button>
+                            <md-divider md-inset ng-if="!$last"></md-divider>
                         </md-list-item>
                     </md-list>
                  </md-content>
@@ -118,21 +124,43 @@
                 </div>
             </md-toolbar>
             <md-dialog-content>
-                <md-content layout-gt-sm="column" layout-margin>
-                    <h3></h3>
-                    <h4>{{view.selectedItem.size}} h in this team / {{view.selectedItem.totalSize}} h total</h4>
-                    <span ng-bind-html="view.selectedItem.description"></span>
-                    <md-list flex class="md-dense" >
-                        <md-list-item class="md-2-line" ng-repeat="support in allSupports | orderBy: '-class_of_service_title'" >
-                            <md-icon class="material-icons md-18" ng-if="support.class_of_service_title == recommKey" style="{{legendStyles[recommKey].style}}">check_box</md-icon>
-                            <md-icon class="material-icons md-18" ng-if="support.class_of_service_title == noRecommKey" style="{{legendStyles[noRecommKey].style}}">error_outline</md-icon>
-                            <md-icon class="material-icons md-18" ng-if="support.class_of_service_title == emptyKey">highlight_off</md-icon>
-                             <div class="md-list-item-text" layout="column">
-                                 <h4>{{support.team_name}}</h4>
-                                <p>{{support.size}} h in this team</p>
-                            </div>
-                        </md-list-item>
-                    </md-list>
+                <md-content layout="column">
+                    <div flex layout="column" layout-padding>
+                        <h4>{{view.selectedItem.size}} h in this team / {{view.selectedItem.totalSize}} h total</h4>
+                        <span ng-bind-html="view.selectedItem.description"></span>
+                    </div>
+                    <div flex layout="row"  layout-padding>
+                        <div flex-gt-sm="50" flex>
+                            <md-list flex class="md-dense" >
+                                <md-subheader class="md-hue-1">Recommended</md-subheader>
+                                <md-list-item class="md-2-line" ng-repeat="support in allSupports | filter: {class_of_service_title: 'Grooming: IT Recommendation'} | orderBy: '-class_of_service_title'" >
+                                    <md-icon class="material-icons md-18" ng-if="support.class_of_service_title == recommended" style="{{legendStyles[recommended].style}}">check_box</md-icon>
+                                    <md-icon class="material-icons md-18" ng-if="support.class_of_service_title == noScope" style="{{legendStyles[noScope].style}}">error_outline</md-icon>
+                                    <md-icon class="material-icons md-18" ng-if="support.class_of_service_title == notRecommended">highlight_off</md-icon>
+                                     <div class="md-list-item-text" layout="column">
+                                         <h4>{{support.team_name}}</h4>
+                                        <p>{{support.size}} h in this team</p>
+                                    </div>
+                                    <md-divider md-inset ng-if="!$last"></md-divider>
+                                </md-list-item>
+                            </md-list>
+                        </div>
+                        <div flex-gt-sm="50" flex>
+                            <md-list flex class="md-dense" >
+                                <md-subheader class="md-hue-1">Not recommended/No scope</md-subheader>
+                                <md-list-item class="md-2-line" ng-repeat="support in allSupports | filter: {class_of_service_title: '!Grooming: IT Recommendation'} | orderBy: '-class_of_service_title'" >
+                                    <md-icon class="material-icons md-18" ng-if="support.class_of_service_title == recommended" style="{{legendStyles[recommended].style}}">check_box</md-icon>
+                                    <md-icon class="material-icons md-18" ng-if="support.class_of_service_title == noScope" style="{{legendStyles[noScope].style}}">error_outline</md-icon>
+                                    <md-icon class="material-icons md-18" ng-if="support.class_of_service_title == notRecommended">highlight_off</md-icon>
+                                     <div class="md-list-item-text" layout="column">
+                                         <h4>{{support.team_name}}</h4>
+                                        <p>{{support.size}} h in this team</p>
+                                    </div>
+                                    <md-divider md-inset ng-if="!$last"></md-divider>
+                                </md-list-item>
+                            </md-list>
+                        </div>
+                    </div>
                 </md-content>
             </md-dialog-content>
         </form>

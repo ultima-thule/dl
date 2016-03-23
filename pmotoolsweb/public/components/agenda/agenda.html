@@ -14,8 +14,8 @@
                         <h3> {{ zeroTeams.length }} teams with capacity set to 0</h3>
                         <p>This may be corrected by administrator in "Teams" dictionary.</p>
                     </div>
-                    <md-button class="md-secondary md-icon-button" ng-click="showDialog('CAPZERO', zeroTeams, 'Teams with capacity set to 0', $event)" aria-label="call">
-                        <md-icon>view_headline</md-icon>
+                    <md-button class="md-raised md-secondary" ng-click="showDialog('CAPZERO', zeroTeams, 'Teams with capacity set to 0', $event)" aria-label="call">
+                        More info
                     </md-button>
                 </md-list-item>
                 <md-list-item class="md-2-line">
@@ -23,8 +23,8 @@
                         <h3> {{ zeroCost.length }} recommended initiatives with cost equal to zero</h3>
                         <p>This may be corrected in LeanKit and requires resynchronization.</p>
                     </div>
-                    <md-button class="md-secondary md-icon-button" ng-click="showDialog('COSTZERO', zeroCost, 'Recommended initiatives with cost equal to zero', $event)" aria-label="call">
-                        <md-icon>view_headline</md-icon>
+                    <md-button class="md-raised md-secondary" ng-click="showDialog('COSTZERO', zeroCost, 'Recommended initiatives with cost equal to zero', $event)" aria-label="call">
+                        More info
                     </md-button>
                 </md-list-item>
                 <md-list-item class="md-2-line">
@@ -32,8 +32,8 @@
                         <h3> {{ teamOverrun.length }} teams with more recommended initiatives than capacity</h3>
                         <p>This may be corrected in LeanKit and requires resynchronization.</p>
                     </div>
-                    <md-button class="md-secondary md-icon-button" ng-click="showDialog('OVERRUN', teamOverrun, 'Teams with more recommended initiatives than capacity', $event)" aria-label="call">
-                        <md-icon>view_headline</md-icon>
+                    <md-button class="md-raised md-secondary" ng-click="showDialog('OVERRUN', teamOverrun, 'Teams with more recommended initiatives than capacity', $event)" aria-label="call">
+                        More info
                     </md-button>
                 </md-list-item>
                 <md-list-item class="md-2-line">
@@ -41,8 +41,8 @@
                         <h3> N recommended initiatives with not all supports accepted</h3>
                         <p>This may be corrected in LeanKit and requires resynchronization.</p>
                     </div>
-                    <md-button class="md-secondary md-icon-button" ng-click="showDialog('NOSUPP', teamOverrun, 'Recommended initiatives with not all supports accepted', $event)" aria-label="call">
-                        <md-icon>view_headline</md-icon>
+                    <md-button class="md-raised md-secondary" disabled ng-click="showDialog('NOSUPP', teamOverrun, 'Recommended initiatives with not all supports accepted', $event)" aria-label="call">
+                        More info
                     </md-button>
                 </md-list-item>
             </md-list>
@@ -53,7 +53,7 @@
           <md-card-header-text>
             <span class="md-subhead">Here you can download a report, which shows current agenda planning state. All reports are based on data synchronized daily from LeanKit kanban board. Last date of synchronization:
             <b><time title="{{ lastLeankitDate | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">{{lastLeankitDate | amTimeAgo}}</time></b></span>
-            <md-button class="md-raised my-hue-1 md-secondary" ng-click="generateReport();">Generate fresh report</md-button>
+            <md-button class="md-raised md-secondary" ng-click="generateReport();">Generate fresh report</md-button>
           </md-card-header-text>
         </md-card-header>
         <md-card-content>
