@@ -35,7 +35,7 @@
                 },
                 {
                   link : '/agendabyteam',
-                  title: 'Agenda by teams',
+                  title: 'Agenda planning by teams',
                   icon: 'storage'
                 },
                 {

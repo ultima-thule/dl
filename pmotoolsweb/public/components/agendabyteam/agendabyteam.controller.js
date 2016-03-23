@@ -35,7 +35,7 @@
             });
 
             $scope.loadInitiatives = function () {
-                $scope.initiatives = agendabyteamService.getForTeam($scope.selectedTeam.name)
+                agendabyteamService.getForTeam($scope.selectedTeam.name)
                     .success(function(data) {
                         $scope.initiatives = data;
 

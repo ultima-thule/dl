@@ -202,18 +202,47 @@ module.exports = function(app) {
         });
     });
 
-    // get all planned initiatives by team
-    app.get('/api/agendabyteam/:id', function(req, res) {
-        Card.find({team_name: req.params.id, board_masterlane_title: "Development backlog", workflow_status_name: "Next quarter development plan"},
-        'title description extended_data team_name size due_date class_of_service_title type_name external_card_id',
-        function(err, cards) {
+    // =========================== AGENDA PLANNING ================================
+    //get recommended initiatives for a team vs capacity
+   app.get('/api/agenda/team/recommended', function(req, res){
+        Card.aggregate([{
+                    $match: {
+                        board_masterlane_title: "Development backlog",
+                        workflow_status_name: "Next quarter development plan",
+                        class_of_service_title: "Grooming: IT Recommendation" }
+                    },
+                    {
+                    $group: { _id: '$team_name',
+                        total: {$sum: '$size'} }
+                    },
+                    {
+                    $lookup: {
+                        from: "team",
+                        localField: "_id",
+                        foreignField: "name",
+                        as: "team" }
+                    },
+                    { $sort: {total: -1} }
+                ], function (err, result) {
+                    if (err)
+                        res.send(err);
+                    res.json(result);
+            });
+        });
+
+    //get teams with zero capacity
+   app.get('/api/agenda/team/zerocapacity', function(req, res){
+        Team.find({$or: [{capacity: 0}, {capacity: null}]},
+        'name location sm pmo',
+        function(err, teams) {
             if (err)
                 res.send(err);
-            res.json(cards);
+            res.json(teams);
         });
     });
 
-     app.get('/api/agendabyteamtotal/:id', function(req, res){
+    //for a team, aggregate types of planned initiatives
+     app.get('/api/agenda/team/total/:id', function(req, res){
         Card.aggregate([{
                     $match: {
                         team_name: req.params.id,
@@ -232,7 +261,19 @@ module.exports = function(app) {
             });
         });
 
-     app.get('/api/agendabyinitiative', function(req, res){
+    // get all planned initiatives for a team
+    app.get('/api/agenda/team/:id', function(req, res) {
+        Card.find({team_name: req.params.id, board_masterlane_title: "Development backlog", workflow_status_name: "Next quarter development plan"},
+        'title description extended_data team_name size due_date class_of_service_title type_name external_card_id',
+        function(err, cards) {
+            if (err)
+                res.send(err);
+            res.json(cards);
+        });
+    });
+
+    //get all initiatives costs with supports (matched by names)
+     app.get('/api/agenda/initiative', function(req, res){
         Card.aggregate([{
                     $match: {
                         board_masterlane_title: "Development backlog",
@@ -250,7 +291,24 @@ module.exports = function(app) {
             });
         });
 
-     app.get('/api/agendaallsupports/:id', function(req, res){
+    //get recommended initiatives with zero
+     app.get('/api/agenda/initiative/zerocost', function(req, res){
+         Card.find({
+                board_masterlane_title: "Development backlog",
+                workflow_status_name: "Next quarter development plan",
+                class_of_service_title: "Grooming: IT Recommendation",
+                size: 0
+            },
+            'title description team_name size assigned_user_name',
+            function(err, teams) {
+                if (err)
+                    res.send(err);
+                res.json(teams);
+            });
+        });
+
+    //get all supports for an initiative
+     app.get('/api/agenda/initiative/supports/:id', function(req, res){
          Card.find({title: req.params.id, board_masterlane_title: "Development backlog", workflow_status_name: "Next quarter development plan"},
         'title team_name size class_of_service_title type_name external_card_id',
         function(err, cards) {
@@ -259,6 +317,7 @@ module.exports = function(app) {
             res.json(cards);
         });
      });
+
 
     // =========================== CHARTS ================================
 

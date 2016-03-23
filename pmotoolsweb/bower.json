@@ -24,5 +24,8 @@
     "angular-moment": "latest",
     "angular-material-sidenav": "latest",
     "angular-ui-router-title": "latest"
+  },
+  "resolutions": {
+    "angular": "^1.0.8"
   }
 }

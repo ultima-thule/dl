@@ -7,11 +7,14 @@
         .module('AgendaCtrl', [])
         .controller('AgendaController', AgendaController);
 
-        AgendaController.$inject = ['$scope', '$http', '$routeParams', '$location', 'agendaService', 'FileSaver', 'Blob', 'namedParamService'];
+        AgendaController.$inject = ['$scope', '$http', '$routeParams', '$location', 'agendaService', 'FileSaver', 'Blob',
+            'namedParamService', 'agendabyteamService'];
 
-        function AgendaController($scope, $http, $routeParams, $location, agendaService, FileSaver, Blob, namedParamService) {
+        function AgendaController($scope, $http, $routeParams, $location, agendaService, FileSaver, Blob, namedParamService,
+            agendabyteamService) {
 
             $scope.title = "IT production reports";
+            $scope.zeroTeams = [];
 
             $scope.generateReport = function() {
                 $scope.isLoading = true;
@@ -75,6 +78,11 @@
                     })
                     .finally(function() {
                         $scope.isLoading = false;
+                    });
+
+                agendabyteamService.getZeroCapacityTeam()
+                    .success(function(data) {
+                        $scope.zeroTeams = data;
                     });
             }
         };
