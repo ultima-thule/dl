@@ -25,7 +25,11 @@
                 },
                 getZeroCapacityTeam : function(id) {
                     return $http.get('/api/agenda/team/zerocapacity');
+                },
+                getZeroCostRecommendations : function(id) {
+                    return $http.get('/api/agenda/initiative/zerocost');
                 }
+
             }
         };
 })();

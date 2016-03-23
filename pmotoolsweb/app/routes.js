@@ -220,9 +220,8 @@ module.exports = function(app) {
                         from: "team",
                         localField: "_id",
                         foreignField: "name",
-                        as: "team" }
-                    },
-                    { $sort: {total: -1} }
+                        as: "teamagg" }
+                    }
                 ], function (err, result) {
                     if (err)
                         res.send(err);
@@ -232,7 +231,7 @@ module.exports = function(app) {
 
     //get teams with zero capacity
    app.get('/api/agenda/team/zerocapacity', function(req, res){
-        Team.find({capacity: 0},
+        Team.find({$or: [{capacity: 0}, {capacity: null}]},
         'name location sm pmo',
         function(err, teams) {
             if (err)

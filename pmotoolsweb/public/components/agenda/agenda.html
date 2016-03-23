@@ -3,15 +3,47 @@
     <md-card flex="70">
         <md-card-header>
           <md-card-header-text>
-            <span class="md-title">Planning </span>
-            <span class="md-subhead">statistics</span>
+            <span class="md-title">Possible problems</span>
+            <span class="md-subhead"></span>
           </md-card-header-text>
         </md-card-header>
         <md-card-content>
             <md-list>
-                <md-list-item ng-repeat="team in zeroTeams">
-                     <div class="md-list-item-text" layout="column">
-                         <h4>{{team.name}}</h4><p>{{team.sm}}</p></div>
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text">
+                        <h3> {{ zeroTeams.length }} teams with capacity set to 0</h3>
+                        <p>This may be corrected by administrator in "Teams" dictionary.</p>
+                    </div>
+                    <md-button class="md-secondary md-icon-button" ng-click="showDialog('CAPZERO', zeroTeams, 'Teams with capacity set to 0', $event)" aria-label="call">
+                        <md-icon>view_headline</md-icon>
+                    </md-button>
+                </md-list-item>
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text">
+                        <h3> {{ zeroCost.length }} recommended initiatives with cost equal to zero</h3>
+                        <p>This may be corrected in LeanKit and requires resynchronization.</p>
+                    </div>
+                    <md-button class="md-secondary md-icon-button" ng-click="showDialog('COSTZERO', zeroCost, 'Recommended initiatives with cost equal to zero', $event)" aria-label="call">
+                        <md-icon>view_headline</md-icon>
+                    </md-button>
+                </md-list-item>
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text">
+                        <h3> {{ teamOverrun.length }} teams with more recommended initiatives than capacity</h3>
+                        <p>This may be corrected in LeanKit and requires resynchronization.</p>
+                    </div>
+                    <md-button class="md-secondary md-icon-button" ng-click="showDialog('OVERRUN', teamOverrun, 'Teams with more recommended initiatives than capacity', $event)" aria-label="call">
+                        <md-icon>view_headline</md-icon>
+                    </md-button>
+                </md-list-item>
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text">
+                        <h3> N recommended initiatives with not all supports accepted</h3>
+                        <p>This may be corrected in LeanKit and requires resynchronization.</p>
+                    </div>
+                    <md-button class="md-secondary md-icon-button" ng-click="showDialog('NOSUPP', teamOverrun, 'Recommended initiatives with not all supports accepted', $event)" aria-label="call">
+                        <md-icon>view_headline</md-icon>
+                    </md-button>
                 </md-list-item>
             </md-list>
         </md-card-content>
@@ -42,3 +74,51 @@
         </md-card-content>
     </md-card>
 </div>
+
+<!-- edit dialogs -->
+<!--<div ng-include="team.details.html" id="editor.html"></div>-->
+<script type="text/ng-template" id="editor.html">
+        <md-dialog aria-label="Edit" class="dialog-70">
+        <form name="inputForm" novalidate>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <md-button class="md-icon-button" ng-click="back()">
+                        <md-icon aria-label="Back">arrow_back</md-icon>
+                        <md-tooltip md-delay="1500" md-autohide="true">Back</md-tooltip>
+                    </md-button>
+                    <h2>{{view.problemText}}</h2>
+                    <span flex></span>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <md-content layout-gt-sm="column" layout-margin>
+                    <md-list flex class="md-dense" ng-if="view.listType==='CAPZERO'">
+                        <md-list-item class="md-2-line" ng-repeat="element in view.listData | orderBy: 'name'" >
+                             <div class="md-list-item-text" layout="column">
+                                <h4>{{element.name}}</h4>
+                                <p>{{element.sm}}</p>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                    <md-list flex class="md-dense"  ng-if="view.listType==='COSTZERO'">
+                        <md-list-item class="md-2-line" ng-repeat="element in view.listData" >
+                             <div class="md-list-item-text" layout="column">
+                                <h4>{{element.title}}</h4>
+                                <p>{{element.team_name}}</p>
+                                <p>SM: {{element.assigned_user_name}}</p>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                    <md-list flex class="md-dense"  ng-if="view.listType==='OVERRUN'">
+                        <md-list-item class="md-2-line" ng-repeat="element in view.listData" >
+                             <div class="md-list-item-text" layout="column">
+                                <h4>{{element.teamagg[0].name}}</h4>
+                                <p>Planned {{element.total}} / Available {{element.teamagg[0].capacity}} ({{element.total / element.teamagg[0].capacity * 100}}%)</p>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+            </md-dialog-content>
+        </form>
+    </md-dialog>
+</script>

@@ -5,16 +5,21 @@
 
     angular
         .module('AgendaCtrl', [])
-        .controller('AgendaController', AgendaController);
+        .controller('AgendaController', AgendaController)
+        .controller('AgendaDetailsController', AgendaDetailsController);
 
-        AgendaController.$inject = ['$scope', '$http', '$routeParams', '$location', 'agendaService', 'FileSaver', 'Blob',
+        AgendaController.$inject = ['$scope', '$http', '$routeParams', '$location', '$mdDialog', 'agendaService', 'FileSaver', 'Blob',
             'namedParamService', 'agendabyteamService'];
+        AgendaDetailsController.$inject = ['$scope', '$mdDialog', '$mdToast', 'listType', 'listData', 'problemText'];
 
-        function AgendaController($scope, $http, $routeParams, $location, agendaService, FileSaver, Blob, namedParamService,
+        function AgendaController($scope, $http, $routeParams, $location, $mdDialog, agendaService, FileSaver, Blob, namedParamService,
             agendabyteamService) {
 
             $scope.title = "IT production reports";
             $scope.zeroTeams = [];
+            $scope.zeroCost = [];
+            $scope.teamOverrun = [];
+            $scope.showDialog = showDialog;
 
             $scope.generateReport = function() {
                 $scope.isLoading = true;
@@ -69,6 +74,7 @@
 
                 //show progress bar
                 $scope.isLoading = true;
+
                 agendaService.get('/api/agendareports')
                     .success(function(data) {
                         $scope.reports = data;
@@ -84,7 +90,57 @@
                     .success(function(data) {
                         $scope.zeroTeams = data;
                     });
+
+                agendabyteamService.getZeroCostRecommendations()
+                    .success(function(data) {
+                        $scope.zeroCost = data;
+                    });
+
+                agendabyteamService.getRecommendedByTeam()
+                    .success(function(data) {
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            if (data[i].teamagg[0]!== undefined && data[i].total > data[i].teamagg[0].capacity)
+                            {
+                                $scope.teamOverrun.push (data[i]);
+                            }
+                        }
+                    });
             }
+
+            function showDialog(listType, listData, problemText, event) {
+                $mdDialog.show({
+                    templateUrl: 'editor.html',
+                    targetEvent: event,
+                    locals: {
+                        listData: listData,
+                        problemText: problemText,
+                        listType: listType
+                    },
+                    bindToController: true,
+                    controller: AgendaDetailsController,
+                    parent: angular.element(document.body)
+                })
+                .then(
+                    function (result) {
+                    }
+                );
+            }
+
+        };
+
+        //Dialog's controller
+        function AgendaDetailsController ($scope, $mdDialog, $mdToast, listType, listData, problemText) {
+            $scope.view = {
+                listData: listData,
+                problemText: problemText,
+                listType: listType
+            };
+            $scope.back = back;
+
+            function back() {
+                $mdDialog.cancel();
+            }
+
         };
 
 })();
