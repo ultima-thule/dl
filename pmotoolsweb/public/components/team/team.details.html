@@ -67,6 +67,21 @@
                         </md-select>
                     </md-input-container>
                 </div>
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>Ignore in reports?</label>
+                        <md-chechbox ng-model="view.selectedItem.ignore" aria-label="Ignore in reports?"></md-chechbox>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>PMO</label>
+                        <md-select ng-model="view.selectedItem.pmo">
+                            <md-option ng-repeat="pmo in pmos" value="{{pmo}}">
+                                {{pmo}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
             </md-content>
         </md-dialog-content>
     </form>

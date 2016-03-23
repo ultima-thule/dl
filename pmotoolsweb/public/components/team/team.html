@@ -96,6 +96,14 @@
                     </div>
                     <div layout-gt-sm="row">
                         <md-input-container class="md-block" flex-gt-sm>
+                            <label>PMO</label>
+                            <md-select ng-model="view.selectedItem.pmo">
+                                <md-option ng-repeat="pmo in pmos" value="{{pmo.name}}">
+                                    {{pmo.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm>
                             <label>Scrum master</label>
                             <md-select ng-model="view.selectedItem.sm">
                                 <md-option ng-repeat="sm in sms | orderBy: 'full_name'" value="{{sm.full_name}}">
@@ -116,6 +124,11 @@
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Capacity</label>
                             <input type="text" name="capacity" ng-model="view.selectedItem.capacity" />
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <md-checkbox ng-model="view.selectedItem.ignore" aria-label="Ignore in reports?">
+                                Ignore in reports?
+                            </md-checkbox>
                         </md-input-container>
                     </div>
                 </md-content>

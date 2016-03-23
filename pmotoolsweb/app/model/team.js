@@ -13,5 +13,6 @@ module.exports = mongoose.model('team', {
     sponsor_name: String,
     coordinator: String,
     sm: String,
-    capacity: Number
+    capacity: Number,
+    ignore: {type: Boolean, default: false}
 }, 'team');

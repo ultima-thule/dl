@@ -53,7 +53,8 @@
                         sm: data.sm,
                         pmo: data.pmo,
                         pmoBoss: data.pmoBoss,
-                        capacity: data.capacity
+                        capacity: data.capacity,
+                        ignore: data.ignore
                     };
                 }
                 $mdDialog.show({
@@ -98,7 +99,7 @@
                     return {name: location};
             });
 
-            $scope.pmos = ('PMO Asia;PMO Sławek').split(';').map(function(pmo) {
+            $scope.pmos = ('PMO Core;PMO Int').split(';').map(function(pmo) {
                     return {name: pmo};
             });
 
