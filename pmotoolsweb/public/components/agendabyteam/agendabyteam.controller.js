@@ -51,7 +51,7 @@
                                 for (var i = 0, len = data2.length; i < len; i++) {
                                     $scope.totalByRecommendation[data2[i]._id] = data2[i];
                                 }
-                                if ($scope.totalByRecommendation[$scope.recommended] !== undefined)
+                                if ($scope.totalByRecommendation[$scope.recommended] !== undefined && $scope.selectedTeam.capacity !== 0)
                                 {
                                     $scope.recommendedInfo = (Number($scope.totalByRecommendation[$scope.recommended].total) / Number($scope.selectedTeam.capacity) * 100) || 0;
                                 }
