@@ -151,7 +151,7 @@ def _insertCard(card, lane):
     c.taskboard_completion_percent = card.task_board_completion_percent
     c.taskboard_total_cards = card.task_board_total_cards
     c.taskboard_total_size = card.task_board_total_size
-    c.title = card.title
+    c.title = card.title.strip()
     c.type_id = card.type_id
     c.type_name = card.type_name
     c.version = card.version
