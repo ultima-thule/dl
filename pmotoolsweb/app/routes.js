@@ -294,7 +294,7 @@ module.exports = function(app) {
             });
         });
 
-    //get recommended initiatives with zero
+    //get recommended initiatives with zero cost
      app.get('/api/agenda/initiative/zerocost', function(req, res){
          Card.find({
                 board_masterlane_title: "Development backlog",
