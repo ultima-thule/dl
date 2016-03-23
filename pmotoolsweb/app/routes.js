@@ -231,13 +231,17 @@ module.exports = function(app) {
 
     //get teams with zero capacity
    app.get('/api/agenda/team/zerocapacity', function(req, res){
-        Team.find({$or: [{capacity: 0}, {capacity: null}]},
-        'name location sm pmo',
-        function(err, teams) {
-            if (err)
-                res.send(err);
-            res.json(teams);
-        });
+        Team.find({
+            $and: [
+                {ignore: false},
+                {$or: [{capacity: 0}, {capacity: null}]},
+            ]},
+            'name location sm pmo',
+            function(err, teams) {
+                if (err)
+                    res.send(err);
+                res.json(teams);
+            });
     });
 
     //for a team, aggregate types of planned initiatives

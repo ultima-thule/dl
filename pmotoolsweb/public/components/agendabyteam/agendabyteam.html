@@ -5,7 +5,7 @@
             <md-input-container >
                 <label>Select team</label>
                 <md-select ng-model="selectedTeam" ng-change="loadInitiatives()">
-                    <md-option ng-repeat="team in teams | orderBy: 'name'" ng-value="team">{{team.name}}</md-option>
+                    <md-option ng-repeat="team in teams | filter:{ignore:false} | orderBy: 'name'" ng-value="team">{{team.name}}</md-option>
                 </md-select>
             </md-input-container>
             <div layout-gt-sm="row" ng-if="selectedTeam">
