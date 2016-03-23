@@ -113,7 +113,7 @@
                         <md-list-item class="md-2-line" ng-repeat="element in view.listData" >
                              <div class="md-list-item-text" layout="column">
                                 <h4>{{element.teamagg[0].name}}</h4>
-                                <p>Planned {{element.total}} / Available {{element.teamagg[0].capacity}} ({{element.total / element.teamagg[0].capacity * 100}}%)</p>
+                                <p>Planned {{element.total}} / Available {{element.teamagg[0].capacity}} ({{element.total / element.teamagg[0].capacity * 100 | number:0}}%)</p>
                             </div>
                         </md-list-item>
                     </md-list>
