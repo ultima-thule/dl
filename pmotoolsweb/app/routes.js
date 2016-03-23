@@ -232,7 +232,7 @@ module.exports = function(app) {
 
     //get teams with zero capacity
    app.get('/api/agenda/team/zerocapacity', function(req, res){
-        Team.find({$or: [{capacity: 0}, {capacity: null}]},
+        Team.find({capacity: 0},
         'name location sm pmo',
         function(err, teams) {
             if (err)
