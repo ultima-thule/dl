@@ -79,7 +79,8 @@
                         title: data.title,
                         size: data.size,
                         totalSize: dataTotalSize,
-                        description: data.description
+                        description: data.description,
+                        comments: data.comments
                     };
                 }
                 $mdDialog.show({

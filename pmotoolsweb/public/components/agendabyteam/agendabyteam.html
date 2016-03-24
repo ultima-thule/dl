@@ -129,6 +129,18 @@
                         <h4>{{view.selectedItem.size}} h in this team / {{view.selectedItem.totalSize}} h total</h4>
                         <span ng-bind-html="view.selectedItem.description"></span>
                     </div>
+                    <div flex ng-if="view.selectedItem.comments.lenght > 0">
+                         <md-list flex class="md-dense" >
+                             <md-subheader class="md-hue-1">Comments</md-subheader>
+                             <md-list-item class="md-2-line" ng-repeat="comment in view.selectedItem.comments">
+                                <div class="md-list-item-text" layout="column">
+                                     <h4>{{comment.post_date | date: 'medium'}}</h4>
+                                    <span ng-bind-html="comment.text"></span>
+                                </div>
+                                 <md-divider md-inset ng-if="!$last"></md-divider>
+                             </md-list-item>
+                         </md-list>
+                    </div>
                     <div flex layout="row"  layout-padding>
                         <div flex-gt-sm="50" flex>
                             <md-list flex class="md-dense" >
@@ -161,6 +173,7 @@
                             </md-list>
                         </div>
                     </div>
+
                 </md-content>
             </md-dialog-content>
         </form>
