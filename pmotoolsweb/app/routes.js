@@ -267,7 +267,7 @@ module.exports = function(app) {
     // get all planned initiatives for a team
     app.get('/api/agenda/team/:id', function(req, res) {
         Card.find({team_name: req.params.id, board_masterlane_title: "Development backlog", workflow_status_name: "Next quarter development plan"},
-        'title description extended_data team_name size due_date class_of_service_title type_name external_card_id',
+        'title description extended_data team_name size due_date class_of_service_title type_name external_card_id comments',
         function(err, cards) {
             if (err)
                 res.send(err);
