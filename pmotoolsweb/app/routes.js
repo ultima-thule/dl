@@ -204,6 +204,45 @@ module.exports = function(app) {
     });
 
     // =========================== AGENDA PLANNING ================================
+    // get all planned initiatives - to plot a total company network graph
+    app.get('/api/agenda/supportrequested', function(req, res) {
+        QuarterPlan.aggregate([
+                    {
+                        $match: {
+                            board_masterlane_title: "Development backlog",
+                            workflow_status_name: "Next quarter development plan",
+                            type_name: {$ne: "Plan: support"}
+                         }
+                    },
+                    {
+                        $group: { _id: {title: '$title', team: "$team_name"}}
+                    },
+                    {
+                        $lookup: {
+                            from: "quarterPlan",
+                            localField: "_id.title",
+                            foreignField: "title",
+                            as: "supportedBy"
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: 1, "supportedBy.team_name": 1
+                        }
+                    },
+                    {
+                        $unwind: "$supportedBy"
+                    },
+                    {
+                        $group: { _id: {masterTeam: '$_id.team', supportTeam: '$supportedBy.team_name'}, total: {$sum: 1}}
+                    }
+                ], function (err, result) {
+                    if (err)
+                        res.send(err);
+                    res.json(result);
+            });
+    });
+
     //get recommended initiatives for a team vs capacity
    app.get('/api/agenda/team/recommended', function(req, res){
         QuarterPlan.aggregate([{
@@ -265,7 +304,7 @@ module.exports = function(app) {
             });
         });
 
-    // get all planned initiatives for a team
+    // get all planned initiatives for a team - to plot a network graph
     app.get('/api/agenda/team/supportrequested/:id', function(req, res) {
         QuarterPlan.aggregate([
                     {
@@ -302,7 +341,7 @@ module.exports = function(app) {
                         $match: {
                             _id: {$ne: req.params.id}
                          }
-                    },
+                    }
                 ], function (err, result) {
                     if (err)
                         res.send(err);

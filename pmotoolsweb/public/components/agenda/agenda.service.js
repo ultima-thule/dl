@@ -22,6 +22,9 @@
                 },
                 generate : function() {
                     return $http.get('/api/genreportplan');
+                },
+                getAllRelations : function() {
+                    return $http.get('/api/agenda/supportrequested');
                 }
             }
         };

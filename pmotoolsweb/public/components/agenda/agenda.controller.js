@@ -9,17 +9,87 @@
         .controller('AgendaDetailsController', AgendaDetailsController);
 
         AgendaController.$inject = ['$scope', '$http', '$routeParams', '$location', '$mdDialog', 'agendaService', 'FileSaver', 'Blob',
-            'namedParamService', 'agendabyteamService'];
+            'namedParamService', 'agendabyteamService', 'VisDataSet'];
         AgendaDetailsController.$inject = ['$scope', '$mdDialog', '$mdToast', 'listType', 'listData', 'problemText'];
 
         function AgendaController($scope, $http, $routeParams, $location, $mdDialog, agendaService, FileSaver, Blob, namedParamService,
-            agendabyteamService) {
+            agendabyteamService, VisDataSet) {
 
             $scope.title = "IT production reports";
             $scope.zeroTeams = [];
             $scope.zeroCost = [];
             $scope.teamOverrun = [];
             $scope.showDialog = showDialog;
+            $scope.isRegenerating = false;
+
+            $scope.hideOneRelations = false;
+
+            $scope.networkoptions = {
+                nodes: {
+                    shape: 'dot',
+                    scaling:{
+                        label: {
+                            min:8,
+                            max:20
+                        }
+                    }
+                }
+            };
+
+            function formatTeamName (text, len){
+                return text.replace(/ /g, "\n");
+            }
+
+            $scope.prepareGraph = function (hideOnes)
+            {
+                agendaService.getAllRelations()
+                    .success(function(data) {
+                        var nodes = VisDataSet([]);
+                        var edges = VisDataSet([]);
+
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            var fromTeamName = data[i]._id.masterTeam;
+                            var toTeamName = data[i]._id.supportTeam;
+
+                            if (fromTeamName != toTeamName) {
+                                var nodeFromExisting = nodes.get(fromTeamName);
+                                if (nodeFromExisting===null) {
+                                    nodes.add ({id: fromTeamName, label: formatTeamName(fromTeamName), value: 1});
+                                }
+                                else {
+                                    nodes.update ([{id: fromTeamName, value: nodeFromExisting.value + 1}]);
+                                }
+
+                                var nodeToExisting = nodes.get(toTeamName);
+                                if (nodeToExisting===null) {
+                                    nodes.add ({id: toTeamName, label: formatTeamName(toTeamName), value: 1});
+                                }
+                                else {
+                                    nodes.update ([{id: toTeamName, value: nodeToExisting.value + 1}]);
+                                }
+
+                                var edgeKey = fromTeamName + toTeamName;
+                                var edgeExisting = edges.get(edgeKey);
+                                var edgeWeight = data[i].total;
+                                if (edgeExisting===null) {
+                                    edges.add ({id: edgeKey, from: fromTeamName, to: toTeamName,
+                                        value: edgeWeight, label: edgeWeight});
+                                }
+                                else {
+                                    var newEdgeWeight = edgeExisting.value + edgeWeight;
+                                    edges.update ([{id: edgeKey, value: newEdgeWeight}]);
+                                    edges.update ([{id: edgeKey, label: newEdgeWeight}]);
+                                }
+                            }
+                        }
+
+                        $scope.networkdata = {
+                          nodes: nodes,
+                          edges: edges
+                        };
+
+                });
+            }
 
             $scope.generateReport = function() {
                 $scope.isLoading = true;
@@ -106,6 +176,8 @@
                             }
                         }
                     });
+
+                $scope.prepareGraph();
             }
 
             function showDialog(listType, listData, problemText, event) {

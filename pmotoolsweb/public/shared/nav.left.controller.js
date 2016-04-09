@@ -17,6 +17,7 @@
                 $scope.isAdmin = newValue;
             });
 
+
             $scope.menu = [
                 {
                   link : '/',
