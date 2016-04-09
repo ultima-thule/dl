@@ -263,7 +263,7 @@ class ExcelReport (object):
         if card.is_blocked:
             strComment = card.block_reason
         elif len(card.comments) > 0 and (card.type_name == 'Progress: Risk identified' or card.type_name == 'Progress: High risk'):
-            strComment = re.sub("<.*?>", "", card.comments[0].text)
+            strComment = re.sub("<.*?>", " ", card.comments[0].text)
         strComment = html.unescape(strComment)
 
         self._write_cell(7, strComment)
