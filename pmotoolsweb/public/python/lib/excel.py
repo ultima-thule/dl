@@ -5,6 +5,7 @@ import xlsxwriter
 import datetime
 import io
 import re
+import html
 
 glNumberOfWraps = 8
 glColWidth = []
@@ -263,6 +264,8 @@ class ExcelReport (object):
             strComment = card.block_reason
         elif len(card.comments) > 0 and (card.type_name == 'Progress: Risk identified' or card.type_name == 'Progress: High risk'):
             strComment = re.sub("<.*?>", "", card.comments[0].text)
+        strComment = html.unescape(strComment)
+
         self._write_cell(7, strComment)
 
         self._write_cell(0, "", None, True)

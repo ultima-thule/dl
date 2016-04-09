@@ -5,6 +5,7 @@ import xlsxwriter
 import datetime
 import io
 import re
+import html
 
 glNumberOfWraps = 12
 glColWidth = []
@@ -236,6 +237,8 @@ class ExcelPlanReport (object):
                 strComment = card.block_reason
             elif len(card.comments) > 0 :
                 strComment = re.sub("<.*?>", "", card.comments[0].text)
+
+        strComment = html.unescape(strComment)
 
         self._write_cell(10, groomingProblem)
         self._write_cell(11, strComment)
