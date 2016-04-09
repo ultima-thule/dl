@@ -9,6 +9,7 @@ var Sponsor = require('./model/sponsor');
 var Board = require('./model/board');
 var UserApp  = require('./model/userApp');
 var User  = require('./model/user');
+var QuarterPlan = require('./model/quarterPlan');
 var LeanKitClient  = require("leankit-client");
 var https = require('https');
 
@@ -205,7 +206,7 @@ module.exports = function(app) {
     // =========================== AGENDA PLANNING ================================
     //get recommended initiatives for a team vs capacity
    app.get('/api/agenda/team/recommended', function(req, res){
-        Card.aggregate([{
+        QuarterPlan.aggregate([{
                     $match: {
                         board_masterlane_title: "Development backlog",
                         workflow_status_name: "Next quarter development plan",
@@ -246,7 +247,7 @@ module.exports = function(app) {
 
     //for a team, aggregate types of planned initiatives
      app.get('/api/agenda/team/total/:id', function(req, res){
-        Card.aggregate([{
+        QuarterPlan.aggregate([{
                     $match: {
                         team_name: req.params.id,
                         board_masterlane_title: "Development backlog",
@@ -266,7 +267,7 @@ module.exports = function(app) {
 
     // get all planned initiatives for a team
     app.get('/api/agenda/team/:id', function(req, res) {
-        Card.find({team_name: req.params.id, board_masterlane_title: "Development backlog", workflow_status_name: "Next quarter development plan"},
+        QuarterPlan.find({team_name: req.params.id, board_masterlane_title: "Development backlog", workflow_status_name: "Next quarter development plan"},
         'title description extended_data team_name size due_date class_of_service_title type_name external_card_id comments',
         function(err, cards) {
             if (err)
@@ -277,7 +278,7 @@ module.exports = function(app) {
 
     //get all initiatives costs with supports (matched by names)
      app.get('/api/agenda/initiative', function(req, res){
-        Card.aggregate([{
+        QuarterPlan.aggregate([{
                     $match: {
                         board_masterlane_title: "Development backlog",
                         workflow_status_name: "Next quarter development plan" }
@@ -296,7 +297,7 @@ module.exports = function(app) {
 
     //get recommended initiatives with zero cost
      app.get('/api/agenda/initiative/zerocost', function(req, res){
-         Card.find({
+         QuarterPlan.find({
                 board_masterlane_title: "Development backlog",
                 workflow_status_name: "Next quarter development plan",
                 class_of_service_title: "Grooming: IT Recommendation",
@@ -312,7 +313,7 @@ module.exports = function(app) {
 
     //get all supports for an initiative
      app.get('/api/agenda/initiative/supports/:id', function(req, res){
-         Card.find({title: req.params.id, board_masterlane_title: "Development backlog", workflow_status_name: "Next quarter development plan"},
+         QuarterPlan.find({title: req.params.id, board_masterlane_title: "Development backlog", workflow_status_name: "Next quarter development plan"},
         'title team_name size class_of_service_title type_name external_card_id',
         function(err, cards) {
             if (err)
