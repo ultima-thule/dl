@@ -16,6 +16,8 @@
     <link rel="stylesheet" type="text/css" href="libs/angular-chart.js/dist/angular-chart.css" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" type="text/css" href="libs/angular-material-icon/sangular-material-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="libs/vis/dist/vis.min.css"/>
     <link rel="stylesheet" type="text/css" href="assets/css/style.css"> <!-- custom styles -->
 
     <!-- JS -->
@@ -42,6 +44,9 @@
     <script src="libs/moment/moment.js"></script>
     <script src="libs/angular-moment/angular-moment.min.js"></script>
     <script src="libs/angular-ui-router-title/angular-ui-router-title.js"></script>
+    <script src="libs/vis/dist/vis.js"></script>
+    <script src="libs/angular-visjs/angular-vis.js"></script>
+
 
     <!-- ANGULAR CUSTOM -->
     <script src="shared/nav.left.controller.js"></script>
@@ -79,7 +84,7 @@
     <script src="app.config.js"></script>
 </head>
 
-<body>
+<body  ng-style="{'background-image':'url(/assets/images/patterns/mp-03.png)'}">
     <div layout="row" ng-style="{'background-image':'url(/assets/images/patterns/mp-03.png)'}">
             <!-- Side Navigation -->
             <div ng-include="'shared/nav.left.html'" ng-controller="NavLeftController"></div>
@@ -93,8 +98,8 @@
                 <!-- ANGULAR DYNAMIC CONTENT -->
                 <div ng-include="'shared/nav.top.html'" ng-controller="NavTopController"></div>
                 <div ui-view></div>
-                <div ng-include="'shared/nav.bottom.html'"></div>
             </div>
     </div>
+    <div ng-include="'shared/nav.bottom.html'"></div>
 </body>
 </html>

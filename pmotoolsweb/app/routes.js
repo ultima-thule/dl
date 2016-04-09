@@ -266,6 +266,52 @@ module.exports = function(app) {
         });
 
     // get all planned initiatives for a team
+    app.get('/api/agenda/team/supportrequested/:id', function(req, res) {
+        QuarterPlan.aggregate([
+                    {
+                        $match: {
+                            team_name: req.params.id,
+                            board_masterlane_title: "Development backlog",
+                            workflow_status_name: "Next quarter development plan",
+                            type_name: {$ne: "Plan: support"}
+                         }
+                    },
+                    {
+                        $group: { _id: '$title',}
+                    },
+                    {
+                        $lookup: {
+                            from: "quarterPlan",
+                            localField: "_id",
+                            foreignField: "title",
+                            as: "aggregated"
+                        }
+                    },
+                    {
+                        $project: {
+                            _id: 1, "aggregated.team_name": 1
+                        }
+                    },
+                    {
+                        $unwind: "$aggregated"
+                    },
+                    {
+                        $group: { _id: '$aggregated.team_name', total: {$sum: 1}}
+                    },
+                    {
+                        $match: {
+                            _id: {$ne: req.params.id}
+                         }
+                    },
+                ], function (err, result) {
+                    if (err)
+                        res.send(err);
+                    res.json(result);
+            });
+    });
+
+
+    // get all planned initiatives for a team
     app.get('/api/agenda/team/:id', function(req, res) {
         QuarterPlan.find({team_name: req.params.id, board_masterlane_title: "Development backlog", workflow_status_name: "Next quarter development plan"},
         'title description extended_data team_name size due_date class_of_service_title type_name external_card_id comments',
@@ -311,6 +357,17 @@ module.exports = function(app) {
             });
         });
 
+    //get all master initiatives
+     app.get('/api/agenda/initiative/master', function(req, res){
+         QuarterPlan.find({type_name: {$ne: "Plan: support"}},
+        'title team_name',
+        function(err, cards) {
+            if (err)
+                res.send(err);
+            res.json(cards);
+        });
+     });
+
     //get all supports for an initiative
      app.get('/api/agenda/initiative/supports/:id', function(req, res){
          QuarterPlan.find({title: req.params.id, board_masterlane_title: "Development backlog", workflow_status_name: "Next quarter development plan"},
@@ -321,6 +378,7 @@ module.exports = function(app) {
             res.json(cards);
         });
      });
+
 
 
     // =========================== CHARTS ================================

@@ -16,6 +16,7 @@ angular
         'mdtTemplates',
         'chart.js',
         'angularMoment',
-        'ui.router.title'
+        'ui.router.title',
+        'ngVis'
     ]);
 
