@@ -2,7 +2,7 @@ __author__ = 'asia'
 
 from mongoengine import *
 import lib.mongoLeankit
-import lib.excel_team
+import lib.excel_team_2
 import datetime
 
 sum_in_progress = 0
@@ -49,20 +49,20 @@ def writeCollection(collection, excelReport):
 
     if len(collection) > 0:
         for index, card in enumerate(collection):
-            if card.team_name != last_team:
-                if index != 0:
-                    excelReport.writeSummary(team_sum_total, "Total for team")
-                last_team = card.team_name
-                team_sum_total = 0
-                excelReport.laneBreak()
-                excelReport.writeTeam(last_team)
+            # if card.team_name != last_team:
+                # if index != 0:
+                #     excelReport.writeSummary(team_sum_total, "Total for team")
+                # last_team = card.team_name
+                # team_sum_total = 0
+                # excelReport.laneBreak()
+                # excelReport.writeTeam(last_team)
             excelReport.writeCard(card)
-            if card.taskboard_completed_card_size is not None:
-                sum_in_progress += card.taskboard_completed_card_size
-            if card.size is not None:
-                sum_total += card.size
-                team_sum_total += card.size
-        excelReport.writeSummary(team_sum_total, "Total for team")
+            # if card.taskboard_completed_card_size is not None:
+            #     sum_in_progress += card.taskboard_completed_card_size
+            # if card.size is not None:
+            #     sum_total += card.size
+            #     team_sum_total += card.size
+        # excelReport.writeSummary(team_sum_total, "Total for team")
 
 
 if __name__ == '__main__':
@@ -71,8 +71,8 @@ if __name__ == '__main__':
 
     _initMongoConn()
 
-    excelReport = lib.excel_team.ExcelReport(datetime.datetime.now().strftime("TeamStatus_%Y-%m-%d-%H-%M-%S.xlsx"),
-                         "Projects in progress and todo")
+    excelReport = lib.excel_team_2.ExcelReport(datetime.datetime.now().strftime("TeamStatus_%Y-%m-%d-%H-%M-%S.xlsx"),
+                         "DreamLab - projects data")
     excelReport.initReport(_initSponsorsDict (), _initReportParams(), _initTeamsDict())
 
     # write all cards with set up sponsor
@@ -91,7 +91,7 @@ if __name__ == '__main__':
                                   & Q(type_name__ne ='Plan: support')).order_by('workflow_status_name', 'title')
     writeCollection(cards, excelReport)
 
-    excelReport.writeSummary(sum_total, "IT Production total")
+    # excelReport.writeSummary(sum_total, "IT Production total")
 
     data = excelReport.close()
 
@@ -100,7 +100,7 @@ if __name__ == '__main__':
 
     report.xls_data = data
     report.generation_date = datetime.datetime.now()
-    report.format_type = "2"
+    report.format_type = "3"
     report.is_plan = False
 
     report.save()

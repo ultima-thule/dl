@@ -13,23 +13,35 @@
 
             $scope.title = "IT production reports";
 
-            $scope.generateReport = function() {
+            $scope.refreshReports = function (){
+                //show progress bar
                 $scope.isLoading = true;
-                reportService.generate ()
+                reportService.get("1")
+                    .success(function(data) {
+                        $scope.reports1 = data;
+                    });
+
+                reportService.get("2")
+                    .success(function(data) {
+                        $scope.reports2 = data;
+                    });
+
+                reportService.get("3")
+                    .success(function(data) {
+                        $scope.reports3 = data;
+                    })
+                    .finally(function() {
+                        $scope.isLoading = false;
+                    });
+            }
+
+            $scope.generateReport = function(format_nr) {
+                $scope.isLoading = true;
+                reportService.generate (format_nr)
                 .success(function(data){
-                    reportService.get('/api/reports')
-                                .success(function(data2) {
-                                    $scope.reports = data2;
-                                })
-                                .error(function(data2) {
-                                    console.log('Error: ' + data2);
-                                })
-                                .finally(function() {
-                                    $scope.isLoading = false;
-                                });
+                    $scope.refreshReports ();
                 })
                 .error(function(data) {
-                    console.log('Error: ' + data);
                     $scope.isLoading = false;
                 });
             }
@@ -48,7 +60,6 @@
                     FileSaver.saveAs(blob, filename);
                     $location.path('/reports');
                 }).error(function(data) {
-                    console.log('Error: ' + data);
                 });
 
             }
@@ -60,22 +71,10 @@
                 .success(function(data){
                     if (data.length > 0)
                         $scope.lastLeankitDate = data[0].param_value_date
-                }).error(function(data) {
-                    console.log('Error: ' + data);
                 });
 
-                //show progress bar
-                $scope.isLoading = true;
-                reportService.get('/api/reports')
-                    .success(function(data) {
-                        $scope.reports = data;
-                    })
-                    .error(function(data) {
-                        console.log('Error: ' + data);
-                    })
-                    .finally(function() {
-                        $scope.isLoading = false;
-                    });
+                $scope.refreshReports ();
+
             }
         };
 

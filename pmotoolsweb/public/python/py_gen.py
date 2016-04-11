@@ -95,6 +95,7 @@ if __name__ == '__main__':
 
     report.xls_data = data
     report.generation_date = datetime.datetime.now()
+    report.format_type = "1"
     report.is_plan = False
 
     report.save()

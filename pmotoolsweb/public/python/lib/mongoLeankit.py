@@ -147,6 +147,7 @@ class Report (Document):
     xls_data = BinaryField()
     generation_date = DateTimeField()
     is_plan = BooleanField()
+    format_type = StringField()
 
 
 class Configparam (Document):

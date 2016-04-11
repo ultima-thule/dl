@@ -1,38 +1,86 @@
 <!-- public/components/report/report.html -->
-<div layout="row" layout-xs="column" >
     <md-card>
-        <md-card-title-media>
-            <img src="http://lorempixel.com/400/200/abstract" />
-          </md-card-title-media>
         <md-card-content layout="column" layout-aling="center center" >
-            Here you can download a report, which shows current production state.<br/>
+            Here you can download different reports, which show current production state.<br/>
             All reports are based on data synchronized daily from LeanKit kanban board. Last date of synchronization:
             <h1><time title="{{ lastLeankitDate | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">{{lastLeankitDate | amTimeAgo}}</time></h1>
+            <md-progress-circular md-mode="indeterminate" ng-show="isLoading" md-diameter="96"></md-progress-circular>
         </md-card-content>
     </md-card>
-
-    <md-card>
+<div layout="row" layout-xs="column" >
+    <md-card flex="100" flex-gt-xs="33">
+        <md-card-header>
+          <md-card-header-text>
+              <span class="md-title">Full production report</span>
+          </md-card-header-text>
+        </md-card-header>
         <md-card-content>
+            <p>This type of report shows full current production state per Business Owner.</p>
+            <md-divider></md-divider>
             <md-list>
-                <md-list-item class="md-2-line">
+                <md-list-item class="md-2-line" ng-repeat="item in reports1">
                     <div class="md-list-item-text" layout="column">
-                        <h3>Want a fresh report?</h3>
-                        <p><md-button class="md-raised my-hue-1 md-secondary" ng-click="generateReport();">Generate</md-button></p>
+                        <h4>Made <time title="{{ item.generation_date | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">{{item.generation_date | amTimeAgo}}</time></h4>
+                        <p>at {{ item.generation_date | amDateFormat: 'h:mm a' }}</p>
                     </div>
-                </md-list-item>
-                <md-divider></md-divider>
-                <md-subheader class="md-no-sticky" layout-align="center center">Download one of the latest reports in MS Excel format
-
-                </md-subheader>
-                    <md-progress-circular md-mode="indeterminate" ng-show="isLoading" md-diameter="96"></md-progress-circular>
-                <md-list-item class="md-2-line" ng-repeat="item in reports | limitTo: 5">
                     <md-button class="md-fab md-mini md-hue-3 md-secondary" aria-label="Download file" target="_blank" ng-href="api/reports/{{item._id}}">
                         <md-icon>file_download</md-icon>
                     </md-button>
+                </md-list-item>
+                <md-list-item class="md-2-line">
+                  <md-button class="md-raised my-hue-1 md-secondary" ng-click="generateReport('1');">Refresh</md-button>
+                </md-list-item>
+            </md-list>
+        </md-card-content>
+    </md-card>
+
+    <md-card flex="100" flex-gt-xs="33">
+        <md-card-header>
+          <md-card-header-text>
+            <span class="md-title">Team report</span>
+          </md-card-header-text>
+        </md-card-header>
+        <md-card-content>
+            <p>This type of report shows simplified projects data per IT Team.</p>
+            <md-divider></md-divider>
+            <md-list>
+                <md-list-item class="md-2-line" ng-repeat="item in reports2">
                     <div class="md-list-item-text" layout="column">
-                        <h3>Report generated <time title="{{ item.generation_date | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">{{item.generation_date | amTimeAgo}}</time></h4>
+                        <h4>Made <time title="{{ item.generation_date | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">{{item.generation_date | amTimeAgo}}</time></h4>
                         <p>at {{ item.generation_date | amDateFormat: 'h:mm a' }}</p>
                     </div>
+                    <md-button class="md-fab md-mini md-hue-3 md-secondary" aria-label="Download file" target="_blank" ng-href="api/reports/{{item._id}}">
+                        <md-icon>file_download</md-icon>
+                    </md-button>
+                </md-list-item>
+                <md-list-item class="md-2-line">
+                  <md-button class="md-raised my-hue-1 md-secondary" ng-click="generateReport('2');">Refresh</md-button>
+                </md-list-item>
+            </md-list>
+        </md-card-content>
+    </md-card>
+
+    <md-card flex="100" flex-gt-xs="33">
+        <md-card-header>
+          <md-card-header-text>
+            <span class="md-title">Raw report</span>
+          </md-card-header-text>
+        </md-card-header>
+        <md-card-content>
+            <p>This type of report contains simplified projects data as a table.</p>
+            <md-divider></md-divider>
+            <md-list>
+                <md-list-item class="md-2-line" ng-repeat="item in reports3">
+                    <div class="md-list-item-text" layout="column">
+                        <h4>Made <time title="{{ item.generation_date | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">{{item.generation_date | amTimeAgo}}</time></h4>
+                        <p>at {{ item.generation_date | amDateFormat: 'h:mm a' }}</p>
+                    </div>
+                    <md-button class="md-fab md-mini md-hue-3 md-secondary" aria-label="Download file" target="_blank" ng-href="api/reports/{{item._id}}">
+                        <md-icon>file_download</md-icon>
+                    </md-button>
+                </md-list-item>
+                <md-list-item class="md-2-line">
+                  <md-button class="md-raised my-hue-1 md-secondary" ng-click="generateReport('3');">Refresh</md-button>
                 </md-list-item>
             </md-list>
         </md-card-content>

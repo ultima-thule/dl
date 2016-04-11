@@ -58,6 +58,58 @@ module.exports = function(app) {
 
     // =========================== REPORT ================================
 
+
+    // get all reports - all formats
+    app.get('/api/reports', function(req, res) {
+        // use mongoose to get all teams in the database
+        Report.find({is_plan: false}).limit(5).sort('-generation_date').exec (function(err, reports) {
+            if (err)
+                res.send(err);
+            res.json(reports);
+        });
+    });
+
+    // get all reports - format 1
+    app.get('/api/reports/format1', function(req, res) {
+        // use mongoose to get all teams in the database
+        Report.find({is_plan: false, format_type: "1"}).limit(1).sort('-generation_date').exec (function(err, reports) {
+            if (err)
+                res.send(err);
+            res.json(reports);
+        });
+    });
+
+    // get all reports - format 2
+    app.get('/api/reports/format2', function(req, res) {
+        // use mongoose to get all teams in the database
+        Report.find({is_plan: false, format_type: "2"}).limit(1).sort('-generation_date').exec (function(err, reports) {
+            if (err)
+                res.send(err);
+            res.json(reports);
+        });
+    });
+
+
+    // get all reports - format 3
+    app.get('/api/reports/format3', function(req, res) {
+        // use mongoose to get all teams in the database
+        Report.find({is_plan: false, format_type: "3"}).limit(1).sort('-generation_date').exec (function(err, reports) {
+            if (err)
+                res.send(err);
+            res.json(reports);
+        });
+    });
+
+    // gel all reports
+    app.get('/api/reports/plan', function(req, res) {
+        // use mongoose to get all teams in the database
+        Report.find({is_plan: true}).limit(5).sort('-generation_date').exec (function(err, reports) {
+            if (err)
+                res.send(err);
+            res.json(reports);
+        });
+    });
+
     // get a report in excel format
     app.get('/api/reports/:id', function(req, res) {
         Report.find({_id: req.params.id}, function(err, reports) {
@@ -70,35 +122,25 @@ module.exports = function(app) {
           });
     });
 
-    // gel all reports
-    app.get('/api/reports', function(req, res) {
-        // use mongoose to get all teams in the database
-        Report.find({is_plan: false}).limit(5).sort('-generation_date').exec (function(err, reports) {
-            if (err)
-                res.send(err);
-            res.json(reports);
-        });
-    });
-
-
-    // gel all reports
-    app.get('/api/agendareports', function(req, res) {
-        // use mongoose to get all teams in the database
-        Report.find({is_plan: true}).limit(5).sort('-generation_date').exec (function(err, reports) {
-            if (err)
-                res.send(err);
-            res.json(reports);
-        });
-    });
-
 
     // generate new report with python script
-    app.get('/api/genreport', function(req, res) {
+    app.get('/api/genreport/:id', function(req, res) {
 
-        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen.py']);
-        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/py_gen.py']);
-        //var python = require('child_process').spawn('C://python34//python.exe', ["C://Users//jgrzywna//PycharmProjects//dl//pmotoolsweb//public//python//py_gen.py"]);
-
+        if (req.params.id === "2") {
+            //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team.py']);
+            var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/py_gen_team.py']);
+//            var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//py_gen_teams.py"]);
+        }
+        else if (req.params.id === "3") {
+            //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team_2.py']);
+            var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/py_gen_team_2.py']);
+//            var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//py_gen_teams_2.py"]);
+        }
+        else {
+            //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen.py']);
+            var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/py_gen.py']);
+//            var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//py_gen.py"]);
+        }
         var output = "";
         python.stdout.on('data', function(){ output += data });
         python.on('close', function(code)

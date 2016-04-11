@@ -117,7 +117,7 @@ class ExcelReport (object):
         global glNumberOfWraps
         global glColWidth
 
-        headers = ["Sponsor name", "Business initiative", "Status", "Estimated cost"]
+        headers = ["Team name", "No of developers", "Sponsor name", "Business initiative", "Description", "Status", "Estimated cost"]
         glNumberOfWraps = len(headers)
 
         glColWidth = [len(headers[x]) for x in range(glNumberOfWraps)]
@@ -185,15 +185,22 @@ class ExcelReport (object):
 
     def writeCard (self, card):
 
-        self._write_cell(0, self.sponsors_dict.get(card.extended_data.sponsor_name, ""))
-        self._write_cell(1, card.title)
-        self._write_cell(2, card.workflow_status_name)
+        team = self.teams_dict[card.team_name]
+        teamSize = ""
+        if team is not None:
+            teamSize = str(team.no_of_developers)
 
-        # strDescription = re.sub("<.*?>", " ", card.description)
-        # strDescription = html.unescape(strDescription)
-        # self._write_cell(2, strDescription.strip())
+        self._write_cell(0, team.name)
+        self._write_cell(1, teamSize)
+        self._write_cell(2, self.sponsors_dict.get(card.extended_data.sponsor_name, ""))
+        self._write_cell(3, card.title)
 
-        self._write_cell(3, self.getInCurrency(card.size), self._format_currency)
+        strDescription = re.sub("<.*?>", " ", card.description)
+        strDescription = html.unescape(strDescription)
+        self._write_cell(4, strDescription.strip())
+
+        self._write_cell(5, card.workflow_status_name)
+        self._write_cell(6, self.getInCurrency(card.size), self._format_currency)
 
         self._write_cell(0, "", None, True)
 
@@ -202,7 +209,10 @@ class ExcelReport (object):
             self._write_cell(0, label, self._format_lane)
             self._write_cell(1, "", self._format_lane)
             self._write_cell(2, "", self._format_lane)
-            self._write_cell(3, self.getInCurrency(total), self._format_lane_currency)
+            self._write_cell(3, "", self._format_lane)
+            self._write_cell(4, "", self._format_lane)
+            self._write_cell(5, "", self._format_lane)
+            self._write_cell(6, self.getInCurrency(total), self._format_lane_currency)
             self._write_cell(0, "", None, True)
 
 

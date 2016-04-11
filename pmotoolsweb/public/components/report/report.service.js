@@ -8,8 +8,8 @@
 
         function reportService($http) {
             return {
-                get : function() {
-                    return $http.get('/api/reports');
+                get : function(id) {
+                    return $http.get('/api/reports/format' + id);
                 },
                 getId : function(id) {
                     return $http.get('/api/reports/' + id,
@@ -20,8 +20,8 @@
                             }
                         });
                 },
-                generate : function() {
-                    return $http.get('/api/genreport');
+                generate : function(format_nr) {
+                    return $http.get('/api/genreport/' + format_nr);
                 }
             }
         };

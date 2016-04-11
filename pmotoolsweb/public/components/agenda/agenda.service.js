@@ -9,7 +9,7 @@
         function agendaService($http) {
             return {
                 get : function() {
-                    return $http.get('/api/agendareports');
+                    return $http.get('/api/reports/plan');
                 },
                 getId : function(id) {
                     return $http.get('/api/reports/' + id,
