@@ -75,13 +75,15 @@ if __name__ == '__main__':
     # write all cards with set up sponsor
     cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
                                   & Q(board_masterlane_title='Current development plan')
-                                  & Q(extended_data__sponsor_name__ne ='')).order_by('extended_data__sponsor_name', 'title')
+                                  & Q(extended_data__sponsor_name__ne ='')
+                                  & Q(type_name__ne ='Plan: support')).order_by('extended_data__sponsor_name', 'title')
     writeCollection(cards, excelReport)
 
     # writa all cards without sponsor
     cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
                                   & Q(board_masterlane_title='Current development plan')
-                                  & Q(extended_data__sponsor_name ='')).order_by('title')
+                                  & Q(extended_data__sponsor_name ='')
+                                  & Q(type_name__ne ='Plan: support')).order_by('title')
     writeCollection(cards, excelReport)
 
     excelReport.writeSummary(sum_in_progress, sum_total, "IT Production total")
