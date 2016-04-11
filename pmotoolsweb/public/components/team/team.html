@@ -22,6 +22,7 @@
                 <th md-column md-order-by="sponsor_name">Sponsor</th>
                 <th md-column md-order-by="default_category">Category</th>
                   <th md-column md-order-by="capacity">Capacity</th>
+                  <th md-column md-order-by="no_of_developers">No of devs</th>
                 <th md-column>Action</th>
               </tr>
             </thead>
@@ -32,6 +33,7 @@
                 <td md-cell>{{item.sponsor_name}}</td>
                 <td md-cell>{{item.default_category}}</td>
                   <td md-cell>{{item.capacity}}</td>
+                  <td md-cell>{{item.no_of_developers}}</td>
                 <td md-cell ng-click="showDialog('E', item, $event)"><md-icon>edit</md-icon></td>
               </tr>
             </tbody>
@@ -124,6 +126,10 @@
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Capacity</label>
                             <input type="text" name="capacity" ng-model="view.selectedItem.capacity" />
+                        </md-input-container>
+                         <md-input-container class="md-block" flex-gt-sm>
+                            <label>No of developers</label>
+                            <input type="text" name="no_of_developers" ng-model="view.selectedItem.no_of_developers" />
                         </md-input-container>
                         <md-input-container class="md-block" flex-gt-sm>
                             <md-checkbox ng-model="view.selectedItem.ignore" aria-label="Ignore in reports?">

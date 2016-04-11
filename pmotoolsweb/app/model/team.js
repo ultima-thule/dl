@@ -14,5 +14,6 @@ module.exports = mongoose.model('team', {
     coordinator: String,
     sm: String,
     capacity: Number,
-    ignore: {type: Boolean, default: false}
+    ignore: {type: Boolean, default: false},
+    no_of_developers: Number
 }, 'team');

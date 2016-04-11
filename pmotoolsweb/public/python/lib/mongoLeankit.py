@@ -126,7 +126,13 @@ class Team(Document):
     location = StringField()
     default_category = StringField() # IT platform, business
     pmo = StringField ()# PMO1, PMO2
+    pmoBoss = StringField ()
     sponsor_name = StringField()
+    coordinator = StringField()
+    sm = StringField()
+    capacity = LongField()
+    ignore = BooleanField()
+    no_of_developers = LongField()
 
 
 class MasterLane(Document):

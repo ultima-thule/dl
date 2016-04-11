@@ -54,7 +54,8 @@
                         pmo: data.pmo,
                         pmoBoss: data.pmoBoss,
                         capacity: data.capacity,
-                        ignore: data.ignore
+                        ignore: data.ignore,
+                        no_of_developers: data.no_of_developers
                     };
                 }
                 $mdDialog.show({
