@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     _initMongoConn()
 
-    excelReport = lib.excel.ExcelReport(datetime.datetime.now().strftime("Status_%Y-%m-%d-%H-%M-%S.xlsx"),
+    excelReport = lib.excel.ExcelReport(datetime.datetime.now().strftime("TeamStatus_%Y-%m-%d-%H-%M-%S.xlsx"),
                          "Portfolio DreamLab")
     excelReport.initReport(_initSponsorsDict (), _initReportParams())
 
