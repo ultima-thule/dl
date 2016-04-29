@@ -188,7 +188,7 @@ class LeankitCardType(Converter):
     attributes = ['Name', 'IsDefault', 'ColorHex', 'IconPath', 'Id']
 
 class LeanKitTask(Converter):
-    attributes = ['Name__author__ = 'asia'
+    attributes = ['Title', 'Id']
 
 # Copyright 2011-2012 Canonical Ltd
 # -*- coding: utf-8 -*-
@@ -424,14 +424,16 @@ class LeankitCard(Converter):
 
     def fetchSubtasks(self):
         print ("Fetching subtasks for ", self.title)
-        url = 'v1/board/{0}/card/{1}/tasks'.format(self.lane.board.id, self.id)
+        url = '/v1/board/{0}/card/{1}/tasks'.format(self.lane.board.id, self.id)
 
-        taskboard_data = self.lane.board.connector.get(
-            url).ReplyData[0]
-        self.tasks = []
-        for task_obj in taskboard_data:
-            task = LeanKitTask(task_obj)
-            self.tasks.append(task)
+        try:
+            taskboard_data = self.lane.board.connector.get(url).ReplyData[0]
+            self.tasks = []
+            for task_obj in taskboard_data:
+                task = LeanKitTask(task_obj)
+                self.tasks.append(task)
+        except:
+            print ("No tasks")
         # self.tasks.sort(key=operator.attrgetter('post_date'), reverse=True)
 
 
@@ -789,7 +791,6 @@ if __name__ == '__main__':
     # Print all users.
     # print (board.users)
 
-', 'IsDefault', 'ColorHex', 'IconPath', 'Id']
 
 class LeankitCard(Converter):
     attributes = ['Id', 'Title', 'Priority', 'Description', 'Tags',
@@ -835,14 +836,19 @@ class LeankitCard(Converter):
 
     def fetchSubtasks(self):
         print ("Fetching subtasks for ", self.title)
-        url = 'v1/board/{0}/card/{1}/tasks'.format(self.lane.board.id, self.id)
-
-        taskboard_data = self.lane.board.connector.get(
-            url).ReplyData[0]
+        url = '/v1/board/{0}/card/{1}/tasks'.format(self.lane.board.id, self.id)
+        # print ("url: " + url)
         self.tasks = []
-        for task_obj in taskboard_data:
-            task = LeanKitTask(task_obj)
-            self.tasks.append(task)
+
+        try:
+            taskboard_data = self.lane.board.connector.get(url).ReplyData[0]
+
+            for task_obj in taskboard_data:
+                task = LeanKitTask(task_obj)
+                self.tasks.append(task)
+        except:
+            pass
+            # print("No tasks on taskboard")
         # self.tasks.sort(key=operator.attrgetter('post_date'), reverse=True)
 
 

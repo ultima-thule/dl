@@ -5,6 +5,8 @@ from lib.mongoLeankit import *
 from mongoengine import *
 import datetime
 import argparse
+import re
+import html
 
 globalTeamDict = {}
 
@@ -78,7 +80,7 @@ def _printCardsForLane(lane):
         #     parent_lane_title = lane.parent_lane.title
         #     parent_lane_id = lane.parent_lane.id
         for card in lane.cards:
-            c = _printCard(card, lane)
+            _printCard(card, lane)
     for child in lane.child_lanes:
         _printCardsForLane(child)
 
@@ -199,9 +201,14 @@ def _insertCard(card, lane):
 
 def _printCard(card, lane):
      if len(card.tasks) > 0:
-        tasks_list = []
+        title = re.sub("<.*?>", " ", card.title)
+        title = html.unescape(title)
+
+        description = re.sub("<.*?>", " ", card.description)
+        description = html.unescape(description)
+
         for task in card.tasks:
-            print (task.id, task.title)
+            print(task.id + ";" + task.title +";" + title + ";" + description)
 
 
 def _getBudgetStatusName(done, planned):
@@ -254,7 +261,7 @@ def _insertAllTeamsForBoard(board):
                     _insertTeam(team_lane)
                     globalTeamDict[team_lane.title] = True
 
-def _printBoard(board):
+def _printBoard(master_lanes):
     for lane in master_lanes:
         _printCardsForLane(lane)
 
@@ -278,7 +285,6 @@ if __name__ == '__main__':
     print("Starting script")
     print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     # init mongo
-    _initMongoConn ()
 
     # parse arguments
     parser = argparse.ArgumentParser(description='Synchronize with LeanKit account.')
@@ -287,9 +293,13 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--comments', help='fetch comments', default=False)
     parser.add_argument('-u', '--users', help='regenerate users for board', default=False)
     parser.add_argument('-t', '--teams', help='regenerate teams for board', default=False)
-    parser.add_argument('-p', '--princon', help='only print to output', default=False)
+    parser.add_argument('-p', '--printcon', help='only print to output', default=False)
     parser.add_argument('-s', '--subtasks', help='regenerate subtasks', default=False)
     args = parser.parse_args()
+
+    if args.printcon is None or args.printcon=='False':
+        _initMongoConn ()
+
 
     if args.board is not None:
         # init kanban
@@ -302,25 +312,25 @@ if __name__ == '__main__':
         if board is not None:
             if args.regenerate is not None and args.regenerate:
                 print("Regenerating board '%s'..." % args.board)
-                if args.comments is not None and args.comments:
+                if args.comments is not None and args.comments=='True':
                     for card in board.cards:
                         card.fetchComments()
-                if args.subtasks is not None and args.subtasks:
+                if args.subtasks is not None and args.subtasks=='True':
                     for card in board.cards:
                         card.fetchSubtasks()
-                if args.printcon is not None and args.printcon:
+                if args.printcon is not None and args.printcon=='True':
                     _printBoard(board.root_lane.child_lanes)
                 else:
                     _cleanBoard(args.board)
                     _insertAllCardsForBoard(board.root_lane.child_lanes, '')
                     _insertParamInfo("last_leankit_synchro")
 
-            if args.users is not None and args.users:
+            if args.users is not None and args.users=='True':
                 print("Regenerating users for board '%s'..." % args.board)
                 _cleanUsers()
                 _insertUsers(board.users)
 
-            if args.teams is not None and args.teams:
+            if args.teams is not None and args.teams=='True':
                 print("Regenerating teams for board '%s'..." % args.board)
                 _cleanTeams()
                 _insertAllTeamsForBoard(board)
