@@ -71,20 +71,9 @@ def _insertCardsForLane(lane):
     for child in lane.child_lanes:
         _insertCardsForLane(child)
 
-def _printCardsForLane(lane):
-    if len(lane.cards) > 0:
-        # next_lane = lane.getNextLanes()
-        # parent_lane_title = ''
-        # parent_lane_id = None
-        # if next_lane is not None:
-        #     parent_lane_title = lane.parent_lane.title
-        #     parent_lane_id = lane.parent_lane.id
-        for card in lane.cards:
-            _printCard(card, lane)
-    for child in lane.child_lanes:
-        _printCardsForLane(child)
-
-
+def _printCardsForBoard(board):
+    for card in board.cards:
+        _printCard(card)
 
 def _getCorrectDate (date_str, is_long=False, is_long_with_at=False):
     if date_str is None or date_str == '':
@@ -199,17 +188,21 @@ def _insertCard(card, lane):
     return c
 
 
-def _printCard(card, lane):
-     if len(card.tasks) > 0:
+def _printCard(card):
+     if card.tasks is not None and len(card.tasks) > 0:
         title = re.sub("<.*?>", " ", card.title)
         title = html.unescape(title)
 
-        description = re.sub("<.*?>", " ", card.description)
+        description = ""
+        if card.description is not None:
+            description = re.sub("<.*?>", " ", card.description)
         description = html.unescape(description)
 
         for task in card.tasks:
-            print(task.id + ";" + task.title +";" + title + ";" + description)
-
+            print (title)
+            print (description)
+            print ("---------------------------------------------------------")
+            # print(str(task.id) + ";" + task.title + ";" + title + ";")
 
 def _getBudgetStatusName(done, planned):
     if done is None or planned is None:
@@ -260,10 +253,6 @@ def _insertAllTeamsForBoard(board):
                 if team_lane.title not in globalTeamDict:
                     _insertTeam(team_lane)
                     globalTeamDict[team_lane.title] = True
-
-def _printBoard(master_lanes):
-    for lane in master_lanes:
-        _printCardsForLane(lane)
 
 
 def _cleanBoard(board_id):
@@ -317,9 +306,9 @@ if __name__ == '__main__':
                         card.fetchComments()
                 if args.subtasks is not None and args.subtasks=='True':
                     for card in board.cards:
-                        card.fetchSubtasks()
+                        card.fetchSubtasks(board)
                 if args.printcon is not None and args.printcon=='True':
-                    _printBoard(board.root_lane.child_lanes)
+                    _printCardsForBoard(board)
                 else:
                     _cleanBoard(args.board)
                     _insertAllCardsForBoard(board.root_lane.child_lanes, '')
