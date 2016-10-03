@@ -3,6 +3,8 @@
 
 import sys, string, xmlrpc, re, getpass, requests, json
 import xmlrpc.client
+from datetime import datetime
+from dateutil import parser
 
 if __name__ == '__main__':
     dev = 0
@@ -11,23 +13,32 @@ if __name__ == '__main__':
     url = "http://doc.grupa.onet/rpc/xmlrpc"
 
     oprintname = "openSprints()"
-    jira_search = 'http://jira.grupa.onet/rest/api/2/search?jql=project = "CMSP2WIDG" AND Type = Story \
-            AND Sprint in openSprints()&fields=summary,customfield_11726,customfield_10002 '
 
     if len(sys.argv) < 4:
-           exit("Usage: " + sys.argv[0] + " userlogin projectname sprintAlias");
+        exit("Usage: " + sys.argv[0] + " userlogin projectname sprintAlias")
 
     # test variables
-    username = sys.argv[1];
+    username = sys.argv[1]
     passwrd = getpass.getpass()
-    projectname = sys.argv[2];
+    projectname = sys.argv[2]
     sprint = sys.argv[3]
 
-    spacekey = "~jgrzywna"
+    jira_search = "http://jira.grupa.onet/rest/api/2/search?jql=project = '" + projectname + "' AND Type = Story \
+            AND Sprint in openSprints()&fields=summary,customfield_11726,customfield_10002 "
+
+    jira_sprint = "http://jira.grupa.onet/rest/agile/1.0/sprint/" + sprint
+
+    spacekey = "~" + username
     pagetitle = sprint + " | " + projectname
 
+    # JIRA SPRINT PART
+    out = requests.get(jira_sprint, auth=(username, passwrd))
+    jira_sprint_data = json.loads(out.content.decode())
+    dateFrom = parser.parse(jira_sprint_data["startDate"])
+    dateTo = parser.parse(jira_sprint_data["endDate"])
+
     # JIRA SEARCH PART
-    out = requests.get(jira_search, auth=('jgrzywna', passwrd))
+    out = requests.get(jira_search, auth=(username, passwrd))
     jira_issues_tmp = out.content.decode().replace("'", "\"")
     jira_issues = json.loads(jira_issues_tmp).get('issues')
 
@@ -35,10 +46,10 @@ if __name__ == '__main__':
     sum_story = 0
     items_table = ""
     for issue in jira_issues:
-        KA =  issue["fields"].get("customfield_11726") and issue["fields"].get("customfield_11726").encode("utf-8") or "n/a"
-        SP =  issue["fields"].get("customfield_10002", "0") and str(issue["fields"].get("customfield_10002", "0")) or "0"
-        SUB = issue["fields"].get("summary").encode("utf-8")
-        items_table +="""
+        KA = issue["fields"].get("customfield_11726") and issue["fields"].get("customfield_11726") or "n/a"
+        SP = issue["fields"].get("customfield_10002", "0") and str(issue["fields"].get("customfield_10002", "0")) or "0"
+        SUB = issue["fields"].get("summary")
+        items_table += """
                 <tr>
                     <td class="confluenceTd"><p>%s</p></td>
                     <td colspan="1" class="confluenceTd">%s</td>
@@ -46,22 +57,24 @@ if __name__ == '__main__':
                     <td style="text-align: center;" class="confluenceTd">-</td>
                     <td style="text-align: center;" colspan="1" class="confluenceTd"><span style="color: rgb(112,112,112);">Tak</span></td>
                 </tr>
-        """%(SUB, KA, SP)
+        """ % (SUB, KA, SP)
         sum_story += float(SP)
-    input_html ="""
+    input_html = """
     <div>
      <table border="1" class="confluenceTable">
         <tbody>
             <tr>
                 <th class="confluenceTh">Kod sprintu</th>
-                <th class="confluenceTh">IP 25.07.2016-08.08.2016</th>
-                <th colspan="1" class="confluenceTh">25.07.2016</th>
-                <th colspan="1" class="confluenceTh">08.08.2016</th>
+                <th class="confluenceTh">%s</th>
+                <th colspan="1" class="confluenceTh">%s</th>
+                <th colspan="1" class="confluenceTh">%s</th>
             </tr>
         </tbody>
     </table>
     </div>
+    """ % (jira_sprint_data["name"], dateFrom.strftime('%Y-%m-%d'), dateTo.strftime('%Y-%m-%d'))
 
+    input_html += """
     <h1 id="Sprint1%7CPL_DL_IT_CMS_P2.WIDGTS_L-Kosztsprintu">Koszt sprintu</h1>
     <p></p><p></p><p></p>
     <div class="table-wrap">
@@ -170,14 +183,12 @@ if __name__ == '__main__':
 
     # CONFLUENCE PART
     if dev != 1:
-        server = xmlrpc.client.ServerProxy(url);
-        token = server.confluence2.login(username, passwrd);
-
-        print ("token")
+        server = xmlrpc.client.ServerProxy(url)
+        token = server.confluence2.login(username, passwrd)
 
         parentPage = {
-                "space" : spacekey,
-                "title" : projectname
+                "space": spacekey,
+                "title": projectname
                 }
 
         try:
@@ -186,13 +197,13 @@ if __name__ == '__main__':
             exit("There is no a page " + projectname)
 
         page = {
-                "space" : spacekey,
-                "parentId" : parentId.get("id"),
-                "title" : pagetitle,
-                "content" : input_html
+                "space": spacekey,
+                "parentId": parentId.get("id"),
+                "title": pagetitle,
+                "content": input_html
                 }
         try:
-            out = server.confluence2.storePage(token, page);
+            out = server.confluence2.storePage(token, page)
         except:
             exit("Script error")
 
