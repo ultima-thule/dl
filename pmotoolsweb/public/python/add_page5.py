@@ -182,6 +182,7 @@ if __name__ == '__main__':
     #####################################################################################################################
 
     # CONFLUENCE PART
+    # dev variable- if is "1" the content won't be written in the confluence
     if dev != 1:
         server = xmlrpc.client.ServerProxy(url)
         token = server.confluence2.login(username, passwrd)
