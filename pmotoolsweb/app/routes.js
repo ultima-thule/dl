@@ -14,6 +14,8 @@ var LeanKitClient  = require("leankit-client");
 var https = require('https');
 var http = require('http');
 
+var jiraAuth = 'readonly_pmo:CbobBsps?!';
+
 module.exports = function(app) {
 
     // server routes ===========================================================
@@ -593,7 +595,7 @@ module.exports = function(app) {
         http.get({
                 host: 'jira.grupa.onet',
                 path: '/rest/agile/1.0/board',
-                auth: 'readonly_pmo:CbobBsps?!'
+                auth: jiraAuth
         }, function(response) {
             // Continuously update stream with data
             var body = '';
@@ -605,6 +607,25 @@ module.exports = function(app) {
             });
         });
     });
+
+    // get all sprints in board
+    app.get('/api/jira/boards/:id/sprint', function(req, res) {
+        http.get({
+                host: 'jira.grupa.onet',
+                path: '/rest/agile/1.0/board/' + req.params.id + '/sprint',
+                auth: jiraAuth
+        }, function(response) {
+            // Continuously update stream with data
+            var body = '';
+            response.on('data', function(d) {
+                body += d;
+            });
+            response.on('end', function() {
+                res.send(body);
+            });
+        });
+    });
+
 
     // =========================== USER APP================================
     // create new user app
