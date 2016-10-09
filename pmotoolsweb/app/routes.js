@@ -12,6 +12,7 @@ var User  = require('./model/user');
 var QuarterPlan = require('./model/quarterPlan');
 var LeanKitClient  = require("leankit-client");
 var https = require('https');
+var http = require('http');
 
 module.exports = function(app) {
 
@@ -583,6 +584,25 @@ module.exports = function(app) {
     app.put('/api/usersLeankit/:id', function(req, res) {
         User.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, function (err, user) {
             res.send(user);
+        });
+    });
+
+    // =========================== JIRA ================================
+    // get all boards
+    app.get('/api/jira/boards', function(req, res) {
+        http.get({
+                host: 'jira.grupa.onet',
+                path: '/rest/agile/1.0/board',
+                auth: 'readonly_pmo:CbobBsps?!'
+        }, function(response) {
+            // Continuously update stream with data
+            var body = '';
+            response.on('data', function(d) {
+                body += d;
+            });
+            response.on('end', function() {
+                res.send(body);
+            });
         });
     });
 
