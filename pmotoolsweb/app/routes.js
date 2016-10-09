@@ -590,11 +590,11 @@ module.exports = function(app) {
     });
 
     // =========================== JIRA ================================
-    // get all boards
+    // get all scrum boards
     app.get('/api/jira/boards', function(req, res) {
         http.get({
                 host: 'jira.grupa.onet',
-                path: '/rest/agile/1.0/board',
+                path: '/rest/agile/1.0/board?type=scrum',
                 auth: jiraAuth
         }, function(response) {
             // Continuously update stream with data
@@ -603,10 +603,30 @@ module.exports = function(app) {
                 body += d;
             });
             response.on('end', function() {
-                res.send(body);
+                var parsed = JSON.parse(body);
+                res.send(parsed.values);
             });
         });
     });
+
+    // get scrum board
+    app.get('/api/jira/boards/:id', function(req, res) {
+        http.get({
+                host: 'jira.grupa.onet',
+                path: '/rest/agile/1.0/board/' + req.params.id,
+                auth: jiraAuth
+        }, function(response) {
+            // Continuously update stream with data
+            var body = '';
+            response.on('data', function(d) {
+                body += d;
+            });
+            response.on('end', function() {
+                res.send(JSON.parse(body));
+            });
+        });
+    });
+
 
     // get all sprints in board
     app.get('/api/jira/boards/:id/sprint', function(req, res) {

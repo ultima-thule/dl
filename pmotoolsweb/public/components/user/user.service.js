@@ -30,7 +30,8 @@
                 signedIn: false,
                 displayName: '',
                 avatar: '01',
-                isAdmin: false
+                isAdmin: false,
+                jiraBoards: []
             };
 
             return {
@@ -52,6 +53,12 @@
                 setAdmin: function (isAdmin) {
                     data.isAdmin = isAdmin;
                 },
+                getJiraBoards: function () {
+                    return data.jiraBoards;
+                },
+                setJiraBoards: function (jiraBoards) {
+                    data.jiraBoards = jiraBoards;
+                },
                 isSignedIn: function () {
                     return data.signedIn;
                 },
@@ -63,6 +70,7 @@
                     data.displayName = '';
                     data.avatar = '01';
                     data.isAdmin = false;
+                    data.jiraBoards = [];
                 }
             };
         };

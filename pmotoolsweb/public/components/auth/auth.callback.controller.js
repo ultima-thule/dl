@@ -31,6 +31,7 @@
                         userFactory.setDisplayName ($scope.user.info.displayName);
                         userFactory.setAvatar ($scope.userApp.avatar);
                         userFactory.setAdmin ($.inArray('admin', $scope.userApp.roles) > -1);
+                        userFactory.setJiraBoards($scope.userApp.jiraBoards);
                         userFactory.signIn ();
                     });
                 });

@@ -15,6 +15,7 @@ angular
         'ParamService', 'DashboardService',
         'AgileboardCtrl', 'AgileboardService', 'AgileboardDetailsCtrl',
         'PwCtrl', 'PwService',
+        'JiraboardCtrl', 'JiraboardService',
         'UserProfileCtrl', 'UserSettingsCtrl', 'UserService',
         'ParamCtrl', 'ParamService',
         'LoginCtrl', 'LogoutCtrl',

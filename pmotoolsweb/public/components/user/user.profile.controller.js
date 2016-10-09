@@ -3,11 +3,15 @@
 
     angular
         .module('UserProfileCtrl', [])
-        .controller('UserProfileController', UserProfileController);
+        .controller('UserProfileController', UserProfileController)
+        .controller('DialogAvatarsController', DialogAvatarsController)
+        .controller('DialogJiraBoardsController', DialogJiraBoardsController);
 
-        UserProfileController.$inject = ['$scope', '$cookies', '$mdDialog', '$mdToast', 'userService', 'authService', 'userFactory'];
+        UserProfileController.$inject = ['$scope', '$cookies', '$mdDialog', '$mdToast', 'userService', 'authService', 'userFactory', 'jiraboardService'];
+        DialogAvatarsController.$inject = ['$scope', '$mdDialog', '$mdToast', 'userService', 'userFactory', 'oldData', 'selectedUser'];
+        DialogJiraBoardsController.$inject = ['$scope', '$mdDialog', '$mdToast', 'userService', 'userFactory', 'jiraboardService', 'oldData', 'selectedUser'];
 
-        function UserProfileController($scope, $cookies, $mdDialog, $mdToast, userService, authService, userFactory) {
+        function UserProfileController($scope, $cookies, $mdDialog, $mdToast, userService, authService, userFactory, jiraboardService) {
 
             authService.getMe()
             .success(function(data){
@@ -24,8 +28,11 @@
             });
 
             $scope.showAvatars = showAvatars;
+            $scope.showJiraBoards = showJiraBoards;
+            $scope.addJiraBoards = addJiraBoards;
             $scope.simpleToastBase = simpleToastBase;
             $scope.showMessage = showMessage;
+            $scope.boardid = "";
 
             function simpleToastBase(message, position, delay, action) {
                 $mdToast.show(
@@ -62,13 +69,57 @@
                 );
             }
 
+            function showJiraBoards(upn, extData, ev) {
+                var tempData = {
+                    upn: upn,
+                    jiraBoards: extData.jiraBoards
+                };
+
+                $mdDialog.show({
+                    templateUrl: 'jiraboards.html',
+                    bindToController: true,
+                    controller: DialogJiraBoardsController,
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    locals: {
+                        oldData: tempData,
+                        selectedUser: extData
+                    }
+                })
+                .then(
+                    function (result) {
+                        showMessage(result);
+                    }
+                );
+            }
+
+            function addJiraBoards(upn, extData, ev) {
+                jiraboardService.getBoard($scope.boardid)
+                .success(function(data){
+                    if (data.type === "scrum") {
+                        var board = {"boardid": data.id, "name": data.name};
+                        $scope.userApp.jiraBoards.push(board);
+                        $scope.userApp.$update(function() {
+                            showMessage('Jira board was successfully added to your boards.');
+                        });
+                    }
+                    else {
+                        showMessage('This is a kanban board, cannot be added.');
+                    }
+                }).error(function(data) {
+                    console.log('Error: ' + data);
+                });
+            }
+
+
             function showMessage(message) {
                 simpleToastBase(message, 'bottom right', 3000, 'Close');
             }
 
         }
 
-        //Dialog's controller
+        //Dialog's avatars controller
         function DialogAvatarsController($scope, $mdDialog, $mdToast, userService, userFactory, oldData, selectedUser) {
             $scope.avatars = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
                             '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
@@ -91,5 +142,38 @@
                 });
             };
         }
+
+
+        //Dialog's jira boards controller
+        function DialogJiraBoardsController($scope, $mdDialog, $mdToast, userService, userFactory, jiraboardService, oldData, selectedUser) {
+            $scope.oldData = oldData;
+            $scope.selectedUser = selectedUser;
+
+            $scope.cancel = function() {
+                $mdDialog.cancel();
+            };
+
+            $scope.save = function() {
+                userService.get({id: $scope.oldData.upn}, function(user) {
+                    user.jiraBoards = $scope.oldData.jiraBoards;
+                    user.$update(function() {
+                        console.log($scope.oldData.jiraBoards);
+                        userFactory.setJiraBoards ($scope.oldData.jiraBoards);
+                        $mdDialog.hide('Your Jira boards were successfully updated.');
+                    });
+                });
+            };
+
+            $scope.isLoading = true;
+            jiraboardService.getAllBoards()
+            .success(function(data){
+                $scope.jiraBoards = data;
+                $scope.isLoading = false;
+            }).error(function(data) {
+                console.log('Error: ' + data);
+                $scope.isLoading = false;
+            });
+        }
+
 
 })();

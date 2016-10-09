@@ -12,7 +12,7 @@
     "material-design-icons": "latest",
     "angular-file-saver": "latest",
     "dndLists": "latest",
-    "mdDataTable": "~1.1.3",
+    "mdDataTable": "latest",
     "angular-material-icons": "latest",
     "lodash": "latest",
     "angular-lodash-module": "latest",
@@ -27,6 +27,6 @@
     "angular-visjs": "latest"
   },
   "resolutions": {
-    "angular": "^1.0.8"
+    "angular": "latest  "
   }
 }

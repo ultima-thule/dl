@@ -51,21 +51,34 @@
         <md-card>
             <md-card-title>
                 <md-card-title-text>
-                    <span class="md-headline">Latest activity</span>
+                    <span class="md-headline">My Jira boards</span>
                 </md-card-title-text>
             </md-card-title>
-            <md-card-content>
+            <md-card-content layout="column">
                 <md-list>
-                    <md-list-item class="md-3-line" ng-repeat="i in [1, 2, 3, 4, 5]">
-                    <md-icon class="material-icons md-48">track_changes</md-icon>
-                    <div class="md-list-item-text">
-                        <h3>This is test</h3>
-                        <h4>this is test</h4>
-                        This is an activity
-                    </div>
+                    <md-list-item class="md-3-line" ng-repeat="i in userApp.jiraBoards">
+                        <md-icon class="material-icons md-48">track_changes</md-icon>
+                        <div class="md-list-item-text">
+                            <md-button ng-href="http://jira.grupa.onet/secure/RapidBoard.jspa?rapidView={{i.boardid}}" target="_blank">{{i.name}}</md-button>
+                        </div>
                     </md-list-item>
                 </md-list>
+                <md-content layout="row">
+                    <form name="projectForm">
+                        <md-input-container class="md-block">
+                            <label>Board ID</label>
+                            <input md-maxlength="3" required name="boardid" ng-model="boardid">
+                        </md-input-container>
+                        <div layout="row">
+                            <span flex></span>
+                            <md-button  ng-click="addJiraBoards(user.info.upn, userApp, $event)">Add board</md-button>
+                        </div>
+                    </form>
+                </md-content>
             </md-card-content>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button ng-click="showJiraBoards(user.info.upn, userApp, $event)" ng-disabled="true">Select Jira boards</md-button>
+            </md-card-actions>
         </md-card>
     </div>
 </md-content>
@@ -93,6 +106,35 @@
         <md-dialog-actions layout="row">
             <span flex></span>
             <md-button ng-click="save()" md-autofocus ng-disabled="oldData.avatar===undefined">I want this!</md-button>
+            <md-button ng-click="cancel()">Cancel</md-button>
+        </md-dialog-actions>
+    </md-dialog>
+</script>
+
+<!-- edit Jira boards dialog -->
+
+<script type="text/ng-template" id="jiraboards.html">
+    <md-dialog aria-label="Select Jira boards"  ng-cloak >
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Select Jira boards</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content layout-wrap>
+            <md-progress-circular md-mode="indeterminate" ng-show="isLoading" md-diameter="96"></md-progress-circular>
+            <div layout="row" layout-wrap layout-padding flex>
+                <div flex="100" ng-repeat="item in jiraBoards">
+                    <md-checkbox ng-checked="exists(item)" ng-click="toggle(item)"> {{ item.name }} </md-checkbox>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="save()" md-autofocus ng-disabled="oldData.jiraBoards===undefined">Remember those boards!</md-button>
             <md-button ng-click="cancel()">Cancel</md-button>
         </md-dialog-actions>
     </md-dialog>

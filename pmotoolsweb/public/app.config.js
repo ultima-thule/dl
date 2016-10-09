@@ -71,6 +71,7 @@ angular
                                 userApp.upn = data.info.upn;
                                 userApp.avatar = '01';
                                 userApp.roles = ['user'];
+                                userApp.jiraBoards = [];
                             }
                             userApp.token = token;
                             userApp.last_login = Date.now();
@@ -85,7 +86,6 @@ angular
                     .error(function(data) {
                         console.log('Error: ' + data);
                     });
-
                 }
         });
     };

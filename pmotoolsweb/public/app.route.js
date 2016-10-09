@@ -118,7 +118,10 @@
                 url: '/pws',
                 templateUrl: 'components/pw/pw.html',
                 controller: 'PwController',
-                authenticate: true
+                authenticate: true,
+                resolve: {
+                  $title: function() { return 'Generate page of PW'; }
+                }
             })
 
             .state('userprofile', {
