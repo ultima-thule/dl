@@ -5,40 +5,45 @@ import sys, string, xmlrpc, re, getpass, requests, json
 import xmlrpc.client
 from datetime import datetime
 from dateutil import parser
+import credentials
 
 if __name__ == '__main__':
     dev = 0
+
+    usernameJira = credentials.loginJira['consumer_secret']
+    passwordJira = credentials.loginJira['password']
+
+    usernameCF = credentials.loginConfluence['consumer_secret']
+    passwordCF = credentials.loginConfluence['password']
 
     #============CONST============
     url = "http://doc.grupa.onet/rpc/xmlrpc"
 
     oprintname = "openSprints()"
 
-    if len(sys.argv) < 4:
-        exit("Usage: " + sys.argv[0] + " userlogin projectname sprintAlias")
+    if len(sys.argv) < 3:
+        exit("Usage: " + sys.argv[0] + " projectname sprintAlias")
 
     # test variables
-    username = sys.argv[1]
-    passwrd = getpass.getpass()
-    projectname = sys.argv[2]
-    sprint = sys.argv[3]
+    projectname = sys.argv[1]
+    sprint = sys.argv[2]
 
     jira_search = "http://jira.grupa.onet/rest/api/2/search?jql=project = '" + projectname + "' AND Type = Story \
             AND Sprint in openSprints()&fields=summary,customfield_11726,customfield_10002 "
 
     jira_sprint = "http://jira.grupa.onet/rest/agile/1.0/sprint/" + sprint
 
-    spacekey = "~" + username
+    spacekey = "~" + usernameCF
     pagetitle = sprint + " | " + projectname
 
     # JIRA SPRINT PART
-    out = requests.get(jira_sprint, auth=(username, passwrd))
+    out = requests.get(jira_sprint, auth=(usernameJira, passwordJira))
     jira_sprint_data = json.loads(out.content.decode())
     dateFrom = parser.parse(jira_sprint_data["startDate"])
     dateTo = parser.parse(jira_sprint_data["endDate"])
 
     # JIRA SEARCH PART
-    out = requests.get(jira_search, auth=(username, passwrd))
+    out = requests.get(jira_search, auth=(usernameJira, passwordJira))
     jira_issues_tmp = out.content.decode().replace("'", "\"")
     jira_issues = json.loads(jira_issues_tmp).get('issues')
 
@@ -184,8 +189,9 @@ if __name__ == '__main__':
     # CONFLUENCE PART
     # dev variable- if is "1" the content won't be written in the confluence
     if dev != 1:
+
         server = xmlrpc.client.ServerProxy(url)
-        token = server.confluence2.login(username, passwrd)
+        token = server.confluence2.login(usernameCF, passwordCF)
 
         parentPage = {
                 "space": spacekey,
@@ -207,4 +213,6 @@ if __name__ == '__main__':
             out = server.confluence2.storePage(token, page)
         except:
             exit("Script error")
+
+        exit(0)
 
