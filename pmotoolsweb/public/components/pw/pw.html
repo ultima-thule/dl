@@ -1,0 +1,33 @@
+<!-- public/components/pw/pw.html -->
+<div layout="row" layout-xs="column" >
+    <md-card flex="100">
+        <md-card-header>
+          <md-card-header-text>
+              <span class="md-title">PW sprint generation</span>
+              <md-progress-circular md-mode="indeterminate" ng-show="isLoading" md-diameter="96"></md-progress-circular>
+          </md-card-header-text>
+        </md-card-header>
+        <md-card-content>
+            <md-content layout-padding>
+                <div>
+                    <form name="pwForm">
+                        <div layout-gt-sm="row">
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>Project name (JIRA key)</label>
+                                <input ng-model="projectName" ng-required="true">
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>Sprint ID</label>
+                                <input ng-model="sprintID" ng-required="true">
+                            </md-input-container>
+                        </div>
+                        <md-button class="md-raised my-hue-1 md-secondary" ng-click="generatePW();" ng-disabled="pwForm.$invalid || isLoading">Generate PW page</md-button>
+                    </form>
+                </div>
+            </md-content>
+
+        </md-card-content>
+    </md-card>
+
+</div>

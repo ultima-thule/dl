@@ -114,6 +114,12 @@
                 authenticate: true
             })
 
+            .state('pws', {
+                url: '/pws',
+                templateUrl: 'components/pw/pw.html',
+                controller: 'PwController',
+                authenticate: true
+            })
 
             .state('userprofile', {
                 url: '/users/profile',

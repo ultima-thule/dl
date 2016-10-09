@@ -7,14 +7,37 @@ from datetime import datetime
 from dateutil import parser
 import credentials
 
+def getOrCreateCfPage(cfServer, userToken, spaceKey, title, parentID, content):
+    pageId = None
+
+    try:
+        pageId = cfServer.confluence2.getPage(userToken, spaceKey, title)
+    except:
+        if createCfPage(cfServer, userToken, spaceKey, title, parentID, content):
+            pageId = cfServer.confluence2.getPage(userToken, spaceKey, title)
+
+    return pageId
+
+
+def createCfPage(cfServer, userToken, spaceKey, title, parentID, content):
+    try:
+        page = {
+                "space": spaceKey,
+                "parentId": parentID,
+                "title": title,
+                "content": content
+                }
+        cfServer.confluence2.storePage(userToken, page)
+    except:
+        return False
+
+    return True
+
 if __name__ == '__main__':
     dev = 0
 
     usernameJira = credentials.loginJira['consumer_secret']
     passwordJira = credentials.loginJira['password']
-
-    usernameCF = credentials.loginConfluence['consumer_secret']
-    passwordCF = credentials.loginConfluence['password']
 
     #============CONST============
     url = "http://doc.grupa.onet/rpc/xmlrpc"
@@ -32,9 +55,6 @@ if __name__ == '__main__':
             AND Sprint in openSprints()&fields=summary,customfield_11726,customfield_10002 "
 
     jira_sprint = "http://jira.grupa.onet/rest/agile/1.0/sprint/" + sprint
-
-    spacekey = "~" + usernameCF
-    pagetitle = sprint + " | " + projectname
 
     # JIRA SPRINT PART
     out = requests.get(jira_sprint, auth=(usernameJira, passwordJira))
@@ -190,29 +210,21 @@ if __name__ == '__main__':
     # dev variable- if is "1" the content won't be written in the confluence
     if dev != 1:
 
+        usernameCF = credentials.loginConfluence['consumer_secret']
+        passwordCF = credentials.loginConfluence['password']
+
         server = xmlrpc.client.ServerProxy(url)
         token = server.confluence2.login(usernameCF, passwordCF)
 
-        parentPage = {
-                "space": spacekey,
-                "title": projectname
-                }
+        spacekey = "AG"
+        parentPageTitle = projectname
+        childPageTitle = projectname + " | " + sprint
 
-        try:
-            parentId = server.confluence2.getPage(token, spacekey, projectname)
-        except:
-            exit("There is no a page " + projectname)
+        parentID = getOrCreateCfPage(server, token, spacekey, parentPageTitle, "64070870", "")
 
-        page = {
-                "space": spacekey,
-                "parentId": parentId.get("id"),
-                "title": pagetitle,
-                "content": input_html
-                }
-        try:
-            out = server.confluence2.storePage(token, page)
-        except:
-            exit("Script error")
+        if parentID is not None:
+            if not createCfPage(server, token, spacekey, childPageTitle, parentID.get("id"), input_html):
+                exit(1)
 
         exit(0)
 

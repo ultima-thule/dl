@@ -38,6 +38,11 @@
                   link : '/agendabyteam',
                   title: 'Agenda planning by teams',
                   icon: 'storage'
+                },
+                {
+                  link : '/pws',
+                  title: 'PW generation',
+                  icon: 'description'
                 }
 //                {
 //                  link : '/agileboards',

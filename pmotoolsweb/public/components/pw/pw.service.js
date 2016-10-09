@@ -9,7 +9,7 @@
         function pwService($http) {
             return {
                 generate : function(projectName, sprintNr) {
-                    return $http.get('/api/createPw/' + projectName + '/' + sprintNr);
+                    return $http.get('/api/createPw/' + projectName + '/sprint/' + sprintNr);
                 }
             }
         };

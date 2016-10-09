@@ -14,6 +14,7 @@ angular
         'AgendabyteamCtrl', 'AgendabyteamService',
         'ParamService', 'DashboardService',
         'AgileboardCtrl', 'AgileboardService', 'AgileboardDetailsCtrl',
+        'PwCtrl', 'PwService',
         'UserProfileCtrl', 'UserSettingsCtrl', 'UserService',
         'ParamCtrl', 'ParamService',
         'LoginCtrl', 'LogoutCtrl',
