@@ -30,6 +30,7 @@
             $scope.showAvatars = showAvatars;
             $scope.showJiraBoards = showJiraBoards;
             $scope.addJiraBoards = addJiraBoards;
+            $scope.removeJiraBoards = removeJiraBoards;
             $scope.simpleToastBase = simpleToastBase;
             $scope.showMessage = showMessage;
             $scope.boardid = "";
@@ -94,21 +95,48 @@
                 );
             }
 
-            function addJiraBoards(upn, extData, ev) {
-                jiraboardService.getBoard($scope.boardid)
-                .success(function(data){
-                    if (data.type === "scrum") {
-                        var board = {"boardid": data.id, "name": data.name};
-                        $scope.userApp.jiraBoards.push(board);
-                        $scope.userApp.$update(function() {
-                            showMessage('Jira board was successfully added to your boards.');
-                        });
+            function addJiraBoards(ev) {
+                var doAdd = true;
+                for (var i = 0; i < $scope.userApp.jiraBoards.length; i++) {
+                    if ($scope.userApp.jiraBoards[i].boardid === $scope.boardid) {
+                        doAdd = false;
+                        break;
                     }
-                    else {
-                        showMessage('This is a kanban board, cannot be added.');
+                }
+
+                if (doAdd) {
+                    jiraboardService.getBoard($scope.boardid)
+                    .success(function(data){
+                        if (data.type === "scrum") {
+                            var board = {"boardid": data.id, "name": data.name};
+                            $scope.userApp.jiraBoards.push(board);
+                            $scope.userApp.$update(function() {
+                                showMessage('Jira board was successfully added to your boards.');
+                            });
+                        }
+                        else {
+                            showMessage('This is a kanban board, cannot be added.');
+                        }
+                    }).error(function(data) {
+                        showMessage('An error occured while adding a board.');
+                    });
+                }
+                else {
+                    showMessage('This board already exists.');
+                }
+            }
+
+            function removeJiraBoards(ev) {
+                var len = $scope.userApp.jiraBoards.length;
+                var arrayBoards = [];
+                for (var i = 0; i < len; i++) {
+                    if (!$scope.userApp.jiraBoards[i].selected) {
+                        arrayBoards.push ($scope.userApp.jiraBoards[i]);
                     }
-                }).error(function(data) {
-                    console.log('Error: ' + data);
+                }
+                $scope.userApp.jiraBoards = arrayBoards;
+                $scope.userApp.$update(function() {
+                    showMessage('Selected Jira boards were successfully removed from your profile.');
                 });
             }
 
@@ -170,7 +198,7 @@
                 $scope.jiraBoards = data;
                 $scope.isLoading = false;
             }).error(function(data) {
-                console.log('Error: ' + data);
+                showMessage('An error occured while loading boards.');
                 $scope.isLoading = false;
             });
         }

@@ -607,7 +607,10 @@ module.exports = function(app) {
                 var parsed = JSON.parse(body);
                 res.send(parsed.values);
             });
-        });
+        }).on('error', function(e) {
+            console.error("Error: " + e.message);
+            res.status(500).send('Error ' + e.message);
+        });;
     });
 
     // get scrum board
@@ -625,7 +628,10 @@ module.exports = function(app) {
             response.on('end', function() {
                 res.send(JSON.parse(body));
             });
-        });
+        }).on('error', function(e) {
+            console.error("Error: " + e.message);
+            res.status(500).send('Error ' + e.message);
+        });;
     });
 
 
@@ -644,7 +650,10 @@ module.exports = function(app) {
             response.on('end', function() {
                 res.send(body);
             });
-        });
+        }).on('error', function(e) {
+            console.error("Error: " + e.message);
+            res.status(500).send('Error ' + e.message);
+        });;
     });
 
 

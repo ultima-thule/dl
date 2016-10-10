@@ -14,12 +14,34 @@ var LeanKitClient  	= require('leankit-client');
 // config files
 var db = require('./config/db');
 
+//development error handler
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: err
+    });
+  });
+
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
+
+
 // set our port
 var port = process.env.PORT || 8080;
 
 // connect to our mongoDB database
 mongoose.connect(db.url);
-
 
 // get all data/stuff of the body (POST) parameters
 // parse application/json
