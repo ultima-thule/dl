@@ -6,17 +6,40 @@
         .module('PwCtrl', ['ngMaterial', 'mdDataTable'])
         .controller('PwController', PwController);
 
-        PwController.$inject = ['$scope', '$http', '$mdToast', 'pwService'];
+        PwController.$inject = ['$scope', '$http', '$mdToast', '$timeout', 'pwService', 'userFactory', 'jiraboardService'];
 
-        function PwController($scope, $http, $mdToast, pwService) {
+        function PwController($scope, $http, $mdToast, $timeout, pwService, userFactory, jiraboardService) {
             $scope.formData = {};
             $scope.title = "PW generation";
             $scope.projectName = "";
             $scope.sprintID = "";
 
+            $scope.loadSprints = loadSprints;
+
+            $scope.$watch(function () { return userFactory.getJiraBoards(); }, function (newValue, oldValue) {
+                $scope.boards = newValue;
+            });
+
+            function loadSprints () {
+                $scope.sprints = null;
+                jiraboardService.getSprints ($scope.selBoard)
+                .success(function(data){
+                    $scope.sprints = data;
+                })
+                .error(function(data) {
+                });
+            };
+
+            $scope.$watch('selBoard', function(newval, oldval) {
+                if (newval) {
+                    $scope.sprints = null;
+                }
+            });
+
+
             $scope.generatePW = function() {
                 $scope.isLoading = true;
-                pwService.generate ($scope.projectName, $scope.sprintID)
+                pwService.generate ($scope.projectName, $scope.selSprint)
                 .success(function(data){
                     showMessage ('Generated, check Confluence!');
                     $scope.isLoading = false;

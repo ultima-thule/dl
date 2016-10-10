@@ -111,6 +111,7 @@
                             var board = {"boardid": data.id, "name": data.name};
                             $scope.userApp.jiraBoards.push(board);
                             $scope.userApp.$update(function() {
+                                userFactory.setJiraBoards ($scope.userApp.jiraBoards);
                                 showMessage('Jira board was successfully added to your boards.');
                             });
                         }
@@ -134,6 +135,7 @@
                         arrayBoards.push ($scope.userApp.jiraBoards[i]);
                     }
                 }
+                userFactory.setJiraBoards (arrayBoards);
                 $scope.userApp.jiraBoards = arrayBoards;
                 $scope.userApp.$update(function() {
                     showMessage('Selected Jira boards were successfully removed from your profile.');

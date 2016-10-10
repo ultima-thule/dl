@@ -79,6 +79,7 @@ angular
                                 userFactory.setDisplayName (data.info.displayName);
                                 userFactory.setAvatar (userApp.avatar);
                                 userFactory.setAdmin ($.inArray('admin', userApp.roles) > -1);
+                                userFactory.setJiraBoards(userApp.jiraBoards);
                                 userFactory.signIn ();
                             });
                         });

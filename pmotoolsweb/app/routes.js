@@ -13,6 +13,7 @@ var QuarterPlan = require('./model/quarterPlan');
 var LeanKitClient  = require("leankit-client");
 var https = require('https');
 var http = require('http');
+var _ = require('lodash');
 
 var jiraAuth = 'readonly_pmo:CbobBsps?!';
 
@@ -179,8 +180,8 @@ module.exports = function(app) {
         //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team.py']);
         //var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_page5.py']);
         var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page.py', req.params.pwid, req.params.sprintid]);
-        //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//add_sprint_page.py",
-        //    req.params.pwid, req.params.sprintid]);
+//        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//add_sprint_page.py",
+//            req.params.pwid, req.params.sprintid]);
 
         var output = "";
         python.stdout.on('data', function(){ output += data });
@@ -648,7 +649,9 @@ module.exports = function(app) {
                 body += d;
             });
             response.on('end', function() {
-                res.send(body);
+                var parsed = JSON.parse(body);
+                var sorted = _.sortBy(parsed.values, "startDate").reverse();
+                res.send(sorted);
             });
         }).on('error', function(e) {
             console.error("Error: " + e.message);
