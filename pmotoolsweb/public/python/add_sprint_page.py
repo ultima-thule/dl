@@ -51,9 +51,8 @@ if __name__ == '__main__':
     projectname = sys.argv[1]
     sprint = sys.argv[2]
 
-    jira_search = "http://jira.grupa.onet/rest/api/2/search?jql=project = '" + projectname + "' AND Type = Story \
-            AND Sprint in openSprints()&fields=summary,customfield_11726,customfield_10002 "
-
+    jira_search = "http://jira.grupa.onet/rest/api/2/search?jql=project = '" + projectname + "' AND Type != Sub-task AND sprint = " + sprint \
+                  + "&fields=summary,customfield_11726,customfield_10002,aggregatetimespent"
     jira_sprint = "http://jira.grupa.onet/rest/agile/1.0/sprint/" + sprint
 
     # JIRA SPRINT PART
@@ -64,26 +63,30 @@ if __name__ == '__main__':
 
     # JIRA SEARCH PART
     out = requests.get(jira_search, auth=(usernameJira, passwordJira))
-    jira_issues_tmp = out.content.decode().replace("'", "\"")
-    jira_issues = json.loads(jira_issues_tmp).get('issues')
+    # jira_issues_tmp = out.content.decode().replace("'", "\"")
+    # jira_issues = json.loads(jira_issues_tmp).get('issues')
+    jira_issues = json.loads(out.content.decode()).get('issues')
 
     #####################################################################################################################
     sum_story = 0
+    sum_timespent = 0
     items_table = ""
     for issue in jira_issues:
         KA = issue["fields"].get("customfield_11726") and issue["fields"].get("customfield_11726") or "n/a"
         SP = issue["fields"].get("customfield_10002", "0") and str(issue["fields"].get("customfield_10002", "0")) or "0"
+        timeSpent = float( issue["fields"].get("aggregatetimespent", "0") and str(issue["fields"].get("aggregatetimespent", "0")) or "0") / 3600
         SUB = issue["fields"].get("summary")
         items_table += """
                 <tr>
                     <td class="confluenceTd"><p>%s</p></td>
                     <td colspan="1" class="confluenceTd">%s</td>
                     <td style="text-align: center;" class="confluenceTd">%s</td>
-                    <td style="text-align: center;" class="confluenceTd">-</td>
+                    <td style="text-align: center;" class="confluenceTd">%s</td>
                     <td style="text-align: center;" colspan="1" class="confluenceTd"><span style="color: rgb(112,112,112);">Tak</span></td>
                 </tr>
-        """ % (SUB, KA, SP)
+        """ % (SUB, KA, SP, timeSpent)
         sum_story += float(SP)
+        sum_timespent += float(timeSpent)
     input_html = """
     <div>
      <table border="1" class="confluenceTable">
@@ -112,7 +115,7 @@ if __name__ == '__main__':
             </tr>
             <tr>
 
-                <td colspan="1" class="confluenceTd"><strong>Wartosc estymowana na planningu</strong></td>
+                <td colspan="1" class="confluenceTd"><strong>Wartość estymowana na planningu</strong></td>
 
                 <td style="text-align: center;" class="confluenceTd">%f</td>
 
@@ -120,7 +123,7 @@ if __name__ == '__main__':
             </tr>
             <tr>
 
-                <td colspan="1" class="confluenceTd"><strong>Wartosc rzeczywista po review</strong></td>
+                <td colspan="1" class="confluenceTd"><strong>Wartość rzeczywista po review</strong></td>
 
                 <td colspan="1" style="text-align: center;" class="confluenceTd">-</td>
 
