@@ -493,7 +493,7 @@ module.exports = function(app) {
     app.get('/api/dashboard/cardbysponsor', function(req, res){
         Card.aggregate([{
                 $match: {
-                    board_masterlane_title: "Current development plan",
+                    board_masterlane_title: "ROOT LANE",
                     workflow_status_name: "In progress" }
                 },
                 {
@@ -511,7 +511,7 @@ module.exports = function(app) {
     app.get('/api/dashboard/cardbyworkflowstatus', function(req, res){
         Card.aggregate([
                 {
-                    $match: { board_masterlane_title: "Current development plan" }
+                    $match: { board_masterlane_title: "ROOT LANE" }
                 },
                 {
                     $group: {

@@ -77,7 +77,7 @@ if __name__ == '__main__':
 
     # write all cards with set up sponsor
     cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
-                                  & Q(board_masterlane_title='Current development plan')
+                                  & Q(board_masterlane_title='ROOT LANE')
                                   & (Q(workflow_status_name='In progress') | Q(workflow_status_name='Todo'))
                                   & Q(team_name__ne ='')
                                   & Q(type_name__ne ='Plan: support')).order_by('team_name', 'workflow_status_name', 'title')
@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
     # writa all cards without sponsor
     cards = lib.mongoLeankit.Card.objects(Q(board_title='PMO Portfolio Kanban Teams')
-                                  & Q(board_masterlane_title='Current development plan')
+                                  & Q(board_masterlane_title='ROOT LANE')
                                   & (Q(workflow_status_name='In progress') | Q(workflow_status_name='Todo'))
                                   & Q(team_name ='')
                                   & Q(type_name__ne ='Plan: support')).order_by('workflow_status_name', 'title')
