@@ -13,6 +13,7 @@
             $scope.title = "PW Automation";
             $scope.projectName = "";
             $scope.sprintID = "";
+            $scope.confLink = "";
 
             $scope.loadSprints = loadSprints;
             $scope.getIcon = getIcon;
@@ -67,7 +68,8 @@
                 $scope.isLoading = true;
                 pwService.generate ($scope.projectName, $scope.selSprint)
                 .success(function(data){
-                    showMessage ("Sprint page created, check <a href='http://doc.grupa.onet'>Confluence</a>!");
+                    $scope.confLink = "http://doc.grupa.onet/pages/viewpage.action?pageId=" + data;
+                    showMessage ("Sprint page created, check Confluence link!");
                     $scope.isLoading = false;
                 })
                 .error(function(data) {
@@ -92,7 +94,7 @@
 
             //shows toast with message
             function showMessage(message) {
-                simpleToastBase(message, 'bottom right', 0, 'Close');
+                simpleToastBase(message, 'bottom right', 3000, 'Close');
             }
         };
 

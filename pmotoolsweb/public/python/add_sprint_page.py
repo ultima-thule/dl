@@ -1,11 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import sys, string, xmlrpc, re, getpass, requests, json
+import json
+import requests
+import sys
+
 import xmlrpc.client
-from datetime import datetime
 from dateutil import parser
+
 import credentials
+
 
 def getOrCreateCfPage(cfServer, userToken, spaceKey, title, parentID, content):
     pageId = None
@@ -13,13 +17,14 @@ def getOrCreateCfPage(cfServer, userToken, spaceKey, title, parentID, content):
     try:
         pageId = cfServer.confluence2.getPage(userToken, spaceKey, title)
     except:
-        if createCfPage(cfServer, userToken, spaceKey, title, parentID, content):
+        if createCfPage(cfServer, userToken, spaceKey, title, parentID, content) is not None:
             pageId = cfServer.confluence2.getPage(userToken, spaceKey, title)
 
     return pageId
 
 
 def createCfPage(cfServer, userToken, spaceKey, title, parentID, content):
+    newPage = None
     try:
         page = {
                 "space": spaceKey,
@@ -27,11 +32,11 @@ def createCfPage(cfServer, userToken, spaceKey, title, parentID, content):
                 "title": title,
                 "content": content
                 }
-        cfServer.confluence2.storePage(userToken, page)
+        newPage = cfServer.confluence2.storePage(userToken, page)
     except:
-        return False
+        pass
 
-    return True
+    return newPage
 
 if __name__ == '__main__':
     dev = 0
@@ -228,8 +233,10 @@ if __name__ == '__main__':
         parentID = getOrCreateCfPage(server, token, spacekey, parentPageTitle, "64070870", "")
 
         if parentID is not None:
-            if not createCfPage(server, token, spacekey, childPageTitle, parentID.get("id"), input_html):
+            newPage = createCfPage(server, token, spacekey, childPageTitle, parentID.get("id"), input_html)
+            if newPage is None:
                 exit(1)
+            print (newPage.get("id"))
 
         exit(0)
 
