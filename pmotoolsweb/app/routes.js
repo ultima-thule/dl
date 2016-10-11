@@ -640,7 +640,7 @@ module.exports = function(app) {
     app.get('/api/jira/boards/:id/sprint', function(req, res) {
         http.get({
                 host: 'jira.grupa.onet',
-                path: '/rest/agile/1.0/board/' + req.params.id + '/sprint',
+                path: '/rest/agile/1.0/board/' + req.params.id + '/sprint?state=active',
                 auth: jiraAuth
         }, function(response) {
             // Continuously update stream with data
