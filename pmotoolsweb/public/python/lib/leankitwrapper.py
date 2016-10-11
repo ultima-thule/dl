@@ -227,16 +227,17 @@ class LeankitCard(Converter):
 
 
     def fetchComments(self):
-        print ("Fetching comments for ", self.title)
-        url = '/Card/GetComments/{0}/{1}'.format(self.lane.board.id, self.id)
+        if self.lane is not None and self.lane.board is not None:
+            print ("Fetching comments for ", self.title)
+            url = '/Card/GetComments/{0}/{1}'.format(self.lane.board.id, self.id)
 
-        comment_data = self.lane.board.connector.get(
-            url).ReplyData[0]
-        self.comments = []
-        for comment_obj in comment_data:
-            comment = LeanKitComment(comment_obj)
-            self.comments.append(comment)
-        self.comments.sort(key=operator.attrgetter('post_date'), reverse=True)
+            comment_data = self.lane.board.connector.get(
+                url).ReplyData[0]
+            self.comments = []
+            for comment_obj in comment_data:
+                comment = LeanKitComment(comment_obj)
+                self.comments.append(comment)
+            self.comments.sort(key=operator.attrgetter('post_date'), reverse=True)
 
     def fetchSubtasks(self, board):
         print ("Fetching subtasks for ", self.title)
