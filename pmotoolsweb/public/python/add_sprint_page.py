@@ -184,7 +184,7 @@ if __name__ == '__main__':
     </table>
     </div><p>
 
-    <span style="color: rgb(0,0,0);"> </span></p><h1 id="Sprint1%7CPL_DL_IT_CMS_P2.WIDGTS_L-Elementydodatkowe%2Cnieplanowane"><span style="color: rgb(0,0,0);">Elementy dodatkowe, nie planowane</span></h1><p></p>
+    <span style="color: rgb(0,0,0);"> </span></p><h1 id="Sprint1%7CPL_DL_IT_CMS_P2.WIDGTS_L-Elementydodatkowe%2Cnieplanowane"><span style="color: rgb(0,0,0);">Elementy dodatkowe, nieplanowane</span></h1><p></p>
 
     <div class="table-wrap">
     <table border="1" class="confluenceTable">
