@@ -10,7 +10,7 @@
 
         function PwController($scope, $http, $mdToast, $timeout, pwService, userFactory, jiraboardService) {
             $scope.formData = {};
-            $scope.title = "PW generation";
+            $scope.title = "PW Automation";
             $scope.projectName = "";
             $scope.sprintID = "";
 
@@ -26,8 +26,6 @@
 
                 jiraboardService.getSprints ($scope.selBoard, 1)
                 .success(function(data){
-//                    console.log("First")
-//                    console.log(data)
                     var children = $scope.sprints.concat(data);
                     $scope.sprints = children;
                 })
@@ -36,10 +34,14 @@
                 .then (function () {
                     jiraboardService.getSprints ($scope.selBoard, 2)
                     .success(function(data){
-//                        console.log("Second")
-//                        console.log(data)
                         var children = $scope.sprints.concat(data);
-                        $scope.sprints = _.sortBy(children, "startDate").reverse();
+                         $scope.sprints = children;
+                    }).then (function () {
+                    jiraboardService.getSprints ($scope.selBoard, 3)
+                    .success(function(data){
+                            var children = $scope.sprints.concat(data);
+                            $scope.sprints = _.sortBy(children, "startDate").reverse();
+                        })
                     })
                 });
             };
@@ -65,11 +67,12 @@
                 $scope.isLoading = true;
                 pwService.generate ($scope.projectName, $scope.selSprint)
                 .success(function(data){
-                    showMessage ('Generated, check Confluence!');
+                    showMessage ("Sprint page created, check <a href='http://doc.grupa.onet'>Confluence</a>!");
                     $scope.isLoading = false;
                 })
                 .error(function(data) {
                     $scope.isLoading = false;
+                    showMessage ("Sprint page cannot be created, error occured.");
                 });
             }
 
@@ -89,7 +92,7 @@
 
             //shows toast with message
             function showMessage(message) {
-                simpleToastBase(message, 'bottom right', 3000, 'Close');
+                simpleToastBase(message, 'bottom right', 0, 'Close');
             }
         };
 
