@@ -51,6 +51,7 @@ def _insertMasterLanes(lanes, board_id):
 
 
 def _insertAllCardsForBoard(master_lanes, only_this_lane=''):
+    print ("Inserting cards...")
     for lane in master_lanes:
         if only_this_lane == '' or lane.title == only_this_lane:
             _insertCardsForLane(lane)
