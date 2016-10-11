@@ -60,9 +60,22 @@
             $scope.$watch('selBoard', function(newval, oldval) {
                 if (newval) {
                     $scope.sprints = null;
+                    $scope.confLink = "";
                 }
             });
 
+            $scope.$watch('selSprint', function(newval, oldval) {
+                if (newval) {
+                    $scope.confLink = "";
+                }
+            });
+
+
+            $scope.$watch('projectName', function(newval, oldval) {
+                if (newval) {
+                    $scope.confLink = "";
+                }
+            });
 
             $scope.generatePW = function() {
                 $scope.isLoading = true;
