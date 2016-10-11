@@ -15,6 +15,7 @@
             $scope.sprintID = "";
 
             $scope.loadSprints = loadSprints;
+            $scope.getIcon = getIcon;
 
             $scope.$watch(function () { return userFactory.getJiraBoards(); }, function (newValue, oldValue) {
                 $scope.boards = newValue;
@@ -29,6 +30,16 @@
                 .error(function(data) {
                 });
             };
+
+            function getIcon (name) {
+                if (name==="active"){
+                    return "cached";
+                }
+                else if (name==="future"){
+                    return "schedule";
+                }
+                return "done";
+            }
 
             $scope.$watch('selBoard', function(newval, oldval) {
                 if (newval) {

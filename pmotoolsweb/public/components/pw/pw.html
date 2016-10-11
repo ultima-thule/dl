@@ -7,7 +7,8 @@
           </md-card-header-text>
         </md-card-header>
         <md-card-content>
-            Before you generate a PW sprint page, please go to your user profile and set up Jira boards you manage.
+            <p>Before you generate a PW sprint page, please go to your user profile and set up Jira boards you manage.
+                Page will be generated in Confluence space <a href="http://doc.grupa.onet/display/PROJEKTY/Home" target="_blank">Projekty</a>, under the project name you entered. </p>
             <form name="pwForm">
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm>
@@ -19,7 +20,7 @@
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Select sprint</label>
                         <md-select  ng-model="selSprint" md-on-open="loadSprints()" ng-disabled="!selBoard" ng-required="true">
-                            <md-option ng-value="item.id" data-ng-repeat="item in sprints">{{ item.name }}</md-option>
+                            <md-option ng-value="item.id" data-ng-repeat="item in sprints"><md-icon>{{getIcon(item.state)}}</md-icon> {{ item.name }}</md-option>
                         </md-select>
                     </md-input-container>
                     <md-input-container class="md-block" flex-gt-sm>
