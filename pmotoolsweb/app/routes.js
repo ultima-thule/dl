@@ -637,10 +637,11 @@ module.exports = function(app) {
 
 
     // get all sprints in board
-    app.get('/api/jira/boards/:id/sprint', function(req, res) {
+    app.get('/api/jira/boards/:id/sprint/:page', function(req, res) {
+
         http.get({
                 host: 'jira.grupa.onet',
-                path: '/rest/agile/1.0/board/' + req.params.id + '/sprint?state=active',
+                path: '/rest/agile/1.0/board/' + req.params.id + '/sprint?state=active,closed&maxResults=50&startAt=' + (req.params.page-1)*50,
                 auth: jiraAuth
         }, function(response) {
             // Continuously update stream with data

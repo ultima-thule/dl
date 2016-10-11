@@ -14,8 +14,8 @@
                 getBoard : function(boardID) {
                     return $http.get('/api/jira/boards/' + boardID);
                 },
-                getSprints : function(boardID) {
-                    return $http.get('/api/jira/boards/' + boardID + '/sprint');
+                getSprints : function(boardID, page) {
+                    return $http.get('/api/jira/boards/' + boardID + '/sprint/' + page);
                 }
             }
         };

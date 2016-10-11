@@ -22,12 +22,25 @@
             });
 
             function loadSprints () {
-                $scope.sprints = null;
-                jiraboardService.getSprints ($scope.selBoard)
+                $scope.sprints = [];
+
+                jiraboardService.getSprints ($scope.selBoard, 1)
                 .success(function(data){
-                    $scope.sprints = data;
+//                    console.log("First")
+//                    console.log(data)
+                    var children = $scope.sprints.concat(data);
+                    $scope.sprints = children;
                 })
                 .error(function(data) {
+                })
+                .then (function () {
+                    jiraboardService.getSprints ($scope.selBoard, 2)
+                    .success(function(data){
+//                        console.log("Second")
+//                        console.log(data)
+                        var children = $scope.sprints.concat(data);
+                        $scope.sprints = _.sortBy(children, "startDate").reverse();
+                    })
                 });
             };
 
