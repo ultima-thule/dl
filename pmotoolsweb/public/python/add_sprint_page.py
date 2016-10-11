@@ -42,15 +42,16 @@ if __name__ == '__main__':
     #============CONST============
     url = "http://doc.grupa.onet/rpc/xmlrpc"
 
-    oprintname = "openSprints()"
+    #oprintname = "openSprints()"
 
     if len(sys.argv) < 3:
         exit("Usage: " + sys.argv[0] + " projectname sprintAlias")
 
-    # test variables
+    # variables
     projectname = sys.argv[1]
     sprint = sys.argv[2]
 
+    # Get the $sprint_number from the given $project
     jira_search = "http://jira.grupa.onet/rest/api/2/search?jql=project = '" + projectname + "' AND Type != Sub-task AND sprint = " + sprint \
                   + "&fields=summary,customfield_11726,customfield_10002,aggregatetimespent"
     jira_sprint = "http://jira.grupa.onet/rest/agile/1.0/sprint/" + sprint
@@ -219,9 +220,10 @@ if __name__ == '__main__':
         server = xmlrpc.client.ServerProxy(url)
         token = server.confluence2.login(usernameCF, passwordCF)
 
-        spacekey = "AG"
+        #spacekey = "AG"
+        spacekey = "PROJEKTY"
         parentPageTitle = projectname
-        childPageTitle = projectname + " | " + sprint
+        childPageTitle = "Sprint " + sprint + " | " + projectname
 
         parentID = getOrCreateCfPage(server, token, spacekey, parentPageTitle, "64070870", "")
 
