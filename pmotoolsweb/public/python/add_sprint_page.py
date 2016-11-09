@@ -6,10 +6,12 @@ import requests
 import sys
 
 import xmlrpc.client
+########################### PYTHON 3.5 modules ##################
 from dateutil import parser
-
 import credentials
-
+#################################################################
+import getpass
+from datetime import datetime, timedelta
 
 def getOrCreateCfPage(cfServer, userToken, spaceKey, title, parentID, content):
     pageId = None
@@ -22,39 +24,71 @@ def getOrCreateCfPage(cfServer, userToken, spaceKey, title, parentID, content):
 
     return pageId
 
+def updtadeOrCreateCfPage(cfServer, userToken, spaceKey, title, parentID, content):
+    pageId = None
 
-def createCfPage(cfServer, userToken, spaceKey, title, parentID, content):
-    newPage = None
     try:
+        pageId = cfServer.confluence2.getPage(userToken, spaceKey, title)
+    except:
+        if createCfPage(cfServer, userToken, spaceKey, title, parentID, content) is not None:
+            pageId = cfServer.confluence2.getPage(userToken, spaceKey, title)
+            return pageId
+    try:
+        if createCfPage(cfServer, userToken, spaceKey, title, parentID, content, pageId) is not None:
+            return pageId
+    except:
+        print(msg)
+    return pageId
+
+
+def createCfPage(cfServer, userToken, spaceKey, title, parentID, content, pageId=None):
+    newPage = None
+    page = {
+            "space": spaceKey,
+            "parentId": parentID,
+            "title": title,
+            "content": content,
+            #"creator": "babciamalina"
+            }
+    if pageId is not None:
         page = {
+                "id": pageId["id"],
                 "space": spaceKey,
                 "parentId": parentID,
                 "title": title,
-                "content": content
+                "content": content,
+                "version": pageId["version"],
                 }
+    try:
         newPage = cfServer.confluence2.storePage(userToken, page)
-    except:
-        pass
+    except Exception as msg:
+        print(msg)
 
     return newPage
 
 if __name__ == '__main__':
-    dev = 0
+    dev = 0 
 
-    usernameJira = credentials.loginJira['consumer_secret']
-    passwordJira = credentials.loginJira['password']
 
     #============CONST============
     url = "http://doc.grupa.onet/rpc/xmlrpc"
 
-    #oprintname = "openSprints()"
 
     if len(sys.argv) < 3:
-        exit("Usage: " + sys.argv[0] + " projectname sprintAlias")
+        exit("Usage: " + sys.argv[0] + " projectname sprint username")
 
     # variables
     projectname = sys.argv[1]
     sprint = sys.argv[2]
+    if len(sys.argv) > 3:
+        usernameJira = sys.argv[3]
+        passwordJira = getpass.getpass()
+    else:
+        pass
+    #TODO: change on console
+    usernameJira = credentials.loginJira['consumer_secret']
+    passwordJira = credentials.loginJira['password']
+
 
     # Get the $sprint_number from the given $project
     jira_search = "http://jira.grupa.onet/rest/api/2/search?jql=project = '" + projectname + "' AND Type != Sub-task AND sprint = " + sprint \
@@ -66,21 +100,36 @@ if __name__ == '__main__':
     jira_sprint_data = json.loads(out.content.decode())
     dateFrom = parser.parse(jira_sprint_data["startDate"])
     dateTo = parser.parse(jira_sprint_data["endDate"])
+    # TODO: change on console
+    #dateFrom = datetime.now() - timedelta(days=14) 
+    #dateTo = datetime.now()
+    #real reported hours
+    jira_hours_search = "http://jira.grupa.onet/rest/api/2/search?jql=project = '" + projectname + "' AND Type != \
+    Sub-task AND worklogDate > %s AND worklogDate < %s&fields=summary,customfield_11726,customfield_10002,worklog"\
+    %(dateFrom.strftime('%Y-%m-%d'), dateTo.strftime('%Y-%m-%d'))
 
     # JIRA SEARCH PART
     out = requests.get(jira_search, auth=(usernameJira, passwordJira))
-    # jira_issues_tmp = out.content.decode().replace("'", "\"")
-    # jira_issues = json.loads(jira_issues_tmp).get('issues')
     jira_issues = json.loads(out.content.decode()).get('issues')
 
+    out_hour = requests.get(jira_hours_search, auth=(usernameJira, passwordJira))
+    jira_hours = json.loads(out_hour.content.decode()).get('issues')
+    struct = {issue['key'] : \
+            [[wl['author']['displayName'], wl['timeSpentSeconds']] for wl in issue['fields']['worklog']['worklogs']]
+            for issue in jira_hours}
+    # dictionary contains sum of reported hours per task:
+    pertask = {task: sum((wl[1] for wl in wls))/3600. for (task, wls) in struct.items()}
+    sum_timespent = sum(pertask.values())
     #####################################################################################################################
     sum_story = 0
-    sum_timespent = 0
     items_table = ""
     for issue in jira_issues:
+        #Kryteria akceptacji
         KA = issue["fields"].get("customfield_11726") and issue["fields"].get("customfield_11726") or "n/a"
+        # StorPoints
         SP = issue["fields"].get("customfield_10002", "0") and str(issue["fields"].get("customfield_10002", "0")) or "0"
-        timeSpent = float( issue["fields"].get("aggregatetimespent", "0") and str(issue["fields"].get("aggregatetimespent", "0")) or "0") / 3600
+        #timeSpent = float( issue["fields"].get("aggregatetimespent", "0") and str(issue["fields"].get("aggregatetimespent", "0")) or "0") / 3600
+        timeSpent = float(pertask.get(issue["key"], 0.0))
         SUB = issue["fields"].get("summary")
         items_table += """
                 <tr>
@@ -88,11 +137,10 @@ if __name__ == '__main__':
                     <td colspan="1" class="confluenceTd">%s</td>
                     <td style="text-align: center;" class="confluenceTd">%s</td>
                     <td style="text-align: center;" class="confluenceTd">%s</td>
-                    <td style="text-align: center;" colspan="1" class="confluenceTd"><span style="color: rgb(112,112,112);">Tak</span></td>
+                    <td style="text-align: center;" colspan="1" class="confluenceTd"><span style="color:rgb(112,112,112);">Nie</span></td>
                 </tr>
         """ % (SUB, KA, SP, timeSpent)
         sum_story += float(SP)
-        sum_timespent += float(timeSpent)
     input_html = """
     <div>
      <table border="1" class="confluenceTable">
@@ -131,14 +179,14 @@ if __name__ == '__main__':
 
                 <td colspan="1" class="confluenceTd"><strong>Wartość rzeczywista po review</strong></td>
 
-                <td colspan="1" style="text-align: center;" class="confluenceTd">-</td>
+                <td colspan="1" style="text-align: center;" class="confluenceTd">%f</td>
 
-                <td colspan="1" style="text-align: center;" class="confluenceTd">-</td>
+                <td colspan="1" style="text-align: center;" class="confluenceTd">%ss</td>
             </tr>
         </tbody>
     </table>
     </div>
-    """.replace("%f", str(sum_story))
+    """.replace("%f", str(sum_story)).replace("%ss", str(sum_timespent))
 
     input_html += """
     <h1 id="Sprint1%7CPL_DL_IT_CMS_P2.WIDGTS_L-Elementyzadeklarowanedorealizacji">Elementy zadeklarowane do realizacji</h1>
@@ -221,22 +269,31 @@ if __name__ == '__main__':
 
         usernameCF = credentials.loginConfluence['consumer_secret']
         passwordCF = credentials.loginConfluence['password']
+        #TODO: change on console
+        #usernameCF = usernameJira
+        #passwordCF = passwordJira
 
         server = xmlrpc.client.ServerProxy(url)
         token = server.confluence2.login(usernameCF, passwordCF)
 
         #spacekey = "AG"
         spacekey = "PROJEKTY"
+        #TODO
+        #spacekey = "~trozanski"
+
         parentPageTitle = projectname
         childPageTitle = "Sprint " + sprint + " | " + projectname
 
         parentID = getOrCreateCfPage(server, token, spacekey, parentPageTitle, "64070870", "")
+        #TODO
+        #parentID = {"id": "64072422"}
 
         if parentID is not None:
-            newPage = createCfPage(server, token, spacekey, childPageTitle, parentID.get("id"), input_html)
+            #newPage = createCfPage(server, token, spacekey, childPageTitle, parentID.get("id"), input_html)
+            newPage = updtadeOrCreateCfPage(server, token, spacekey, childPageTitle, parentID.get("id"), input_html)
             if newPage is None:
+                print("No new page")
                 exit(1)
             print (newPage.get("id"))
-
         exit(0)
 
