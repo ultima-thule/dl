@@ -104,8 +104,8 @@ if __name__ == '__main__':
     #dateFrom = datetime.now() - timedelta(days=14) 
     #dateTo = datetime.now()
     #real reported hours
-    jira_hours_search = "http://jira.grupa.onet/rest/api/2/search?jql=project = '" + projectname + "' AND Type != \
-    Sub-task AND worklogDate > %s AND worklogDate < %s&fields=summary,customfield_11726,customfield_10002,worklog"\
+    jira_hours_search = "http://jira.grupa.onet/rest/api/2/search?jql=project = '" + projectname + "'  \
+    AND worklogDate > %s AND worklogDate < %s&fields=summary,customfield_11726,customfield_10002,worklog"\
     %(dateFrom.strftime('%Y-%m-%d'), dateTo.strftime('%Y-%m-%d'))
 
     # JIRA SEARCH PART
