@@ -7,8 +7,8 @@ import sys
 
 import xmlrpc.client
 ########################### PYTHON 3.5 modules ##################
-#from dateutil import parser
-#import credentials
+from dateutil import parser
+import credentials
 #################################################################
 import getpass
 from datetime import datetime, timedelta
@@ -68,7 +68,7 @@ def createCfPage(cfServer, userToken, spaceKey, title, parentID, content, pageId
     return newPage
 
 if __name__ == '__main__':
-    dev = 1 
+    dev = 0 
 
 
     #============CONST============
@@ -87,31 +87,29 @@ if __name__ == '__main__':
     else:
         pass
     #TODO: change on console
-    #usernameJira = credentials.loginJira['consumer_secret']
-    #passwordJira = credentials.loginJira['password']
+    usernameJira = credentials.loginJira['consumer_secret']
+    passwordJira = credentials.loginJira['password']
 
 
     # Get the $sprint_number from the given $project
     jira_search = "http://jira.grupa.onet/rest/api/2/search?jql=project = '" + projectname + "' AND Type != Sub-task AND sprint = " + sprint \
-                  + "&fields=summary,customfield_11726,customfield_10002,aggregatetimespent,type"
+                  + "&fields=status,issuetype,summary,customfield_11726,customfield_10002,aggregatetimespent"
     jira_sprint = "http://jira.grupa.onet/rest/agile/1.0/sprint/" + sprint
 
     # JIRA SPRINT PART
     out = requests.get(jira_sprint, auth=(usernameJira, passwordJira))
     jira_sprint_data = json.loads(out.content.decode())
-    #dateFrom = parser.parse(jira_sprint_data["startDate"])
-    #dateTo = parser.parse(jira_sprint_data["endDate"])
+    dateFrom = parser.parse(jira_sprint_data["startDate"])
+    dateTo = parser.parse(jira_sprint_data["endDate"])
     # TODO: change on console
-    dateFrom = datetime.now() - timedelta(days=3) 
-    dateTo = datetime.now()
+    #dateFrom = datetime.now() - timedelta(days=14) 
+    #dateTo = datetime.now()
     #real reported hours
+    jira_hours_search = "http://jira.grupa.onet/rest/api/2/search?jql=project='" + projectname + "' \
+    AND worklogDate>%s AND worklogDate<%s&fields=summary,customfield_11726,customfield_10002,worklog,parent"\
+    %(dateFrom.strftime('%Y-%m-%d'), dateTo.strftime('%Y-%m-%d'))
     #jira_hours_search = "http://jira.grupa.onet/rest/api/2/search?jql=project='" + projectname + "' \
-    #AND worklogDate>%s AND worklogDate<%s&fields=summary,customfield_11726,customfield_10002,worklog"\
-    #%(dateFrom.strftime('%Y-%m-%d'), dateTo.strftime('%Y-%m-%d'))
-    jira_hours_search = "http://jira.grupa.onet/rest/api/2/search?jql=project='" + projectname + "' \
-    AND id IN (ZUMISEARCH-59, ZUMISEARCH-60, ZUMISEARCH-61, ZUMISEARCH-62)&fields=worklog,aggregatetimespent"
-    jira_hours_search = "http://jira.grupa.onet/rest/api/2/search?jql=project='" + projectname + "' \
-    AND id IN (ZUMISEARCH-59, ZUMISEARCH-60, ZUMISEARCH-61,ZUMISEARCH-62)&fields=worklog,aggregatetimespent,parent"
+    #AND id IN (ZUMISEARCH-59, ZUMISEARCH-60, ZUMISEARCH-61,ZUMISEARCH-62)&fields=worklog,aggregatetimespent,parent"
 
     # JIRA SEARCH PART
     out = requests.get(jira_search, auth=(usernameJira, passwordJira))
@@ -119,40 +117,43 @@ if __name__ == '__main__':
 
     out_hour = requests.get(jira_hours_search, auth=(usernameJira, passwordJira))
     jira_hours = json.loads(out_hour.content.decode()).get('issues')
-    # CONVERT LARGE JSON TO NICE DICTIONARY
-    #struct = {issue['key'] : \
-    #        [[wl['author']['displayName'], wl['timeSpentSeconds'], wl['updated'][:10]] for wl in
-    #            issue['fields']['worklog']['worklogs'] \
-    #                    if wl["started"] > dateFrom.strftime('%Y-%m-%d') \
-    #                    and wl["started"] <= dateTo.strftime('%Y-%m-%d')]
-    #        for issue in jira_hours}
+
+    # let's write down all reported hours per task
     struct = {}
     for issue in jira_hours:
+        # where to find the main story id
         if 'parent' in issue['fields'].keys():
             ky = issue['fields']['parent']['key']
         else:
             ky = issue['key']
+        # Get array with reported time between the timeline
         arr = [[wl['author']['displayName'], wl['timeSpentSeconds'], wl['updated'][:10]] for wl in
                 issue['fields']['worklog']['worklogs'] \
                         if wl["started"] > dateFrom.strftime('%Y-%m-%d') \
                         and wl["started"] <= dateTo.strftime('%Y-%m-%d')]
         if ky in struct.keys():
-            struct[ky].append(arr) 
+            struct[ky] += arr
         else:
-            struct.update({ky: [arr]})
-    print(struct)
-    times_tmp = {issue['key'] : \
-            [[wl['author']['displayName'], wl['timeSpentSeconds']] for wl in issue['fields']['worklog']['worklogs']]
-            for issue in jira_hours}
+            struct.update({ky: arr})
     # dictionary contains sum of reported hours per task:
-    # test
-    pertask = {task: sum((wl[1] for wl in wls[0]))/3600. for (task, wls) in struct.items()}
-    print(pertask)
+    # {'ZUMISEARCH-59': [['Różański Tomasz', 3600, '2016-11-15'], ['Różański Tomasz', 3600, '2016-11-15'], ['Różański
+    # Tomasz', 3600, '2016-11-15'], ['Różański Tomasz', 7200, '2016-11-15']]}
+    pertask={}
+    for (task, wls) in struct.items():
+        pertask.update({task: sum([wl[1] for wl in wls])/3600.})
+    #pertask = {task: sum((wl[1] for wl in wls[0]))/3600. for (task, wls) in struct.items()}
     sum_timespent = sum(pertask.values())
-    exit(1)
     #####################################################################################################################
     sum_story = 0
     items_table = ""
+    # TODO: map these values to the description in table
+    status_map = {
+            "In Progress": "Nie",
+            "Waiting" : "Nie",
+            "Resolved": "Tak",
+            "Close": "Tak"
+            "Reopened": "Nie",
+            }
     for issue in jira_issues:
         #Kryteria akceptacji
         KA = issue["fields"].get("customfield_11726") and issue["fields"].get("customfield_11726") or "n/a"
@@ -163,7 +164,7 @@ if __name__ == '__main__':
         timeSpent = float(pertask.get(issue["key"], 0.0))
         SUB = issue["fields"].get("summary")
         items_table += """
-                <tr>
+                <tr class="confluenceTr">
                     <td class="confluenceTd"><p>%s</p></td>
                     <td colspan="1" class="confluenceTd">%s</td>
                     <td style="text-align: center;" class="confluenceTd">%s</td>
@@ -198,7 +199,6 @@ if __name__ == '__main__':
                 <th class="confluenceTh">Czas realizacji</th>
             </tr>
             <tr>
-
                 <td colspan="1" class="confluenceTd"><strong>Wartość estymowana na planningu</strong></td>
 
                 <td style="text-align: center;" class="confluenceTd">%f</td>
