@@ -145,6 +145,7 @@ if __name__ == '__main__':
             [[wl['author']['displayName'], wl['timeSpentSeconds']] for wl in issue['fields']['worklog']['worklogs']]
             for issue in jira_hours}
     # dictionary contains sum of reported hours per task:
+    # test
     pertask = {task: sum((wl[1] for wl in wls[0]))/3600. for (task, wls) in struct.items()}
     print(pertask)
     sum_timespent = sum(pertask.values())
