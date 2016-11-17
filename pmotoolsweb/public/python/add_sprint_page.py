@@ -7,11 +7,12 @@ import sys
 
 import xmlrpc.client
 ########################### PYTHON 3.5 modules ##################
-from dateutil import parser
-import credentials
+#from dateutil import parser
+#import credentials
 #################################################################
 import getpass
 from datetime import datetime, timedelta
+import pprint
 
 def getOrCreateCfPage(cfServer, userToken, spaceKey, title, parentID, content):
     pageId = None
@@ -67,7 +68,7 @@ def createCfPage(cfServer, userToken, spaceKey, title, parentID, content, pageId
     return newPage
 
 if __name__ == '__main__':
-    dev = 0 
+    dev = 1 
 
 
     #============CONST============
@@ -86,27 +87,31 @@ if __name__ == '__main__':
     else:
         pass
     #TODO: change on console
-    usernameJira = credentials.loginJira['consumer_secret']
-    passwordJira = credentials.loginJira['password']
+    #usernameJira = credentials.loginJira['consumer_secret']
+    #passwordJira = credentials.loginJira['password']
 
 
     # Get the $sprint_number from the given $project
     jira_search = "http://jira.grupa.onet/rest/api/2/search?jql=project = '" + projectname + "' AND Type != Sub-task AND sprint = " + sprint \
-                  + "&fields=summary,customfield_11726,customfield_10002,aggregatetimespent"
+                  + "&fields=summary,customfield_11726,customfield_10002,aggregatetimespent,type"
     jira_sprint = "http://jira.grupa.onet/rest/agile/1.0/sprint/" + sprint
 
     # JIRA SPRINT PART
     out = requests.get(jira_sprint, auth=(usernameJira, passwordJira))
     jira_sprint_data = json.loads(out.content.decode())
-    dateFrom = parser.parse(jira_sprint_data["startDate"])
-    dateTo = parser.parse(jira_sprint_data["endDate"])
+    #dateFrom = parser.parse(jira_sprint_data["startDate"])
+    #dateTo = parser.parse(jira_sprint_data["endDate"])
     # TODO: change on console
-    #dateFrom = datetime.now() - timedelta(days=14) 
-    #dateTo = datetime.now()
+    dateFrom = datetime.now() - timedelta(days=3) 
+    dateTo = datetime.now()
     #real reported hours
-    jira_hours_search = "http://jira.grupa.onet/rest/api/2/search?jql=project = '" + projectname + "'  \
-    AND worklogDate > %s AND worklogDate < %s&fields=summary,customfield_11726,customfield_10002,worklog"\
-    %(dateFrom.strftime('%Y-%m-%d'), dateTo.strftime('%Y-%m-%d'))
+    #jira_hours_search = "http://jira.grupa.onet/rest/api/2/search?jql=project='" + projectname + "' \
+    #AND worklogDate>%s AND worklogDate<%s&fields=summary,customfield_11726,customfield_10002,worklog"\
+    #%(dateFrom.strftime('%Y-%m-%d'), dateTo.strftime('%Y-%m-%d'))
+    jira_hours_search = "http://jira.grupa.onet/rest/api/2/search?jql=project='" + projectname + "' \
+    AND id IN (ZUMISEARCH-59, ZUMISEARCH-60, ZUMISEARCH-61, ZUMISEARCH-62)&fields=worklog,aggregatetimespent"
+    jira_hours_search = "http://jira.grupa.onet/rest/api/2/search?jql=project='" + projectname + "' \
+    AND id IN (ZUMISEARCH-59, ZUMISEARCH-60, ZUMISEARCH-61,ZUMISEARCH-62)&fields=worklog,aggregatetimespent,parent"
 
     # JIRA SEARCH PART
     out = requests.get(jira_search, auth=(usernameJira, passwordJira))
@@ -114,12 +119,36 @@ if __name__ == '__main__':
 
     out_hour = requests.get(jira_hours_search, auth=(usernameJira, passwordJira))
     jira_hours = json.loads(out_hour.content.decode()).get('issues')
-    struct = {issue['key'] : \
+    # CONVERT LARGE JSON TO NICE DICTIONARY
+    #struct = {issue['key'] : \
+    #        [[wl['author']['displayName'], wl['timeSpentSeconds'], wl['updated'][:10]] for wl in
+    #            issue['fields']['worklog']['worklogs'] \
+    #                    if wl["started"] > dateFrom.strftime('%Y-%m-%d') \
+    #                    and wl["started"] <= dateTo.strftime('%Y-%m-%d')]
+    #        for issue in jira_hours}
+    struct = {}
+    for issue in jira_hours:
+        if 'parent' in issue['fields'].keys():
+            ky = issue['fields']['parent']['key']
+        else:
+            ky = issue['key']
+        arr = [[wl['author']['displayName'], wl['timeSpentSeconds'], wl['updated'][:10]] for wl in
+                issue['fields']['worklog']['worklogs'] \
+                        if wl["started"] > dateFrom.strftime('%Y-%m-%d') \
+                        and wl["started"] <= dateTo.strftime('%Y-%m-%d')]
+        if ky in struct.keys():
+            struct[ky].append(arr) 
+        else:
+            struct.update({ky: [arr]})
+    print(struct)
+    times_tmp = {issue['key'] : \
             [[wl['author']['displayName'], wl['timeSpentSeconds']] for wl in issue['fields']['worklog']['worklogs']]
             for issue in jira_hours}
     # dictionary contains sum of reported hours per task:
-    pertask = {task: sum((wl[1] for wl in wls))/3600. for (task, wls) in struct.items()}
+    pertask = {task: sum((wl[1] for wl in wls[0]))/3600. for (task, wls) in struct.items()}
+    print(pertask)
     sum_timespent = sum(pertask.values())
+    exit(1)
     #####################################################################################################################
     sum_story = 0
     items_table = ""
@@ -129,6 +158,7 @@ if __name__ == '__main__':
         # StorPoints
         SP = issue["fields"].get("customfield_10002", "0") and str(issue["fields"].get("customfield_10002", "0")) or "0"
         #timeSpent = float( issue["fields"].get("aggregatetimespent", "0") and str(issue["fields"].get("aggregatetimespent", "0")) or "0") / 3600
+        # DO ODBLOKOWANIA AGREGATETIMESPENT
         timeSpent = float(pertask.get(issue["key"], 0.0))
         SUB = issue["fields"].get("summary")
         items_table += """
@@ -158,7 +188,6 @@ if __name__ == '__main__':
 
     input_html += """
     <h1 id="Sprint1%7CPL_DL_IT_CMS_P2.WIDGTS_L-Kosztsprintu">Koszt sprintu</h1>
-    <p></p><p></p><p></p>
     <div class="table-wrap">
     <table border="1" class="confluenceTable">
         <tbody>
@@ -190,7 +219,6 @@ if __name__ == '__main__':
 
     input_html += """
     <h1 id="Sprint1%7CPL_DL_IT_CMS_P2.WIDGTS_L-Elementyzadeklarowanedorealizacji">Elementy zadeklarowane do realizacji</h1>
-    <p></p>
     <div class="table-wrap">
     <table border="1" class="confluenceTable">
         <thead>
@@ -211,9 +239,9 @@ if __name__ == '__main__':
             </tbody>
         </table>
         </div>
-    <p> </p><p>
-    <line-height: 1.25;">Elementy zgloszone do zewnetrznego zespolu</span>
-    </p><p></p>
+    <p>
+    <line-height: 1.25;"><h1>Elementy zgloszone do zewnetrznego zespolu</h1></span>
+    </p>
 
     <div class="table-wrap"><table border="1" class="confluenceTable">
     <thead>
