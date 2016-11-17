@@ -160,6 +160,7 @@ if __name__ == '__main__':
         # StorPoints
         SP = issue["fields"].get("customfield_10002", "0") and str(issue["fields"].get("customfield_10002", "0")) or "0"
         #timeSpent = float( issue["fields"].get("aggregatetimespent", "0") and str(issue["fields"].get("aggregatetimespent", "0")) or "0") / 3600
+        #
         # DO ODBLOKOWANIA AGREGATETIMESPENT
         timeSpent = float(pertask.get(issue["key"], 0.0))
         SUB = issue["fields"].get("summary")
