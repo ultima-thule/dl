@@ -147,13 +147,13 @@ if __name__ == '__main__':
     sum_story = 0
     items_table = ""
     # TODO: map these values to the description in table
-    status_map = {
-            "In Progress": "Nie",
-            "Waiting" : "Nie",
-            "Resolved": "Tak",
-            "Close": "Tak"
-            "Reopened": "Nie",
-            }
+    #status_map = {
+    #        "In Progress": "Nie",
+    #        "Waiting" : "Nie",
+    #        "Resolved": "Tak",
+    #        "Close": "Tak"
+    #        "Reopened": "Nie",
+    #        }
     for issue in jira_issues:
         #Kryteria akceptacji
         KA = issue["fields"].get("customfield_11726") and issue["fields"].get("customfield_11726") or "n/a"
