@@ -1,4 +1,6 @@
 import lib.excelfile
+import operator
+
 from xlsxwriter.utility import xl_rowcol_to_cell
 
 gl_col_width = []
@@ -58,15 +60,30 @@ class ExcelEstimate (lib.excelfile.ExcelFile):
         headers = ["Zadanie", "Rola w projekcie", "Roboczogodziny", "Stawka godzinowa netto", "Wycena netto"]
         self.last_row = self._write_table_header(self.last_row, headers, self._format_header)
 
-    def write_task_list(self):
+    def write_task_list(self, show_subtasks=False):
         if self.data['issues'] is not None:
-
             for k in self.data['issues']:
-                self._write_cell(0, self.last_row, self.data['issues'][k]['summary'], self._format_lane)
-                self._write_cell(1, self.last_row, "Programista", self._format_lane)
-                self._write_cell(2, self.last_row, self.data['issues'][k]['timespent'], self._format_lane)
-                self._write_cell(3, self.last_row, 107, self._format_lane_currency)
-                cellA = xl_rowcol_to_cell(self.last_row, 2)
-                cellB = xl_rowcol_to_cell(self.last_row, 3)
-                self.write_formula(4, self.last_row, '=' + cellA + "*" + cellB, self._format_lane_currency)
-                self.last_row += 1
+                main_issue = self.data['issues'][k]
+                #TODO obsłużyć case zaraportowania w główne zadanie
+                if not show_subtasks or (show_subtasks and len(self.data['issues'][k]['children'])==0):
+                    self._write_cell(0, self.last_row, main_issue['summary'], self._format_lane)
+                    self._write_cell(1, self.last_row, "Programista", self._format_lane)
+                    self._write_cell(2, self.last_row, main_issue['timespent'], self._format_lane)
+                    self._write_cell(3, self.last_row, 107, self._format_lane_currency)
+                    cellA = xl_rowcol_to_cell(self.last_row, 2)
+                    cellB = xl_rowcol_to_cell(self.last_row, 3)
+                    self.write_formula(4, self.last_row, '=' + cellA + "*" + cellB, self._format_lane_currency)
+                    self._write_cell(5, self.last_row, main_issue['type'], self._format_lane_currency)
+                    self.last_row += 1
+                else:
+                    for sub_issue in self.data['issues'][k]['children']:
+                        self._write_cell(0, self.last_row, main_issue['summary'] + " - "
+                                         + sub_issue['summary'], self._format_lane)
+                        self._write_cell(1, self.last_row, "Programista", self._format_lane)
+                        self._write_cell(2, self.last_row, sub_issue['timespent'], self._format_lane)
+                        self._write_cell(3, self.last_row, 107, self._format_lane_currency)
+                        cellA = xl_rowcol_to_cell(self.last_row, 2)
+                        cellB = xl_rowcol_to_cell(self.last_row, 3)
+                        self.write_formula(4, self.last_row, '=' + cellA + "*" + cellB, self._format_lane_currency)
+                        self._write_cell(5, self.last_row, sub_issue['type'], self._format_lane_currency)
+                        self.last_row += 1

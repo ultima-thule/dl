@@ -101,7 +101,7 @@ if __name__ == '__main__':
     }
 
     excelReport.init_report(data)
-    excelReport.write_task_list()
+    excelReport.write_task_list(False)
     excelReport.close()
 
     exit(0)
