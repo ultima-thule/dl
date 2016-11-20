@@ -7,60 +7,60 @@ class Confluence (object):
     def __init__(self, url, username, password, spacekey):
         self.server = xmlrpc.client.ServerProxy(url)
         self.token = self.server.confluence2.login(username, password)
-        self.spaceKey = spacekey
+        self.spacekey = spacekey
 
 
-    def getOrCreatePage(self, title, parentID, content):
-        pageId = None
+    def get_or_create_page(self, title, parent_id, content):
+        page_id = None
 
         try:
-            pageId = self.server.confluence2.getPage(self.token, self.spaceKey, title)
+            page_id = self.server.confluence2.getPage(self.token, self.spacekey, title)
         except:
-            if self.createPage(title, parentID, content) is not None:
-                pageId = self.server.confluence2.getPage(self.token, self.spaceKey, title)
+            if self.create_page(title, parent_id, content) is not None:
+                page_id = self.server.confluence2.getPage(self.token, self.spacekey, title)
 
-        return pageId
+        return page_id
 
 
-    def updateOrCreatePage(self, title, parentID, content):
-        pageId = None
+    def update_or_create_page(self, title, parent_id, content):
+        page_id = None
 
         try:
-            pageId = self.server.confluence2.getPage(self.token, self.spaceKey, title)
+            page_id = self.server.confluence2.getPage(self.token, self.spacekey, title)
         except:
-            if self.createPage(title, parentID, content) is not None:
-                pageId = self.server.confluence2.getPage(self.token, self.spaceKey, title)
-                return pageId
+            if self.create_page(title, parent_id, content) is not None:
+                page_id = self.server.confluence2.getPage(self.token, self.spacekey, title)
+                return page_id
         try:
-            if self.createPage(title, parentID, content, pageId) is not None:
-                return pageId
+            if self.create_page(title, parent_id, content, page_id) is not None:
+                return page_id
         except:
             #print(msg)
             pass
-        return pageId
+        return page_id
 
 
-    def createPage(self, title, parentID, content, pageId=None):
-        newPage = None
+    def create_page(self, title, parent_id, content, page_id=None):
+        new_page = None
         page = {
-                "space": self.spaceKey,
-                "parentId": parentID,
+                "space": self.spacekey,
+                "parentId": parent_id,
                 "title": title,
                 "content": content,
                 }
-        if pageId is not None:
+        if page_id is not None:
             page = {
-                    "id": pageId["id"],
-                    "space": self.spaceKey,
-                    "parentId": parentID,
+                    "id": page_id["id"],
+                    "space": self.spacekey,
+                    "parentId": parent_id,
                     "title": title,
                     "content": content,
-                    "version": pageId["version"],
+                    "version": page_id["version"],
                     }
         try:
-            newPage = self.server.confluence2.storePage(self.token, page)
+            new_page = self.server.confluence2.storePage(self.token, page)
         except Exception as msg:
             print(msg)
 
-        return newPage
+        return new_page
 

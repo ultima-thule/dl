@@ -13,14 +13,15 @@ import lib.confluence
 import lib.jira
 
 
-glTsd = lib.jira.JiraTimeSpent()
+gl_tsd = lib.jira.JiraTimeSpent()
 
-def getIssueField(issue, name, defValue):
+
+def get_issue_field(issue, name, def_value):
     """ Returns the value of field or default value. """
-    return issue["fields"].get(name) or defValue
+    return issue["fields"].get(name) or def_value
 
 
-def sprintInfoToHTML(sprint):
+def sprint_info_to_html(sprint):
     """ Generates HTML page fragment, containing basic sprint information."""
     doc, tag, text, line = Doc().ttl()
 
@@ -30,17 +31,17 @@ def sprintInfoToHTML(sprint):
                 with tag('tr'):
                     line('th', 'Kod sprintu')
                     line('th', sprint.name)
-                    line('th', sprint.dateFrom)
-                    line('th', sprint.dateTo)
+                    line('th', sprint.date_from)
+                    line('th', sprint.date_to)
     return doc.getvalue()
 
 
-def sprintCostsToHTML(projectName, costTable):
+def sprint_costs_to_html(project_name, cost_table):
     """ Generates HTML page fragment, containing summary info of sprint costs. """
 
     doc, tag, text, line = Doc().ttl()
 
-    line('h1', 'Koszt sprintu', id=projectName + '-Kosztsprintu')
+    line('h1', 'Koszt sprintu', id=project_name + '-Kosztsprintu')
 
     with tag('div', klass='table-wrap'):
         with tag('table', border='1', klass='confluenceTable'):
@@ -52,23 +53,23 @@ def sprintCostsToHTML(projectName, costTable):
                 with tag('tr'):
                     with tag('td'):
                         line('strong', 'Wartość estymowana na planningu')
-                    with tag('td', ('style', 'text-align: center')): text(costTable.sumStoryPoints)
+                    with tag('td', ('style', 'text-align: center')): text(cost_table.sum_story_points)
                     with tag('td', ('style', 'text-align: center')): text('-')
                 with tag('tr'):
                     with tag('td'):
                         line('strong', 'Wartość rzeczywista po review')
-                    line('td', costTable.sumStoryPoints, ('style', 'text-align: center'))
-                    line('td', costTable.sumTimeSpent, ('style', 'text-align: center'))
+                    line('td', cost_table.sum_story_points, ('style', 'text-align: center'))
+                    line('td', cost_table.sum_time_spent, ('style', 'text-align: center'))
     return doc.getvalue()
 
 
-def sprintPlanToHTML (projectName, jiraIssues):
+def sprint_plan_to_html(project_name, jiraIssues):
     """ Generates HTML page fragment, containing detailed information on stories and tasks taken to sprint."""
-    global glTsd
+    global gl_tsd
 
     doc, tag, text, line = Doc().ttl()
 
-    line('h1', 'Elementy zadeklarowane do realizacji', id=projectName + '-Elementyzadeklarowanedorealizacji')
+    line('h1', 'Elementy zadeklarowane do realizacji', id=project_name + '-Elementyzadeklarowanedorealizacji')
 
     with tag('div', klass='table-wrap'):
         with tag('table', border='1', klass='confluenceTable'):
@@ -80,32 +81,32 @@ def sprintPlanToHTML (projectName, jiraIssues):
                     line('th', 'Czas realizacji')
                     line('th', 'Czy zrealizowane?')
             with tag('tbody'):
-                statusMap = { 'ToDo': 'Nie', 'In Progress': 'Nie', 'Waiting': 'Nie', 'Resolved': 'Tak', 'Closed': 'Tak', 'Reopened': 'Nie'}
+                status_map = { 'ToDo': 'Nie', 'In Progress': 'Nie', 'Waiting': 'Nie', 'Resolved': 'Tak', 'Closed': 'Tak', 'Reopened': 'Nie'}
                 for issue in jiraIssues:
-                    issueSummary = getIssueField(issue, 'summary', '')
-                    issueAccCrit = getIssueField(issue, 'customfield_11726', 'n/a')
-                    issueSP = getIssueField(issue, 'customfield_10002', '0')
-                    #issueTimeSpent = getIssueField(issue, 'aggregatetimespent', '0')
+                    issue_summary = get_issue_field(issue, 'summary', '')
+                    issue_acc_crit = get_issue_field(issue, 'customfield_11726', 'n/a')
+                    issue_sp = get_issue_field(issue, 'customfield_10002', '0')
+                    #issue_time_spent = get_issue_field(issue, 'aggregatetimespent', '0')
                     # DO ODBLOKOWANIA AGREGATETIMESPENT
-                    issueTimeSpent = float(glTsd.tableTasks.get(issue["key"], 0.0))
-                    issueStatus = statusMap[getIssueField(issue, 'status', None)["name"]]
+                    issue_time_spent = float(gl_tsd.table_tasks.get(issue["key"], 0.0))
+                    issue_status = status_map[get_issue_field(issue, 'status', None)["name"]]
 
                     with tag('tr', klass='confluenceTr'):
-                        line('td', issueSummary)
-                        line('td', issueAccCrit)
-                        line('td', issueSP, ('style', 'text-align: center'))
-                        line('td', issueTimeSpent, ('style', 'text-align: center'))
-                        line('td', issueStatus, ('style', 'text-align: center'))
-                    glTsd.sumStoryPoints += float(issueSP)
+                        line('td', issue_summary)
+                        line('td', issue_acc_crit)
+                        line('td', issue_sp, ('style', 'text-align: center'))
+                        line('td', issue_time_spent, ('style', 'text-align: center'))
+                        line('td', issue_status, ('style', 'text-align: center'))
+                    gl_tsd.sum_story_points += float(issue_sp)
 
     return doc.getvalue()
 
 
-def sprintExternalToHTML (projectName):
+def sprint_external_to_html(project_name):
     """ Generates HTML page fragment, containing detailed information on stories and tasks planned in external teams."""
     doc, tag, text, line = Doc().ttl()
 
-    line('h1', 'Elementy zgłoszone do zewnętrznego zespołu', id=projectName + '-Elementyzgloszonedozewnetrznegozespolu')
+    line('h1', 'Elementy zgłoszone do zewnętrznego zespołu', id=project_name + '-Elementyzgloszonedozewnetrznegozespolu')
 
     with tag('div', klass='table-wrap'):
         with tag('table', border='1', klass='confluenceTable'):
@@ -125,11 +126,11 @@ def sprintExternalToHTML (projectName):
     return doc.getvalue()
 
 
-def sprintNotDoneToHTML (projectName):
+def sprint_not_done_to_html(project_name):
     """ Generates HTML page fragment, containing detailed information on stories and tasks not done in sprint."""
     doc, tag, text, line = Doc().ttl()
 
-    line('h1', 'Elementy niezrealizowane w sprincie', id=projectName + '-Elementyniezrealizowanewsprincie')
+    line('h1', 'Elementy niezrealizowane w sprincie', id=project_name + '-Elementyniezrealizowanewsprincie')
 
     with tag('div', klass='table-wrap'):
         with tag('table', border='1', klass='confluenceTable'):
@@ -145,12 +146,12 @@ def sprintNotDoneToHTML (projectName):
     return doc.getvalue()
 
 
-def sprintExtraDoneToHTML (projectName):
+def sprint_extra_done_to_html (project_name):
     """ Generates HTML page fragment, containing detailed information on stories and tasks added to sprint after planning."""
 
     doc, tag, text, line = Doc().ttl()
 
-    line('h1', 'Elementy dodatkowe, nieplanowane', id=projectName + '-Elementydodatkowe%2Cnieplanowane')
+    line('h1', 'Elementy dodatkowe, nieplanowane', id=project_name + '-Elementydodatkowe%2Cnieplanowane')
 
     with tag('div', klass='table-wrap'):
         with tag('table', border='1', klass='confluenceTable'):
@@ -170,13 +171,13 @@ def sprintExtraDoneToHTML (projectName):
     return doc.getvalue()
 
 
-def countRealReportedTime (jiraHours, sprint):
+def count_real_reported_time (jira_hours, sprint):
     """ Sums worklogs in given time period."""
 
-    global glTsd
+    global gl_tsd
     # let's write down all reported hours per task
     struct = {}
-    for issue in jiraHours:
+    for issue in jira_hours:
         # where to find the main story id
         if 'parent' in issue['fields'].keys():
             ky = issue['fields']['parent']['key']
@@ -185,8 +186,8 @@ def countRealReportedTime (jiraHours, sprint):
         # Get array with reported time between the timeline
         arr = [[wl['author']['displayName'], wl['timeSpentSeconds'], wl['updated'][:10]] for wl in
                 issue['fields']['worklog']['worklogs'] \
-                        if wl["started"] > sprint.dateFrom \
-                        and wl["started"] <= sprint.dateTo]
+                        if wl["started"] > sprint.date_from \
+                        and wl["started"] <= sprint.date_to]
         if ky in struct.keys():
             struct[ky] += arr
         else:
@@ -194,14 +195,14 @@ def countRealReportedTime (jiraHours, sprint):
     # dictionary contains sum of reported hours per task:
     # {'ZUMISEARCH-59': [['Różański Tomasz', 3600, '2016-11-15'], ['Różański Tomasz', 3600, '2016-11-15'], ['Różański
     # Tomasz', 3600, '2016-11-15'], ['Różański Tomasz', 7200, '2016-11-15']]}
-    perTask = {}
+    per_task = {}
     for (task, wls) in struct.items():
-        perTask.update({task: sum([wl[1] for wl in wls])/3600.})
-    #pertask = {task: sum((wl[1] for wl in wls[0]))/3600. for (task, wls) in struct.items()}
-    sumTimeSpent = sum(perTask.values())
+        per_task.update({task: sum([wl[1] for wl in wls])/3600.})
+    #per_task = {task: sum((wl[1] for wl in wls[0]))/3600. for (task, wls) in struct.items()}
+    sum_time_spent = sum(per_task.values())
 
-    glTsd.sumTimeSpent = sumTimeSpent
-    glTsd.tableTasks = perTask
+    gl_tsd.sum_time_spent = sum_time_spent
+    gl_tsd.table_tasks = per_task
     return
 
 
@@ -213,69 +214,69 @@ if __name__ == '__main__':
         exit("Usage: " + sys.argv[0] + " projectname sprint")
 
     # variables
-    projectName = sys.argv[1]
-    sprintID = sys.argv[2]
+    project_name = sys.argv[1]
+    sprint_id = sys.argv[2]
     if len(sys.argv) > 3:
-        userJira = sys.argv[3]
-        pwdJira = getpass.getpass()
+        user_jira = sys.argv[3]
+        pwd_jira = getpass.getpass()
     else:
         pass
 
     #init Jira connection
     #TODO: change on console
-    userJira = credentials.loginJira['consumer_secret']
-    pwdJira = credentials.loginJira['password']
-    jira = lib.jira.Jira('http://jira.grupa.onet', userJira, pwdJira)
+    user_jira = credentials.loginJira['consumer_secret']
+    pwd_jira = credentials.loginJira['password']
+    jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 
     #Get sprint general data
-    sprint = jira.getSprintData(sprintID)
+    sprint = jira.get_sprint_data(sprint_id)
 
     #Get sprint planning data
-    jiraHours = jira.getWorklogsInSprint(projectName, sprint)
-    countRealReportedTime(jiraHours, sprint)
-    jiraIssues = jira.getIssuesInSprint(projectName, sprint)
+    jira_hours = jira.get_worklogs_in_sprint(project_name, sprint)
+    count_real_reported_time(jira_hours, sprint)
+    jira_issues = jira.get_issues_in_sprint(project_name, sprint)
 
     #Build HTML page
     doc, tag, text = Doc().tagtext()
 
-    doc.asis(sprintInfoToHTML(sprint))    #First table - sprint data
-    planHTML = sprintPlanToHTML(projectName, jiraIssues)
-    doc.asis(sprintCostsToHTML(projectName, glTsd))    #Second table - sprint costs
+    doc.asis(sprint_info_to_html(sprint))    #First table - sprint data
+    planHTML = sprint_plan_to_html(project_name, jira_issues)
+    doc.asis(sprint_costs_to_html(project_name, gl_tsd))    #Second table - sprint costs
     doc.asis(planHTML)    #Third table - story list
-    doc.asis(sprintExternalToHTML(projectName))    #Fourth table - items for external team
-    doc.asis(sprintNotDoneToHTML(projectName))    #Fifth table - items not done in sprint
-    doc.asis(sprintExtraDoneToHTML(projectName))    #Sixth table - extra items in sprint
+    doc.asis(sprint_external_to_html(project_name))    #Fourth table - items for external team
+    doc.asis(sprint_not_done_to_html(project_name))    #Fifth table - items not done in sprint
+    doc.asis(sprint_extra_done_to_html(project_name))    #Sixth table - extra items in sprint
 
     #####################################################################################################################
     # CONFLUENCE PART
     # dev variable- if is "1" the content won't be written in the confluence
     if dev != 1:
 
-        usernameCF = credentials.loginConfluence['consumer_secret']
-        passwordCF = credentials.loginConfluence['password']
+        user_cf = credentials.loginConfluence['consumer_secret']
+        pwd_cf = credentials.loginConfluence['password']
 
         #TODO: change on console
         #usernameCF = usernameJira
         #passwordCF = passwordJira
 
         url = "http://doc.grupa.onet/rpc/xmlrpc"
-        confl = lib.confluence.Confluence(url, usernameCF, passwordCF, "PROJEKTY")
+        confl = lib.confluence.Confluence(url, user_cf, pwd_cf, "PROJEKTY")
         #TODO
         #confl = lib.confluence.Confluence(url, usernameCF, passwordCF, "trozanski")
 
-        parentPageTitle = projectName
-        childPageTitle = "Sprint " + sprintID + " | " + projectName
+        parent_page_title = project_name
+        child_page_title = "Sprint " + sprint_id + " | " + project_name
 
-        parentID = confl.getOrCreatePage(parentPageTitle, "64070870", "")
+        parent_id = confl.get_or_create_page(parent_page_title, "64070870", "")
         #TODO
         #parentID = {"id": "64072422"}
 
-        if parentID is not None:
-            #newPage = confl.createPage(childPageTitle, parentID.get("id"), doc.getvalue())
-            newPage = confl.updateOrCreatePage(childPageTitle, parentID.get("id"), doc.getvalue())
-            if newPage is None:
+        if parent_id is not None:
+            #newPage = confl.createPage(child_page_title, parentID.get("id"), doc.getvalue())
+            new_page = confl.update_or_create_page(child_page_title, parent_id.get("id"), doc.getvalue())
+            if new_page is None:
                 print("No new page")
                 exit(1)
-            print(newPage.get("id"))
+            print(new_page.get("id"))
         exit(0)
 
