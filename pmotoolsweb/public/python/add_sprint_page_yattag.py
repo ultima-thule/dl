@@ -3,9 +3,7 @@
 
 import sys
 
-import xmlrpc.client
 ########################### PYTHON 3.5 modules ##################
-from dateutil import parser
 import credentials
 #################################################################
 import getpass
@@ -13,9 +11,6 @@ import getpass
 from yattag import Doc
 import lib.confluence
 import lib.jira
-
-from datetime import datetime, timedelta
-import pprint
 
 
 glTsd = lib.jira.JiraTimeSpent()
