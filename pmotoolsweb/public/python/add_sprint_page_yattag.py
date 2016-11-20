@@ -210,7 +210,7 @@ if __name__ == '__main__':
     #============CONST============
 
     if len(sys.argv) < 3:
-        exit("Usage: " + sys.argv[0] + " projectname sprint username")
+        exit("Usage: " + sys.argv[0] + " projectname sprint")
 
     # variables
     projectname = sys.argv[1]
