@@ -1,8 +1,10 @@
 import datetime
 import sys
+import argparse
 
 import credentials
 import lib.jira
+import lib.excel_estimate
 
 
 def get_time_spent(elem, field_name):
@@ -84,26 +86,30 @@ def build_issues_tree(data):
     return response
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        exit("Usage: " + sys.argv[0] + " projectname")
-    project_name = sys.argv[1]
+
+    # parse arguments
+    parser = argparse.ArgumentParser(description='Generate xlsx estimate sheeto for project.')
+    parser.add_argument('-p', '--project', help='project name', required=True)
+    parser.add_argument('-s', '--subtasks', help='include subtasks', default=False)
+    args = parser.parse_args()
 
     #init Jira connection
     user_jira = credentials.loginJira['consumer_secret']
     pwd_jira = credentials.loginJira['password']
     jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 
-    excelReport = lib.excel_estimate.ExcelEstimate(project_name + "_kosztorys_"
-                    + datetime.datetime.now().strftime("%Y%m%d-%H%M%S.xlsx"), "Kosztorys")
+    file_name = args.project + "_kosztorys_" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S.xlsx")
 
-    issues = jira.get_all_issues(project_name)
+    excelReport = lib.excel_estimate.ExcelEstimate(file_name, "Kosztorys")
+
+    issues = jira.get_all_issues(args.project)
     data = {
         "issues": build_issues_tree(issues),
-        "projectName": project_name
+        "projectName": args.project
     }
 
     excelReport.init_report(data)
-    excelReport.write_task_list(True)
+    excelReport.write_task_list(args.subtasks)
     excelReport.close()
 
     exit(0)
