@@ -91,6 +91,19 @@
                 });
             }
 
+            $scope.generateEstimate = function() {
+                $scope.isLoading = true;
+                pwService.generateEstimate ($scope.projectName, true)
+                .success(function(data){
+                    showMessage ("Excel generated.");
+                    $scope.isLoading = false;
+                })
+                .error(function(data) {
+                    $scope.isLoading = false;
+                    showMessage ("Excel cannot be created, error occured.");
+                });
+            }
+
             $scope.simpleToastBase = simpleToastBase;
             $scope.showMessage = showMessage;
 

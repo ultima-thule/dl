@@ -31,6 +31,7 @@
                 <md-progress-linear md-mode="indeterminate" ng-show="isLoading" ></md-progress-linear>
                 <md-button class="md-raised my-hue-1 md-secondary" ng-click="generatePW();" ng-disabled="pwForm.$invalid || isLoading">Create sprint summary page</md-button>
                 <md-button class="md-raised my-hue-1 md-secondary" ng-href="{{confLink}}" ng-disabled="!confLink" target="_blank">Go to Confluence page</md-button>
+                <md-button class="md-raised my-hue-1 md-secondary" ng-href="generateEstimate();" ng-disabled="pwForm.$invalid || isLoading" target="_blank">Get estimate in Excel</md-button>
             </form>
         </md-card-content>
     </md-card>
