@@ -103,7 +103,7 @@
                     var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
                     var filename = "report " + date + ".xlsx";
                     FileSaver.saveAs(blob, filename);
-                    $location.path('/createPw');
+                    $location.path('/pws');
                 }).error(function(data) {
                 });
 

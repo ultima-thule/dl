@@ -175,13 +175,13 @@ module.exports = function(app) {
 
     // =========================== PW ================================
 // create PW estimate with script
-    app.get('/api/createPw/:project/:withsubtasks', function(req, res) {
+    app.get('/api/createpw/:id', function(req, res) {
 
         //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team.py']);
         //var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_page5.py']);
         //prod
         var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_estimate_xslx.py',
-                    req.params.project, Boolean(req.params.withsubtasks)]);
+                    req.params.id, true]);
         //mac
         //var python = require('child_process').spawn('python3', ['/Users/jgrzywna/Projects/dl/pmotoolsweb/public/python/add_sprint_page.py', req.params.pwid, req.params.sprintid]);
 //        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//add_sprint_page.py",
@@ -201,7 +201,7 @@ module.exports = function(app) {
     });
 
 // create PW with script
-    app.get('/api/createPw/:pwid/sprint/:sprintid', function(req, res) {
+    app.get('/api/createpw/:pwid/sprint/:sprintid', function(req, res) {
 
         //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team.py']);
         //var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_page5.py']);
