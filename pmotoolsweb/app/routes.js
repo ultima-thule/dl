@@ -14,6 +14,7 @@ var LeanKitClient  = require("leankit-client");
 var https = require('https');
 var http = require('http');
 var _ = require('lodash');
+var fs = require('fs');
 
 var jiraAuth = 'readonly_pmo:CbobBsps?!';
 
@@ -173,6 +174,31 @@ module.exports = function(app) {
     });
 
     // =========================== PW ================================
+// create PW estimate with script
+    app.get('/api/createPwEstimate/:project/:withsubtasks', function(req, res) {
+
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team.py']);
+        //var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_page5.py']);
+        //prod
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_estimate_xslx.py',
+                    req.params.project, Boolean(req.params.withsubtasks)]);
+        //mac
+        //var python = require('child_process').spawn('python3', ['/Users/jgrzywna/Projects/dl/pmotoolsweb/public/python/add_sprint_page.py', req.params.pwid, req.params.sprintid]);
+//        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//add_sprint_page.py",
+//            req.params.pwid, req.params.sprintid]);
+
+        var output = "";
+        python.stdout.on('data', function(data){ output += data });
+        python.on('close', function(code)
+        {
+            if (code !== 0) {  return res.send(500, code); }
+
+            res.append('Content-Disposition', 'attachment; filename=estimate.xlsx');
+            res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+            return res.send(200, output)
+        });
+    });
 
 // create PW with script
     app.get('/api/createPw/:pwid/sprint/:sprintid', function(req, res) {

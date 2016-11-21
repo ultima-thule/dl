@@ -110,6 +110,6 @@ if __name__ == '__main__':
 
     excelReport.init_report(data)
     excelReport.write_task_list(args.subtasks)
-    excelReport.close()
-
+    data = excelReport.close()
+    print(data)
     exit(0)
