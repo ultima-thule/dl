@@ -1,4 +1,5 @@
 import json
+
 import requests
 from dateutil import parser
 
@@ -90,6 +91,6 @@ class Jira (object):
         """ Gets all issues within project - one 50-elem batch. """
         #customfield_11300 = epic link, customfield_10800 = sprint
         query = "/rest/api/2/search?jql=project = '" + project_name + "'" \
-                + "&fields=status,issuetype,summary,aggregatetimespent,parent,customfield_11300,customfield_10800" \
+                + "&fields=status,issuetype,summary,timespent,aggregatetimespent,parent,customfield_11300,customfield_10800" \
                 + "&startAt=" + str(start_at)
         return self.search(query)

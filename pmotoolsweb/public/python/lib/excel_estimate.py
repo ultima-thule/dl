@@ -1,5 +1,4 @@
 import lib.excelfile
-import operator
 
 from xlsxwriter.utility import xl_rowcol_to_cell
 
@@ -14,6 +13,7 @@ class ExcelEstimate (lib.excelfile.ExcelFile):
         lib.excelfile.ExcelFile.init_report(self)
 
         self._configure_header_format('6666FF', 'black', True)
+        self._configure_tc_format()
 
         self.col_widths = {"0": 80, "1": 18, "2": 12, "3": 10, "4": 14}
 
@@ -22,6 +22,11 @@ class ExcelEstimate (lib.excelfile.ExcelFile):
 
         self.write_top_header()
         self.write_report_header()
+
+    def _configure_tc_format(self):
+        self._format_tc = self.workbook.add_format()
+        self._format_tc.set_bg_color('white')
+        self._format_tc.set_border(1)
 
     def write_top_header(self):
         for i in range(2):
@@ -60,30 +65,41 @@ class ExcelEstimate (lib.excelfile.ExcelFile):
         headers = ["Zadanie", "Rola w projekcie", "Roboczogodziny", "Stawka godzinowa netto", "Wycena netto"]
         self.last_row = self._write_table_header(self.last_row, headers, self._format_header)
 
+    def _build_formula(self, row1, col1, row2, col2, sign):
+        cellA = xl_rowcol_to_cell(row1, col1)
+        cellB = xl_rowcol_to_cell(row2, col2)
+        return '=' + cellA + sign + cellB
+
     def write_task_list(self, show_subtasks=False):
         if self.data['issues'] is not None:
             for k in self.data['issues']:
                 main_issue = self.data['issues'][k]
                 #TODO obsłużyć case zaraportowania w główne zadanie
-                if not show_subtasks or (show_subtasks and len(self.data['issues'][k]['children'])==0):
-                    self._write_cell(0, self.last_row, main_issue['summary'], self._format_lane)
-                    self._write_cell(1, self.last_row, "Programista", self._format_lane)
-                    self._write_cell(2, self.last_row, main_issue['timespent'], self._format_lane)
+                #parent
+                ts = int(main_issue["timespent"] * 10)
+                if not show_subtasks \
+                        or (show_subtasks and len(self.data['issues'][k]['children']) == 0)\
+                        or (show_subtasks and ts > 0):
+                    self._write_cell(0, self.last_row, main_issue['summary'], self._format_tc)
+                    self._write_cell(1, self.last_row, "Programista", self._format_tc)
+                    if ts > 0 and show_subtasks:
+                        self._write_cell(2, self.last_row, main_issue['timespent'], self._format_tc)
+                    else:
+                        self._write_cell(2, self.last_row, main_issue['totaltimespent'], self._format_tc)
                     self._write_cell(3, self.last_row, 107, self._format_lane_currency)
-                    cellA = xl_rowcol_to_cell(self.last_row, 2)
-                    cellB = xl_rowcol_to_cell(self.last_row, 3)
-                    self.write_formula(4, self.last_row, '=' + cellA + "*" + cellB, self._format_lane_currency)
-                    self._write_cell(5, self.last_row, main_issue['type'], self._format_lane_currency)
+                    self.write_formula(4, self.last_row,
+                                       self._build_formula(self.last_row, 2, self.last_row, 3, "*"),
+                                       self._format_lane_currency)
                     self.last_row += 1
-                else:
+                #wypisz wszystkie subtaski
+                if show_subtasks:
                     for sub_issue in self.data['issues'][k]['children']:
                         self._write_cell(0, self.last_row, main_issue['summary'] + " - "
-                                         + sub_issue['summary'], self._format_lane)
-                        self._write_cell(1, self.last_row, "Programista", self._format_lane)
-                        self._write_cell(2, self.last_row, sub_issue['timespent'], self._format_lane)
+                                         + sub_issue['summary'], self._format_tc)
+                        self._write_cell(1, self.last_row, "Programista", self._format_tc)
+                        self._write_cell(2, self.last_row, sub_issue['totaltimespent'], self._format_tc)
                         self._write_cell(3, self.last_row, 107, self._format_lane_currency)
-                        cellA = xl_rowcol_to_cell(self.last_row, 2)
-                        cellB = xl_rowcol_to_cell(self.last_row, 3)
-                        self.write_formula(4, self.last_row, '=' + cellA + "*" + cellB, self._format_lane_currency)
-                        self._write_cell(5, self.last_row, sub_issue['type'], self._format_lane_currency)
+                        self.write_formula(4, self.last_row,
+                                           self._build_formula(self.last_row, 2, self.last_row, 3, "*"),
+                                           self._format_lane_currency)
                         self.last_row += 1

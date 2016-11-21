@@ -1,13 +1,13 @@
-import sys
 import datetime
+import sys
+
 import credentials
-import lib.excel_estimate
 import lib.jira
 
 
-def get_time_spent(elem):
+def get_time_spent(elem, field_name):
     """ Counts timespent in hours instead of miliseconds."""
-    ts = elem["fields"].get("aggregatetimespent", 0)
+    ts = elem["fields"].get(field_name, 0)
     if ts is None:
         ts = 0
     ts /= 3600
@@ -57,7 +57,8 @@ def build_issues_tree(data):
             "type": elem["fields"]["issuetype"]["name"],
             "epic": elem["fields"]["customfield_11300"],
             "sprints": get_sprints(elem),
-            "timespent": get_time_spent(elem),
+            "timespent": get_time_spent(elem, "timespent"),
+            "totaltimespent": get_time_spent(elem, "aggregatetimespent"),
             "children": []
         }
 
@@ -65,7 +66,8 @@ def build_issues_tree(data):
             "key": parent_id, "parent": None,
             "summary": "", "type": None,
             "epic": None, "sprints": {},
-            "timespent": 0, "children": []
+            "timespent": 0, "totaltimespent": 0,
+            "children": []
         }
 
         #it's a subtasks
@@ -101,7 +103,7 @@ if __name__ == '__main__':
     }
 
     excelReport.init_report(data)
-    excelReport.write_task_list(False)
+    excelReport.write_task_list(True)
     excelReport.close()
 
     exit(0)
