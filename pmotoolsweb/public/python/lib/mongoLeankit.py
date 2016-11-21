@@ -149,6 +149,10 @@ class Report (Document):
     is_plan = BooleanField()
     format_type = StringField()
 
+class Estimate (Document):
+    xls_data = BinaryField()
+    generation_date = DateTimeField()
+    project_name = StringField()
 
 class Configparam (Document):
     param_key = StringField()

@@ -2,10 +2,11 @@ import datetime
 import sys
 import argparse
 
+from mongoengine import *
 import credentials
 import lib.jira
 import lib.excel_estimate
-
+import lib.mongoLeankit
 
 def get_time_spent(elem, field_name):
     """ Counts timespent in hours instead of miliseconds."""
@@ -100,7 +101,7 @@ if __name__ == '__main__':
 
     file_name = args.project + "_kosztorys_" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S.xlsx")
 
-    excelReport = lib.excel_estimate.ExcelEstimate(file_name, "Kosztorys")
+    excelReport = lib.excel_estimate.ExcelEstimate(file_name, "Kosztorys", True)
 
     issues = jira.get_all_issues(args.project)
     data = {
@@ -111,5 +112,15 @@ if __name__ == '__main__':
     excelReport.init_report(data)
     excelReport.write_task_list(args.subtasks)
     data = excelReport.close()
-    print(data)
+
+    # print("Report generated, saving to database...")
+    connect('leankit')
+    report = lib.mongoLeankit.Estimate()
+
+    report.xls_data = data
+    report.generation_date = datetime.datetime.now()
+    report.project_name = args.project
+
+    report.save()
+
     exit(0)

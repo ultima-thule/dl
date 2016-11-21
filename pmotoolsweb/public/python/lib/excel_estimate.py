@@ -6,8 +6,8 @@ gl_col_width = []
 
 class ExcelEstimate (lib.excelfile.ExcelFile):
 
-    def __init__(self, workbook_name, worksheet_name):
-        lib.excelfile.ExcelFile.__init__(self, workbook_name, worksheet_name, True)
+    def __init__(self, workbook_name, worksheet_name, in_memory):
+        lib.excelfile.ExcelFile.__init__(self, workbook_name, worksheet_name, in_memory)
 
     def init_report(self, project_data):
         lib.excelfile.ExcelFile.init_report(self)

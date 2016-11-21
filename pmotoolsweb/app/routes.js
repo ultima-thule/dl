@@ -11,6 +11,7 @@ var UserApp  = require('./model/userApp');
 var User  = require('./model/user');
 var QuarterPlan = require('./model/quarterPlan');
 var LeanKitClient  = require("leankit-client");
+var Estimate = require('./model/estimate');
 var https = require('https');
 var http = require('http');
 var _ = require('lodash');
@@ -130,7 +131,6 @@ module.exports = function(app) {
 
     // generate new report with python script
     app.get('/api/genreport/:id', function(req, res) {
-
         if (req.params.id === "2") {
             //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team.py']);
             var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/py_gen_teams.py']);
@@ -174,28 +174,32 @@ module.exports = function(app) {
     });
 
     // =========================== PW ================================
-// create PW estimate with script
-    app.get('/api/createpw/:id', function(req, res) {
 
-        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team.py']);
-        //var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_page5.py']);
-        //prod
-        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_estimate_xslx.py',
-                    req.params.id, true]);
-        //mac
-        //var python = require('child_process').spawn('python3', ['/Users/jgrzywna/Projects/dl/pmotoolsweb/public/python/add_sprint_page.py', req.params.pwid, req.params.sprintid]);
-//        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//add_sprint_page.py",
-//            req.params.pwid, req.params.sprintid]);
+    // get a estimate in excel format
+    app.get('/api/estimates/:id', function(req, res) {
+        Estimate.find({_id: req.params.id}, function(err, estimates) {
+            if (err)
+                res.send(err);
+            var date = estimates[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
+            res.append('Content-Disposition', 'attachment; filename=report_' + date + '.xlsx');
+            res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.send(estimates[0].xls_data);
+          });
+    });
 
+    // generate new estimate with python script
+    app.get('/api/genestimate/:project', function(req, res) {
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_estimate_xslx.py -p ' + req.params.project]);
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_estimate_xslx.py -p ' + req.params.project]);
+//        var program_line = 'E://Development//Projects//dl//pmotoolsweb//public//python//gen_estimate_xslx.py -p ' + req.params.project;
+//        console.log(program_line)
+//        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', [program_line]);
         var output = "";
         python.stdout.on('data', function(data){ output += data });
         python.on('close', function(code)
         {
+            console.log(code)
             if (code !== 0) {  return res.send(500, code); }
-
-            res.append('Content-Disposition', 'attachment; filename=estimate.xlsx');
-            res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-
             return res.send(200, output)
         });
     });
