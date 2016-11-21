@@ -175,7 +175,7 @@ module.exports = function(app) {
 
     // =========================== PW ================================
 // create PW estimate with script
-    app.get('/api/createPwEstimate/:project/:withsubtasks', function(req, res) {
+    app.get('/api/createPw/:project/:withsubtasks', function(req, res) {
 
         //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team.py']);
         //var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_page5.py']);

@@ -6,9 +6,9 @@
         .module('PwCtrl', ['ngMaterial', 'mdDataTable'])
         .controller('PwController', PwController);
 
-        PwController.$inject = ['$scope', '$http', '$mdToast', '$timeout', 'pwService', 'userFactory', 'jiraboardService'];
+        PwController.$inject = ['$scope', '$http', '$routeParams', '$mdToast', '$timeout', 'pwService', 'userFactory', 'jiraboardService'];
 
-        function PwController($scope, $http, $mdToast, $timeout, pwService, userFactory, jiraboardService) {
+        function PwController($scope, $http, $routeParams, $mdToast, $timeout, pwService, userFactory, jiraboardService) {
             $scope.formData = {};
             $scope.title = "PW Automation";
             $scope.projectName = "";
@@ -91,17 +91,22 @@
                 });
             }
 
-            $scope.generateEstimate = function() {
-                $scope.isLoading = true;
-                pwService.generateEstimate ($scope.projectName, true)
+            // if requested to download a file
+            if ($routeParams.project)
+            {
+                pwService.generate ($routeParams.project, $routeParams.withsubtasks)
                 .success(function(data){
-                    showMessage ("Excel generated.");
-                    $scope.isLoading = false;
-                })
-                .error(function(data) {
-                    $scope.isLoading = false;
-                    showMessage ("Excel cannot be created, error occured.");
+                    var blob = new Blob([data], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                        });
+
+                    var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
+                    var filename = "report " + date + ".xlsx";
+                    FileSaver.saveAs(blob, filename);
+                    $location.path('/createPw');
+                }).error(function(data) {
                 });
+
             }
 
             $scope.simpleToastBase = simpleToastBase;
