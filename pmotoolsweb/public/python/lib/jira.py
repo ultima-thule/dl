@@ -39,13 +39,13 @@ class Jira (object):
 
     def _search_in_batches(self, func, *args):
         """ Reads all 50-elem batches of data from Jira. """
-        data = func(*args, 0)
+        data = func(*(args + (0,)))
         issues = data["issues"]
         start_at = data["startAt"]
         max_results = data["maxResults"]
         total = data["total"]
         while (start_at + 1) * max_results < total:
-            data = func(*args, start_at + max_results)
+            data = func(*(args +(start_at + max_results, )))
             start_at = data["startAt"]
             max_results = data["maxResults"]
             issues += data["issues"]
