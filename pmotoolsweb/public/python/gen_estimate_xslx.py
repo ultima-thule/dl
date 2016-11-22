@@ -1,10 +1,28 @@
 import argparse
 import datetime
+import operator
 
-import credentials
 from mongoengine import *
 
+import credentials
 import lib.mongoLeankit
+import lib.jira
+import lib.excel_estimate
+
+class JiraIssue (object):
+    def __init__(self, parent_id):
+        self.key = parent_id
+        self.parent = None
+        self.summary = ""
+        self.type = None
+        self.epic = None
+        self.sprints = {}
+        self.timespent = 0
+        self.totaltimespent = 0
+        self.children = []
+        self.not_management_task = False
+        self.not_analysis_task = False
+        self.rank = 0
 
 
 def get_time_spent(elem, field_name):
@@ -46,20 +64,21 @@ def get_sprints(elem):
 
     return dict_sprints
 
-def is_management_task(text):
+def not_management_task(text):
     text = text.lower()
     if "zarządzanie projektem" in text\
             or "pm" in text\
             or "zarzadzanie projektem" in text:
-        return True
-    return False
+        return False
+    return True
 
 
-def is_analysis_task(text):
+def not_analysis_task(text):
     text = text.lower()
-    if "scrum" in text:
-        return True
-    return False
+    if "scrum" in text\
+            or "analityczne" in text:
+        return False
+    return True
 
 
 def build_issues_tree(data):
@@ -67,48 +86,37 @@ def build_issues_tree(data):
     response = {}
     for elem in data:
         parent_id = get_parent_id(elem)
-        issue = {
-            "key": elem["key"],
-            "parent": parent_id,
-            "summary": elem["fields"]["summary"],
-            "type": elem["fields"]["issuetype"]["name"],
-            "epic": elem["fields"]["customfield_11300"],
-            "sprints": get_sprints(elem),
-            "timespent": get_time_spent(elem, "timespent"),
-            "totaltimespent": get_time_spent(elem, "aggregatetimespent"),
-            "is_management_task": False,
-            "is_analysis_task": False,
-            "children": [],
-            "rank": 0
-        }
 
-        parent_issue = {
-            "key": parent_id, "parent": None,
-            "summary": "", "type": None,
-            "epic": None, "sprints": {},
-            "timespent": 0, "totaltimespent": 0,
-            "children": [],
-            "is_management_task": False,
-            "is_analysis_task": False,
-            "rank": 0
-        }
+        issue = JiraIssue(parent_id)
+        issue.key = elem["key"]
+        issue.parent = None
+        issue.summary = elem["fields"]["summary"]
+        issue.type = elem["fields"]["issuetype"]["name"]
+        issue.epic = elem["fields"]["customfield_11300"]
+        issue.sprints = get_sprints(elem)
+        issue.timespent = get_time_spent(elem, "timespent")
+        issue.totaltimespent = get_time_spent(elem, "aggregatetimespent")
+        issue.children = []
+        issue.not_management_task = not_management_task(issue.summary)
+        issue.not_analysis_task = not_analysis_task(issue.summary)
+        issue.rank = elem["fields"]["customfield_11304"]
+
+        parent_issue = JiraIssue(parent_id)
 
         #it's a subtasks
         if parent_id is not None:
             if not parent_id in response:
                 response[parent_id] = parent_issue
-            response[parent_id]["children"].append(issue)
+            response[parent_id].children.append(issue)
         #it's not a subtask
         else:
-            if issue["key"] in response:
-                issue["children"] = response[issue["key"]]["children"]
+            if issue.key in response:
+                issue.children = response[issue.key].children
+            response[issue.key] = issue
 
-            issue["is_management_task"] = is_management_task(elem["fields"]["summary"])
-            issue["is_management_task"] = is_analysis_task(elem["fields"]["summary"])
+    sorted_response = sorted(response.values(), key=operator.attrgetter('not_management_task', 'not_analysis_task', 'rank'))
 
-            response[issue["key"]] = issue
-
-    return response
+    return sorted_response
 
 if __name__ == '__main__':
 
@@ -137,11 +145,12 @@ if __name__ == '__main__':
     issues = jira.get_all_issues(args.project)
     data = {
         "issues": build_issues_tree(issues),
-        "projectName": args.project
+        "projectName": args.project,
+        "show_subtasks": args.subtasks
     }
 
     excelReport.init_report(data)
-    excelReport.write_task_list(args.subtasks)
+    excelReport.generate_report()
     data = excelReport.close()
 
     if args.memory:

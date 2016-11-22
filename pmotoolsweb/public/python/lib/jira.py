@@ -89,8 +89,8 @@ class Jira (object):
 
     def _get_all_issues_batch(self, project_name, start_at):
         """ Gets all issues within project - one 50-elem batch. """
-        #customfield_11300 = epic link, customfield_10800 = sprint
+        #customfield_11300 = epic link, customfield_10800 = sprint, 11304 = rank
         query = "/rest/api/2/search?jql=project = '" + project_name + "'" \
-                + "&fields=status,issuetype,summary,timespent,aggregatetimespent,parent,customfield_11300,customfield_10800" \
+                + "&fields=status,issuetype,summary,timespent,aggregatetimespent,parent,customfield_11300,customfield_10800,customfield_11304" \
                 + "&startAt=" + str(start_at)
         return self.search(query)

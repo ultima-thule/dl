@@ -36,58 +36,35 @@ class ExcelFile(object):
             self.worksheet.set_column(int(k), int(k), min(v, 100))
 
     def _configure_no_borders(self):
-        self._format_noborders = self.workbook.add_format()
-        self._format_noborders.set_border(0)
+        self._f_noborders = self.workbook.add_format({'border': 0})
 
     def _configure_lane_format(self, bg_color):
-        self._format_lane = self.workbook.add_format()
-        self._format_lane.set_bg_color(bg_color)
-
-        self._format_lane_bold = self.workbook.add_format()
-        self._format_lane_bold.set_bg_color(bg_color)
-        self._format_lane_bold.set_bold()
-
-        self._format_lane_right = self.workbook.add_format()
-        self._format_lane_right.set_bg_color(bg_color)
-        self._format_lane_right.set_align('right')
-
-        self._format_lane_right_bold = self.workbook.add_format()
-        self._format_lane_right_bold.set_bg_color(bg_color)
-        self._format_lane_right_bold.set_align('right')
-        self._format_lane_right_bold.set_bold()
+        self._f_lane = self.workbook.add_format({'bg_color': bg_color})
+        self._f_lane_bold = self.workbook.add_format({'bg_color': bg_color, 'bold': True})
+        self._f_lane_right = self.workbook.add_format({'bg_color': bg_color, 'align': 'right'})
+        self._f_lane_right_bold = self.workbook.add_format({'bg_color': bg_color, 'align': 'right', 'bold': True})
 
     def _configure_lane_currency_format(self, bg_color):
-        self._format_lane_currency= self.workbook.add_format()
-        self._format_lane_currency.set_bg_color(bg_color)
-        self._format_lane_currency.set_num_format(0x03)
-        self._format_lane_currency.set_border(1)
+        self._f_lane_currency = self.workbook.add_format({'bg_color': bg_color, 'num_format': 0x2a, 'border': 1})
 
     def _configure_lane_percent_format(self, bg_color):
-        self._format_lane_percent = self.workbook.add_format()
-        self._format_lane_percent.set_bg_color(bg_color)
-        self._format_lane_percent.set_num_format(0x0a)
-        self._format_lane_percent.set_border(1)
+        self._f_lane_percent = self.workbook.add_format({'bg_color': bg_color, 'num_format': 0x0a, 'border': 1})
 
     def _configure_wrap_format(self):
-        self._format_wrap = self.workbook.add_format()
-        self._format_wrap.set_text_wrap()
+        self._f_wrap = self.workbook.add_format({'text_wrap': True})
 
-    def _configure_header_format(self, bg_color, color, is_bold=False):
-        self._format_header = self.workbook.add_format()
-        self._format_header.set_bg_color(bg_color)
-        self._format_header.set_font_color(color)
-        self._format_header.set_font_size(12)
-        self._format_header.set_border(1)
+    def _configure_header_format(self, bg_color, color, is_bold=False, alignment="right", valignment="bottom"):
+        self._f_header = self.workbook.add_format({'bg_color': bg_color, 'font_color': color, 'font_size': 12,
+                                                   'border': 1, 'align': alignment, 'valign': valignment,
+                                                   'text_wrap': True})
         if is_bold:
-            self._format_header.set_bold()
+            self._f_header.set_bold()
 
     def _configure_currency_format(self):
-        self._format_currency = self.workbook.add_format()
-        self._format_currency.set_num_format(0x03)
+        self._f_currency = self.workbook.add_format({'num_format': 0x03})
 
     def _configure_percent_format(self):
-        self._format_percent = self.workbook.add_format()
-        self._format_percent.set_num_format(0x0a)
+        self._f_percent = self.workbook.add_format({'num_format': 0x0a})
 
     def init_report(self):
         self._configure_no_borders()
