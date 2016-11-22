@@ -1,12 +1,11 @@
-import datetime
-import sys
 import argparse
+import datetime
 
-from mongoengine import *
 import credentials
-import lib.jira
-import lib.excel_estimate
+from mongoengine import *
+
 import lib.mongoLeankit
+
 
 def get_time_spent(elem, field_name):
     """ Counts timespent in hours instead of miliseconds."""
@@ -47,6 +46,21 @@ def get_sprints(elem):
 
     return dict_sprints
 
+def is_management_task(text):
+    text = text.lower()
+    if "zarządzanie projektem" in text\
+            or "pm" in text\
+            or "zarzadzanie projektem" in text:
+        return True
+    return False
+
+
+def is_analysis_task(text):
+    text = text.lower()
+    if "scrum" in text:
+        return True
+    return False
+
 
 def build_issues_tree(data):
     """ Builds logical tree of issues: parent -> subtasks """
@@ -62,7 +76,10 @@ def build_issues_tree(data):
             "sprints": get_sprints(elem),
             "timespent": get_time_spent(elem, "timespent"),
             "totaltimespent": get_time_spent(elem, "aggregatetimespent"),
-            "children": []
+            "is_management_task": False,
+            "is_analysis_task": False,
+            "children": [],
+            "rank": 0
         }
 
         parent_issue = {
@@ -70,7 +87,10 @@ def build_issues_tree(data):
             "summary": "", "type": None,
             "epic": None, "sprints": {},
             "timespent": 0, "totaltimespent": 0,
-            "children": []
+            "children": [],
+            "is_management_task": False,
+            "is_analysis_task": False,
+            "rank": 0
         }
 
         #it's a subtasks
@@ -82,6 +102,10 @@ def build_issues_tree(data):
         else:
             if issue["key"] in response:
                 issue["children"] = response[issue["key"]]["children"]
+
+            issue["is_management_task"] = is_management_task(elem["fields"]["summary"])
+            issue["is_management_task"] = is_analysis_task(elem["fields"]["summary"])
+
             response[issue["key"]] = issue
 
     return response
@@ -91,7 +115,14 @@ if __name__ == '__main__':
     # parse arguments
     parser = argparse.ArgumentParser(description='Generate xlsx estimate sheeto for project.')
     parser.add_argument('-p', '--project', help='project name', required=True)
-    parser.add_argument('-s', '--subtasks', help='include subtasks', default=False)
+    memory_parser = parser.add_mutually_exclusive_group(required=True)
+    memory_parser.add_argument('--memory', dest='memory', action='store_true')
+    memory_parser.add_argument('--no-memory', dest='memory', action='store_false')
+    parser.set_defaults(memory=True)
+    subtasks_parser = parser.add_mutually_exclusive_group(required=True)
+    subtasks_parser.add_argument('--subtasks', dest='subtasks', action='store_true')
+    subtasks_parser.add_argument('--no-subtasks', dest='subtasks', action='store_false')
+    parser.set_defaults(subtasks=False)
     args = parser.parse_args()
 
     #init Jira connection
@@ -101,7 +132,7 @@ if __name__ == '__main__':
 
     file_name = args.project + "_kosztorys_" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S.xlsx")
 
-    excelReport = lib.excel_estimate.ExcelEstimate(file_name, "Kosztorys", True)
+    excelReport = lib.excel_estimate.ExcelEstimate(file_name, "Kosztorys", args.memory)
 
     issues = jira.get_all_issues(args.project)
     data = {
@@ -113,14 +144,14 @@ if __name__ == '__main__':
     excelReport.write_task_list(args.subtasks)
     data = excelReport.close()
 
-    # print("Report generated, saving to database...")
-    connect('leankit')
-    report = lib.mongoLeankit.Estimate()
+    if args.memory:
+        connect('leankit')
+        report = lib.mongoLeankit.Estimate()
 
-    report.xls_data = data
-    report.generation_date = datetime.datetime.now()
-    report.project_name = args.project
+        report.xls_data = data
+        report.generation_date = datetime.datetime.now()
+        report.project_name = args.project
 
-    report.save()
+        report.save()
 
     exit(0)

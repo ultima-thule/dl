@@ -68,17 +68,23 @@ class ExcelEstimate (lib.excelfile.ExcelFile):
     def _build_formula(self, row1, col1, row2, col2, sign):
         cellA = xl_rowcol_to_cell(row1, col1)
         cellB = xl_rowcol_to_cell(row2, col2)
+        if sign == 'SUM':
+            return 'SUM(' + cellA + ':' + cellB + ')'
         return '=' + cellA + sign + cellB
 
     def write_task_list(self, show_subtasks=False):
         if self.data['issues'] is not None:
+            start_of_sum = self.last_row
             for k in self.data['issues']:
                 main_issue = self.data['issues'][k]
                 #TODO obsłużyć case zaraportowania w główne zadanie
                 #parent
                 ts = int(main_issue["timespent"] * 10)
-                if not show_subtasks \
-                        or (show_subtasks and len(self.data['issues'][k]['children']) == 0)\
+                is_reported = main_issue['totaltimespent'] > 0
+                has_children = len(self.data['issues'][k]['children']) != 0
+
+                if (not show_subtasks and is_reported)\
+                        or (show_subtasks and not has_children and is_reported)\
                         or (show_subtasks and ts > 0):
                     self._write_cell(0, self.last_row, main_issue['summary'], self._format_tc)
                     self._write_cell(1, self.last_row, "Programista", self._format_tc)
@@ -94,12 +100,24 @@ class ExcelEstimate (lib.excelfile.ExcelFile):
                 #wypisz wszystkie subtaski
                 if show_subtasks:
                     for sub_issue in self.data['issues'][k]['children']:
-                        self._write_cell(0, self.last_row, main_issue['summary'] + " - "
-                                         + sub_issue['summary'], self._format_tc)
-                        self._write_cell(1, self.last_row, "Programista", self._format_tc)
-                        self._write_cell(2, self.last_row, sub_issue['totaltimespent'], self._format_tc)
-                        self._write_cell(3, self.last_row, 107, self._format_lane_currency)
-                        self.write_formula(4, self.last_row,
-                                           self._build_formula(self.last_row, 2, self.last_row, 3, "*"),
-                                           self._format_lane_currency)
-                        self.last_row += 1
+                        if sub_issue['totaltimespent'] > 0:
+                            self._write_cell(0, self.last_row, main_issue['summary'] + " - "
+                                             + sub_issue['summary'], self._format_tc)
+                            self._write_cell(1, self.last_row, "Programista", self._format_tc)
+                            self._write_cell(2, self.last_row, sub_issue['totaltimespent'], self._format_tc)
+                            self._write_cell(3, self.last_row, 107, self._format_lane_currency)
+                            self.write_formula(4, self.last_row,
+                                               self._build_formula(self.last_row, 2, self.last_row, 3, "*"),
+                                               self._format_lane_currency)
+                            self.last_row += 1
+
+            #sum rows
+            self._write_cell(0, self.last_row, 'Suma', self._format_header)
+            self._write_cell(1, self.last_row, '', self._format_header)
+            self.write_formula(2, self.last_row,
+                               self._build_formula(start_of_sum, 2, self.last_row-1, 2, "SUM"),
+                               self._format_header)
+            self._write_cell(3, self.last_row, '', self._format_header)
+            self.write_formula(4, self.last_row,
+                               self._build_formula(start_of_sum, 4, self.last_row - 1, 4, "SUM"),
+                               self._format_header)
