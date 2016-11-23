@@ -180,8 +180,10 @@ def count_real_reported_time (jira_hours, sprint):
     for issue in jira_hours:
         # where to find the main story id
         if 'parent' in issue['fields'].keys():
+            # get the parent key, where append hours from the subtasks:
             ky = issue['fields']['parent']['key']
         else:
+            # get the STORY id
             ky = issue['key']
         # Get array with reported time between the timeline
         arr = [[wl['author']['displayName'], wl['timeSpentSeconds'], wl['updated'][:10]] for wl in
@@ -193,7 +195,7 @@ def count_real_reported_time (jira_hours, sprint):
         else:
             struct.update({ky: arr})
     # dictionary contains sum of reported hours per task:
-    # {'ZUMISEARCH-59': [['Różański Tomasz', 3600, '2016-11-15'], ['Różański Tomasz', 3600, '2016-11-15'], ['Różański
+    # struct = {'ZUMISEARCH-59': [['Różański Tomasz', 3600, '2016-11-15'], ['Różański Tomasz', 3600, '2016-11-15'], ['Różański
     # Tomasz', 3600, '2016-11-15'], ['Różański Tomasz', 7200, '2016-11-15']]}
     per_task = {}
     for (task, wls) in struct.items():
@@ -208,12 +210,13 @@ def count_real_reported_time (jira_hours, sprint):
 
 if __name__ == '__main__':
     dev = 0 
-
-    #============CONST============
     if len(sys.argv) < 3:
         exit("Usage: " + sys.argv[0] + " projectname sprint")
 
-    # variables
+    #====================================================
+    # If the script is running from the console this part
+    # allows to catch the proper variables
+    #====================================================
     project_name = sys.argv[1]
     sprint_id = sys.argv[2]
     if len(sys.argv) > 3:
@@ -222,21 +225,29 @@ if __name__ == '__main__':
     else:
         pass
 
-    #init Jira connection
-    #TODO: change on console
+    #====================================================
+    # Init Jira connection
+    #====================================================
+    # CONSOLERUN: comment two lines:
     user_jira = credentials.loginJira['consumer_secret']
     pwd_jira = credentials.loginJira['password']
     jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 
-    #Get sprint general data
+    #====================================================
+    # GET-DATA BLOCK
+    #====================================================
+    # Get the sprint general data
     sprint = jira.get_sprint_data(sprint_id)
 
-    #Get sprint planning data
+    # Get the sprint planning data
     jira_hours = jira.get_worklogs_in_sprint(project_name, sprint)
     count_real_reported_time(jira_hours, sprint)
     jira_issues = jira.get_issues_in_sprint(project_name, sprint)
 
-    #Build HTML page
+
+    #====================================================
+    # BUILD HTML 
+    #====================================================
     doc, tag, text = Doc().tagtext()
 
     doc.asis(sprint_info_to_html(sprint))    #First table - sprint data
@@ -247,28 +258,29 @@ if __name__ == '__main__':
     doc.asis(sprint_not_done_to_html(project_name))    #Fifth table - items not done in sprint
     doc.asis(sprint_extra_done_to_html(project_name))    #Sixth table - extra items in sprint
 
-    #####################################################################################################################
+    #====================================================
     # CONFLUENCE PART
+    #====================================================
     # dev variable- if is "1" the content won't be written in the confluence
     if dev != 1:
 
         user_cf = credentials.loginConfluence['consumer_secret']
         pwd_cf = credentials.loginConfluence['password']
 
-        #TODO: change on console
+        # CONSOLERUN: uncomment on console
         #usernameCF = usernameJira
         #passwordCF = passwordJira
 
         url = "http://doc.grupa.onet/rpc/xmlrpc"
         confl = lib.confluence.Confluence(url, user_cf, pwd_cf, "PROJEKTY")
-        #TODO
+        # CONSOLERUN: uncomment on console
         #confl = lib.confluence.Confluence(url, usernameCF, passwordCF, "trozanski")
 
         parent_page_title = project_name
         child_page_title = "Sprint " + sprint_id + " | " + project_name
 
         parent_id = confl.get_or_create_page(parent_page_title, "64070870", "")
-        #TODO
+        # CONSOLERUN: uncomment on console- this id is related to trozanski space
         #parentID = {"id": "64072422"}
 
         if parent_id is not None:
