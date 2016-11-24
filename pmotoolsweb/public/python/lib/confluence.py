@@ -9,6 +9,25 @@ class Confluence (object):
         self.token = self.server.confluence2.login(username, password)
         self.spacekey = spacekey
 
+    def get_page(self, title):
+        page = None
+
+        try:
+            page = self.server.confluence2.getPage(self.token, self.spacekey, title)
+        except:
+            return None
+
+        return page
+
+    def get_page_by_id(self, page_id):
+        page = None
+
+        try:
+            page = self.server.confluence2.getPage(self.token, page_id)
+        except:
+            return None
+
+        return page
 
     def get_or_create_page(self, title, parent_id, content):
         page_id = None
@@ -20,7 +39,6 @@ class Confluence (object):
                 page_id = self.server.confluence2.getPage(self.token, self.spacekey, title)
 
         return page_id
-
 
     def update_or_create_page(self, title, parent_id, content):
         page_id = None
@@ -38,7 +56,6 @@ class Confluence (object):
             #print(msg)
             pass
         return page_id
-
 
     def create_page(self, title, parent_id, content, page_id=None):
         new_page = None
@@ -63,4 +80,14 @@ class Confluence (object):
             print(msg)
 
         return new_page
+
+    def get_child_pages(self, parent_page):
+        children = []
+        if parent_page is not None:
+            try:
+                children = self.server.confluence2.getChildren(self.token, parent_page["id"])
+            except Exception as msg:
+                print(msg)
+        return children
+
 
