@@ -6,6 +6,7 @@ import sys
 
 import credentials
 import lib.confluence
+import lib.jira
 from yattag import Doc
 
 gl_tsd = lib.jira.JiraTimeSpent()
