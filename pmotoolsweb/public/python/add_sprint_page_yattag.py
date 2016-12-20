@@ -1,16 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import getpass
 import sys
 
-########################### PYTHON 3.5 modules ##################
 import credentials
-#################################################################
-import getpass
-
-from yattag import Doc
-import lib.confluence
 import lib.jira
+from yattag import Doc
 
 
 gl_tsd = lib.jira.JiraTimeSpent()
@@ -81,7 +77,7 @@ def sprint_plan_to_html(project_name, jiraIssues):
                     line('th', 'Czas realizacji')
                     line('th', 'Czy zrealizowane?')
             with tag('tbody'):
-                status_map = { 'ToDo': 'Nie', 'In Progress': 'Nie', 'Waiting': 'Nie', 'Resolved': 'Tak', 'Closed': 'Tak', 'Reopened': 'Nie'}
+                status_map = { 'ToDo': 'Nie', 'In Progress': 'Nie', 'Waiting': 'Nie', 'Resolved': 'Tak', 'Closed': 'Tak', 'Reopened': 'Nie', 'code review': 'Nie'}
                 for issue in jiraIssues:
                     issue_summary = get_issue_field(issue, 'summary', '')
                     issue_acc_crit = get_issue_field(issue, 'customfield_11726', 'n/a')
