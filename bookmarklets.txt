@@ -1,0 +1,11 @@
+// JS repository
+// To get a new bookmarklet please put these code to the: http://mrcoles.com/bookmarklet/
+
+
+// Autogeneration for the sprint page from the sprint-id and the project name
+// Warning! Project name is get from the task detail from the right column! For now I do not know how to get this from another place:(
+$(".js-sprint-start").on("mouseover", 
+function(){
+$.ajax({url:'http://pmo.cloud.onet/api/createpw/'+document.getElementsByClassName("ghx-project")[0].innerText
++'/sprint/'+document.getElementsByClassName("ghx-backlog-header js-sprint-header")[0].getAttribute("data-sprint-id")
+})});
