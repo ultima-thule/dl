@@ -190,7 +190,7 @@ module.exports = function(app) {
     // generate new estimate with python script
     app.get('/api/genestimate/:project', function(req, res) {
         //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_estimate_xslx.py -p ' + req.params.project]);
-        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_estimate_xslx.py -p --no-memory --no-subtasks ' + req.params.project]);
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_estimate_xslx.py --no-memory --no-subtasks -p ' + req.params.project]);
 //        var program_line = 'E://Development//Projects//dl//pmotoolsweb//public//python//gen_estimate_xslx.py -p ' + req.params.project;
 //        console.log(program_line)
 //        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', [program_line]);
