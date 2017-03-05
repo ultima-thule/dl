@@ -16,12 +16,14 @@ javascript:(function(){
         };
 
         window.pwGen = function(){
-            alert("Will be in the nearest future");
+            window.project =   $(".ghx-project")[0].textContent;
+            window.open ("http://pmo.cloud.onet/api/genscope/" + window.project);
         };
 
 
         window.costGen = function(){
-            alert("Will be in the nearest future 2");
+            window.project =   $(".ghx-project")[0].textContent;
+            window.open ("http://pmo.cloud.onet/api/genestimate/" + window.project);
         };
 
         window.sprintGen = function(){
