@@ -207,16 +207,17 @@ module.exports = function(app) {
             Pwfile.find({"project": req.params.id, "format_type": "XLSX"}).sort('-generation_date').exec(function(err, estfiles) {
                 if (err)
                     res.send(err);
-                var date = estfiles[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
-                res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + date + '.xlsx');
-                res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                res.send(estfiles[0].data);
+                if (scopefiles.length > 0) {
+                    var date = estfiles[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
+                    res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + date + '.xlsx');
+                    res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                    res.send(estfiles[0].data);
+                    }
+                    else {
+                        return res.send(200, output)
+                    }
               });
-
-//            return res.send(200, output)
         });
-
-
     });
 
     // generate new pw scope with python script
@@ -231,20 +232,22 @@ module.exports = function(app) {
         python.stdout.on('data', function(data){ output += data });
         python.on('close', function(code)
         {
-            console.log(code)
+//            console.log(code)
             if (code !== 0) {  return res.send(500, code); }
 
-            Pwfile.find({"project": req.params.id, "format_type": "DOCX"}).sort('-generation_date').exec(function(err, estfiles) {
+            Pwfile.find({"project": req.params.id, "format_type": "DOCX"}).sort('-generation_date').exec(function(err, scopefiles) {
                 if (err)
                     res.send(err);
-                var date = estfiles[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
-                res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + date + '.docx');
-                res.append('Content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-                res.send(estfiles[0].data);
+                if (scopefiles.length > 0) {
+                    var date = scopefiles[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
+                    res.append('Content-Disposition', 'attachment; filename=' + scopefiles[0].project + date + '.docx');
+                    res.append('Content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                    res.send(scopefiles[0].data);
+                }
+                else {
+                    return res.send(200, output)
+                }
               });
-
-
-//            return res.send(200, output)
         });
     });
 
