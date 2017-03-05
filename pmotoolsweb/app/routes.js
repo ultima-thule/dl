@@ -208,8 +208,8 @@ module.exports = function(app) {
                 if (err)
                     res.send(err);
                 if (estfiles.length > 0) {
-                    var date = estfiles[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
-                    res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + date + '.xlsx');
+                    var date = estfiles[0].date_text;
+                    res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + '_' + date + '.xlsx');
                     res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                     res.send(estfiles[0].data);
                     }
@@ -239,8 +239,8 @@ module.exports = function(app) {
                 if (err)
                     res.send(err);
                 if (scopefiles.length > 0) {
-                    var date = scopefiles[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
-                    res.append('Content-Disposition', 'attachment; filename=' + scopefiles[0].project + date + '.docx');
+                    var date = scopefiles[0].date_text;
+                    res.append('Content-Disposition', 'attachment; filename=' + scopefiles[0].project + '_' + date + '.docx');
                     res.append('Content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
                     res.send(scopefiles[0].data);
                 }
