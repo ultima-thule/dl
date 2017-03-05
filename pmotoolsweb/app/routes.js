@@ -193,7 +193,7 @@ module.exports = function(app) {
     app.get('/api/genestimate/:id', function(req, res) {
         //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_estimate_tofile.py ' + req.params.id]);
         //PROD
-        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_estimate_tofile.py ' + req.params.id]);
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_estimate_tofile.py', req.params.id]);
         //HOME
         //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//gen_estimate_tofile.py " + req.params.id]);
 
@@ -211,7 +211,7 @@ module.exports = function(app) {
     app.get('/api/genscope/:id', function(req, res) {
         //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_scope_tofile.py ' + req.params.id]);
         //PROD
-        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_scope_tofile.py ' + req.params.id]);
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_scope_tofile.py', req.params.id]);
         //HOME
         //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//gen_scope_tofile.py " + req.params.id]);
 
