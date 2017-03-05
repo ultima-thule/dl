@@ -1,14 +1,16 @@
+
 import argparse
 import datetime
 import operator
 import sys
-
-from mongoengine import *
-
 import credentials
+from mongoengine import *
 import lib.mongoLeankit
 import lib.jira
 import lib.excel_estimate
+
+def _initMongoConn ():
+    connect('leankit')
 
 class JiraIssue (object):
     def __init__(self, parent_id):
@@ -124,29 +126,17 @@ if __name__ == '__main__':
         exit("Usage: " + sys.argv[0] + " projectname")
     project_name = sys.argv[1]
 
-    # parse arguments
-    # parser = argparse.ArgumentParser(description='Generate xlsx estimate sheeto for project.')
-    # parser.add_argument('-p', '--project', help='project name', required=True)
-    # parser.add_argument('-s', '--subtasks', help='subtasks', required=False)
-    # parser.add_argument('-n', '--nosubtasks', help='nosubtasks', required=False)
-    # memory_parser = parser.add_mutually_exclusive_group(required=True)
-    # memory_parser.add_argument('--memory', dest='memory', action='store_true')
-    # memory_parser.add_argument('--no-memory', dest='memory', action='store_false')
-    # parser.set_defaults(memory=True)
-    # subtasks_parser = parser.add_mutually_exclusive_group(required=True)
-    # subtasks_parser.add_argument('--subtasks', dest='subtasks', action='store_true')
-    # subtasks_parser.add_argument('--no-subtasks', dest='subtasks', action='store_false')
-    # parser.set_defaults(subtasks=False)
-    # args = parser.parse_args()
+    _initMongoConn()
 
     #init Jira connection
     user_jira = credentials.loginJira['consumer_secret']
     pwd_jira = credentials.loginJira['password']
     jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 
-    file_name = project_name + "_kosztorys_" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S.xlsx")
+    date_text = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    file_name = project_name + "_kosztorys_" + date_text + ".xlsx"
 
-    excelReport = lib.excel_estimate.ExcelEstimate(file_name, "Kosztorys", False)
+    excelReport = lib.excel_estimate.ExcelEstimate(file_name, "Kosztorys", True)
 
     issues = jira.get_all_issues(project_name)
     data = {
@@ -155,12 +145,17 @@ if __name__ == '__main__':
         "show_subtasks": False
     }
 
-    print('duuuuu1', flush=True)
-
     excelReport.init_report(data)
     excelReport.generate_report()
     data = excelReport.close()
 
-    print('duuuuu', flush=True)
+    pwfile = lib.mongoLeankit.Pwfile()
+
+    pwfile.data = data
+    pwfile.project = project_name
+    pwfile.generation_date = datetime.datetime.now()
+    pwfile.date_text = date_text
+    pwfile.format_type = "XLSX"
+    pwfile.save()
 
     exit(0)

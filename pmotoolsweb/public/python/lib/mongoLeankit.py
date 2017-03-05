@@ -174,3 +174,10 @@ class CardHistory (Document):
     step_done = IntField()
     step_cancelled = IntField()
     finish_date = DateTimeField()
+
+class Pwfile(Document):
+    data = BinaryField()
+    project = StringField()
+    generation_date = DateTimeField()
+    date_text = StringField()
+    format_type = StringField()

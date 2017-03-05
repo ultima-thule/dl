@@ -12,10 +12,12 @@ var User  = require('./model/user');
 var QuarterPlan = require('./model/quarterPlan');
 var LeanKitClient  = require("leankit-client");
 var Estimate = require('./model/estimate');
+var PwFile = require('./model/pwfile');
 var https = require('https');
 var http = require('http');
 var _ = require('lodash');
 var fs = require('fs');
+var PythonShell = require('python-shell');
 
 var jiraAuth = 'readonly_pmo:CbobBsps?!';
 
@@ -187,13 +189,14 @@ module.exports = function(app) {
           });
     });
 
-    // generate new estimate with python script
-    app.get('/api/genestimate/:project', function(req, res) {
-        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_estimate_xslx.py -p ' + req.params.project]);
-        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_estimate_xslx.py --no-memory --no-subtasks -p ' + req.params.project]);
-//        var program_line = 'E://Development//Projects//dl//pmotoolsweb//public//python//gen_estimate_xslx.py -p ' + req.params.project;
-//        console.log(program_line)
-//        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', [program_line]);
+    // generate new pw estimate with python script
+    app.get('/api/genestimate/:id', function(req, res) {
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_estimate_tofile.py ' + req.params.id]);
+        //PROD
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_estimate_tofile.py ' + req.params.id]);
+        //HOME
+        //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//gen_estimate_tofile.py " + req.params.id]);
+
         var output = "";
         python.stdout.on('data', function(data){ output += data });
         python.on('close', function(code)
@@ -204,7 +207,25 @@ module.exports = function(app) {
         });
     });
 
-// create PW with script
+    // generate new pw scope with python script
+    app.get('/api/genscope/:id', function(req, res) {
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_scope_tofile.py ' + req.params.id]);
+        //PROD
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_scope_tofile.py ' + req.params.id]);
+        //HOME
+        //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//gen_scope_tofile.py " + req.params.id]);
+
+        var output = "";
+        python.stdout.on('data', function(data){ output += data });
+        python.on('close', function(code)
+        {
+            console.log(code)
+            if (code !== 0) {  return res.send(500, code); }
+            return res.send(200, output)
+        });
+    });
+
+    // create PW with script
     app.get('/api/createpw/:pwid/sprint/:sprintid', function(req, res) {
 
         //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team.py']);

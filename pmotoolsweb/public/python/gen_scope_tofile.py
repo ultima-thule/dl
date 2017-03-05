@@ -2,17 +2,18 @@ import argparse
 import datetime
 import lib.confluence
 
-from docx import Document
+import docx
 from docx.shared import Inches
 from lxml import html
 from lxml.html.clean import clean_html
+import sys
 
 import credentials
 import lib.confluence
 import lib.confluence_parser
 from mongoengine import *
 import lib.mongoLeankit
-
+import io
 
 def _initMongoConn ():
     connect('leankit')
@@ -141,17 +142,11 @@ def generate_table(document, tables):
 
 
 if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        exit("Usage: " + sys.argv[0] + " projectname")
+    project_name = sys.argv[1]
 
-
-
-    # parse arguments
-    parser = argparse.ArgumentParser(description='Generate xlsx estimate sheeto for project.')
-    parser.add_argument('-p', '--project', help='project name', required=True)
-    memory_parser = parser.add_mutually_exclusive_group(required=True)
-    memory_parser.add_argument('--memory', dest='memory', action='store_true')
-    memory_parser.add_argument('--no-memory', dest='memory', action='store_false')
-    parser.set_defaults(memory=True)
-    args = parser.parse_args()
+    _initMongoConn()
 
     #init Confluence connection
     user_cf = credentials.loginConfluence['consumer_secret']
@@ -159,18 +154,18 @@ if __name__ == '__main__':
     url = "http://doc.grupa.onet/rpc/xmlrpc"
     confl = lib.confluence.Confluence(url, user_cf, pwd_cf, "PROJEKTY")
 
-    file_name = args.project + "_zakres_" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S.docx")
+    date_text = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
-    parent_page_title = args.project
+    parent_page_title = project_name
 
-    document = Document()
+    document = docx.Document()
 
-    project_page = confl.get_page(args.project)
+    project_page = confl.get_page(project_name)
     if project_page is not None:
         child_pages = confl.get_child_pages(project_page)
         for page in child_pages:
             title_doc = page["title"].partition("|")[0]
-            title =  page["title"].lower()
+            title = page["title"].lower()
 
             page_full = confl.get_page_by_id(page["id"])
             page_clean = page_full["content"].replace("ac:", "ac").replace("ri:", "ri")
@@ -186,16 +181,19 @@ if __name__ == '__main__':
                 document.add_heading(title_doc, 1)
                 generate_page_close(document, page_tree)
 
-    document.save(file_name)
 
-    # if args.memory:
-    #     connect('leankit')
-    #     report = lib.mongoLeankit.Estimate()
-    #
-    #     report.xls_data = data
-    #     report.generation_date = datetime.datetime.now()
-    #     report.project_name = args.project
-    #
-    #     report.save()
+    target_stream = io.BytesIO()
+    document.save(target_stream)
+    target_stream.seek(0)
+    pwfile = lib.mongoLeankit.Pwfile()
+
+    pwfile.data = target_stream.read()
+    pwfile.project = project_name
+    pwfile.generation_date = datetime.datetime.now()
+    pwfile.date_text = date_text
+    pwfile.format_type = "DOCX"
+    pwfile.save()
+
+    target_stream.close()
 
     exit(0)

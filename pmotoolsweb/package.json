@@ -11,6 +11,7 @@
         "morgan": "latest",
         "lodash": "latest",
         "leankit-client": "latest",
-        "oauth20-provider": "latest"
+        "oauth20-provider": "latest",
+        "python-shell": "latest"
       }
 }

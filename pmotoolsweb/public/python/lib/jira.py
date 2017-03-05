@@ -49,7 +49,7 @@ class Jira (object):
             no_of_batches += 1
 
         for i in range (no_of_batches):
-            print("Start at:" + str(start_at) + " max_results: " + str(max_results) + " total:" + str(total))
+            # print("Start at:" + str(start_at) + " max_results: " + str(max_results) + " total:" + str(total))
             data = func(*(args +(start_at + max_results, )))
             start_at = data["startAt"]
             max_results = data["maxResults"]
