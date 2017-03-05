@@ -207,7 +207,7 @@ module.exports = function(app) {
             Pwfile.find({"project": req.params.id, "format_type": "XLSX"}).sort('-generation_date').exec(function(err, estfiles) {
                 if (err)
                     res.send(err);
-                if (scopefiles.length > 0) {
+                if (estfiles.length > 0) {
                     var date = estfiles[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
                     res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + date + '.xlsx');
                     res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
