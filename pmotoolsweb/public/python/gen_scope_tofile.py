@@ -21,20 +21,25 @@ def _initMongoConn ():
 
 def generate_page_project_card(document, page_tree):
     if document is not None and page_tree is not None:
-        panels = page_tree.xpath("//acmacro/acparameter[@acname='title']")
+        panels = page_tree.xpath("//acmacro[@acname='panel']")
         for p in panels:
             # Clean title from CCF formatting
-            heading = p.text.replace("*", "")
-            document.add_heading(heading, 2)
+            title = p.xpath("./child::acparameter[@acname='title']")
+            if len(title) > 0:
+                heading = title[0].text.replace("*", "")
+                document.add_heading(heading, 2)
 
             # Generate text
-            text_body = p.xpath("./following-sibling::acrich-text-body/*")
+            text_body = p.xpath("./child::acrich-text-body/*")
             for tb in text_body:
-                generate_paragraph(document, tb, 0, None, None, None)
+                if tb.tag == "table":
+                    # Generate tables
+                    generate_table(document, tb)
+                else:
+                    generate_paragraph(document, tb, 0, None, None, None)
+            #
+            # tables = p.xpath("./child::acrich-text-body/table")
 
-            # Generate tables
-            tables = p.xpath("./following-sibling::acrich-text-body/table")
-            generate_table(document, tables)
 
 
 def generate_page_sprint(document, page_tree):
@@ -49,7 +54,7 @@ def generate_page_close(document, page_tree):
 
 def generate_paragraph(document, item, li_indent=0, prev_par=None, current_par=None, cell=None):
     # do not parse tables - separate function!
-    if item.tag == "table" or item.tag == "acparameter" or item.tag == "acmacro":
+    if item.tag == "table" or item.tag == "acparameter":
         return
 
     indent = li_indent
