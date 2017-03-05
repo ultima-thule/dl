@@ -204,7 +204,7 @@ module.exports = function(app) {
 //            console.log(code)
             if (code !== 0) {  return res.send(500, code); }
 
-            Pwfile.find({"project": req.params.id}, function(err, estfiles) {
+            Pwfile.find({"project": req.params.id, "format_type": "XLSX"}).sort('-generation_date').exec(function(err, estfiles) {
                 if (err)
                     res.send(err);
                 var date = estfiles[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
@@ -233,7 +233,18 @@ module.exports = function(app) {
         {
             console.log(code)
             if (code !== 0) {  return res.send(500, code); }
-            return res.send(200, output)
+
+            Pwfile.find({"project": req.params.id, "format_type": "DOCX"}).sort('-generation_date').exec(function(err, estfiles) {
+                if (err)
+                    res.send(err);
+                var date = estfiles[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
+                res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + date + '.docx');
+                res.append('Content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                res.send(estfiles[0].data);
+              });
+
+
+//            return res.send(200, output)
         });
     });
 
