@@ -139,6 +139,25 @@ def generate_table(document, tables):
                         generate_paragraph(document, elem, 0, None, None, table.cell(j,i))
                 document.add_paragraph()
 
+def check_for_project_card (cf_server, parent_page):
+    # iterate through children
+    child_pages = cf_server.get_child_pages(parent_page)
+    for page in child_pages:
+        title_doc = page["title"].partition("|")[0]
+        title = page["title"].lower()
+
+        if "karta projektu" in title or "kp" in title:
+            return True
+
+    return False
+
+
+def get_page_tree(cf_server, page):
+    page_full = cf_server.get_page_by_id(page["id"])
+    page_clean = page_full["content"].replace("ac:", "ac").replace("ri:", "ri")
+    page_tree = html.fromstring(page_clean)
+
+    return page_tree
 
 
 if __name__ == '__main__':
@@ -162,16 +181,22 @@ if __name__ == '__main__':
 
     project_page = confl.get_page(project_name)
     if project_page is not None:
+        project_card_exists = check_for_project_card(confl, project_page)
+        #create project card from main page
+        if not project_card_exists:
+            page_tree = get_page_tree(confl, project_page)
+            document.add_heading(project_page["title"], 1)
+            generate_page_project_card(document, page_tree)
+
+        #iterate through children
         child_pages = confl.get_child_pages(project_page)
         for page in child_pages:
             title_doc = page["title"].partition("|")[0]
             title = page["title"].lower()
 
-            page_full = confl.get_page_by_id(page["id"])
-            page_clean = page_full["content"].replace("ac:", "ac").replace("ri:", "ri")
-            page_tree = html.fromstring(page_clean)
+            page_tree = get_page_tree(confl, page)
 
-            if "karta projektu" in title:
+            if "karta projektu" in title or "kp" in title:
                 document.add_heading(title_doc, 1)
                 generate_page_project_card(document, page_tree)
             elif "sprint" in title:
