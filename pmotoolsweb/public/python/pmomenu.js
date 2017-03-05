@@ -1,25 +1,9 @@
-javascript:(function(){
-    window.costGen = function(){
-        window.project =   $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent ;
-        window.url = "http://pmo.cloud.onet/api/genestimate/" + window.project;
-
-        create = $.get(window.url)
-            .done(function(){
-                alert("Generate excel for the project: " + project);
-            })
-            .fail(function(){
-                alert("There is some errors");
-            })
-            .success(function(data){
-                return data;
-            })
-        };
-
+javascript:(
+    function(){
         window.pwGen = function(){
-            window.project =   $(".ghx-project")[0].textContent;
+            window.project = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent ;
             window.open ("http://pmo.cloud.onet/api/genscope/" + window.project);
         };
-
 
         window.costGen = function(){
             window.project =   $(".ghx-project")[0].textContent;
@@ -55,5 +39,6 @@ javascript:(function(){
             });
         };
 
-        $("header#header").append('<div style="background: #a1a1a1;color:white;width:100%25;"><button onClick="sprintGen()" style="background:#3b9fa3">Strona Sprintu</button><button onClick="hideMe([\'#childrenspan57114800-0\', \'#childrenspan41629680-0\'])" style="background:#79b0d3"> Pokaz moje teamy </button><button onClick="pwGen()" style="background:#f2beb5">Generuj PW</button><button onClick="costGen()" style="background:#f2beb5">Generuj Kosztorys</button><div>')
-    })()
+        $("header#header").append('<div style="background: #a1a1a1;color:white;width:100%25;"><button onClick="sprintGen()" style="background:#3b9fa3">Strona Sprintu</button><button onClick="hideMe([\'#childrenspan57114800-0\', \'#childrenspan41629680-0\'])" style="background:#79b0d3"> Pokaz moje teamy </button>');
+        $("header#header").append('<button onClick="pwGen()" style="background:#f2beb5">Generuj zakres (Jira lub CF)</button><button onClick="costGen()" style="background:#f2beb5">Generuj kosztorys (Jira)</button>');
+    }) ()
