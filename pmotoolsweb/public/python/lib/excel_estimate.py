@@ -46,7 +46,7 @@ class ExcelEstimate (lib.excelfile.ExcelFile):
             self._write_empty_line(i, 0, 5)
             self.last_row += 1
 
-        self.insert_image('A1', 'logo.png')
+        self.insert_image('A1', './logo.png')
         company_header = ["DreamLab Spółka z o.o.", "ul. Pilotów 10, 31-462 Kraków",
                          "Tel./Fax: +48 12 618 46 00, Email: office@dreamlab.pl",
                          "Sąd Rejestrowy: Sąd Rejonowy dla Krakowa Śródmieścia",
