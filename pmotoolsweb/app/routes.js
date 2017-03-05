@@ -12,7 +12,7 @@ var User  = require('./model/user');
 var QuarterPlan = require('./model/quarterPlan');
 var LeanKitClient  = require("leankit-client");
 var Estimate = require('./model/estimate');
-var PwFile = require('./model/pwfile');
+var Pwfile = require('./model/pwfile');
 var https = require('https');
 var http = require('http');
 var _ = require('lodash');
@@ -201,10 +201,23 @@ module.exports = function(app) {
         python.stdout.on('data', function(data){ output += data });
         python.on('close', function(code)
         {
-            console.log(code)
+//            console.log(code)
             if (code !== 0) {  return res.send(500, code); }
-            return res.send(200, output)
+
+            Pwfile.find({"project": req.params.id}, function(err, estfiles) {
+                if (err)
+                    res.send(err);
+                console.log(estfiles[0].project)
+                var date = estfiles[0].generation_date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
+                res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + date + '.xlsx');
+                res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                res.send(reports[0].xls_data);
+              });
+
+//            return res.send(200, output)
         });
+
+
     });
 
     // generate new pw scope with python script
