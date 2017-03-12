@@ -114,8 +114,8 @@ def generate_pw_last_page(document):
         document.add_heading("Produkty prac", 1)
         txt = "Realizacja zadań sprintu, wymagań projektu – wszystkie elementy, które definiują przyrost funkcjonalności, "
         txt += "niezbędny z punktu widzenia wartości biznesowej produktu, definiowanej przez Product Ownera. "
-        txt += "W ramach prac przewidzianych niniejszą ofertą przewidziano dostarczenie m. in.następujących "
-        txt += "produktów prac:"
+        txt += "W ramach prac przewidzianych niniejszą ofertą przewidziano dostarczenie m. in. "
+        txt += "produktów prac opisanych w rozdziale Kamienie milowe."
         add_simple_par(document, txt, gl_font_size, align=docx.enum.text.WD_ALIGN_PARAGRAPH.JUSTIFY)
 
         document.add_heading("Uwagi dot. harmonogramu i kosztorysu", 1)
