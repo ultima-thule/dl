@@ -377,12 +377,6 @@ if __name__ == '__main__':
 
     _initMongoConn()
 
-    if len(sys.argv) < 2:
-        exit("Usage: " + sys.argv[0] + " projectname")
-    project_name = sys.argv[1]
-
-    _initMongoConn()
-
     #init Confluence connection
     user_cf = credentials.loginConfluence['consumer_secret']
     pwd_cf = credentials.loginConfluence['password']
@@ -445,18 +439,7 @@ if __name__ == '__main__':
         #create last PW pages
         generate_pw_last_page(document)
 
-    target_stream = io.BytesIO()
-    document.save(target_stream)
-    target_stream.seek(0)
-    pwfile = lib.mongoLeankit.Pwfile()
-
-    pwfile.data = target_stream.read()
-    pwfile.project = project_name
-    pwfile.generation_date = datetime.datetime.now()
-    pwfile.date_text = date_text
-    pwfile.format_type = "DOCX"
-    pwfile.save()
-
-    target_stream.close()
+    file_name = project_name + "_zakres_" + date_text + ".docx"
+    document.save(file_name)
 
     exit(0)
