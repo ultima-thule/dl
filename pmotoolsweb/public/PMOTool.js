@@ -43,5 +43,5 @@ window.hideMe = function(arrayId){
 };
 
 function addButtons() {
-    $("header#header").append('<div style="background: #a1a1a1;color:white;width:100%25;"><button onClick="sprintGen()" style="background:#3b9fa3">Strona Sprintu</button><button onClick="hideMe(pmoMenu.teams)" style="background:#79b0d3">Pokaz moje teamy</button><button onClick="pwGen()" style="background:#f2beb5">Generuj zakres</button><button onClick="costGen()" style="background:#f2beb5">Generuj kosztorys bez subtaskĂłw</button><button onClick="costGen2()" style="background:#f2beb5">Generuj kosztorys z subtaskami</button>');
+    $("header#header").append('<div style="background: #a1a1a1;color:white;width:100%25;"><button onClick="sprintGen()" style="background:#3b9fa3">Strona Sprintu</button><button onClick="hideMe(pmoMenu.teams)" style="background:#79b0d3">Pokaz moje teamy</button><button onClick="pwGen()" style="background:#f2beb5">Generuj zakres</button><button onClick="costGen()" style="background:#f2beb5">Generuj kosztorys bez subtasków</button><button onClick="costGen2()" style="background:#f2beb5">Generuj kosztorys z subtaskami</button>');
 };
