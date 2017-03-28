@@ -15,6 +15,23 @@ window.costGen = function(){
         })	
 };
 
+
+window.costGen2 = function(){
+	window.project =   $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent ;
+	window.url = "http://pmo.cloud.onet/api/genestimate2/" + window.project;
+        create = $.get(window.url)
+	.done(function(){
+		alert("Generate excel for the project: " + project);
+	})
+	.fail(function(){
+		alert("There is some errors");
+        })
+        .success(function(data){
+                return data;
+        })
+};
+
+
 window.pwGen = function(){alert("Will be in the nearest future")};
 
 window.sprintGen = function(){
@@ -44,5 +61,6 @@ $("header#header").append('<div style="background: #a1a1a1;color:white;width:100
 <button onClick="sprintGen()" style="background:#3b9fa3">Strona Sprintu</button> 
 <button onClick="hideMe([\'#childrenspan57114800-0\', \'#childrenspan41629680-0\'])" style="background:#79b0d3"> Pokaz moje teamy </button>
 <button onClick="pwGen()" style="background:#f2beb5">Generuj PW</button> 
-<button onClick="costGen()" style="background:#f2beb5">Generuj Kosztorys</button> 
+<button onClick="costGen()" style="background:#f2beb5">Generuj kosztorys bez subtasków</button>
+<button onClick="costGen2()" style="background:#f2beb5">Generuj kosztorys z subtaskami</button>
 <div>');
