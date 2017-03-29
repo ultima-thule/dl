@@ -77,8 +77,8 @@ def sprint_plan_to_html(project_name, jiraIssues):
                     line('th', 'Czas realizacji')
                     line('th', 'Czy zrealizowane?')
             with tag('tbody'):
-                status_map = { 'ToDo': 'Nie', 'In Progress': 'Nie', 'Waiting': 'Nie', 'Resolved': 'Tak', 'Closed': 'Tak', 'Reopened': 'Nie',
-                               'code review': 'Nie', 'Backlog': 'Nie'}
+                status_map = {'ToDo': 'Nie', 'In Progress': 'Nie', 'Waiting': 'Nie', 'Resolved': 'Tak', 'Closed': 'Tak', 'Reopened': 'Nie',
+                               'code review': 'Nie', 'Backlog': 'Nie', 'Done': 'Tak', 'Blocked': 'Nie'}
                 for issue in jiraIssues:
                     issue_summary = get_issue_field(issue, 'summary', '')
                     issue_acc_crit = get_issue_field(issue, 'customfield_11726', 'n/a')
@@ -86,7 +86,10 @@ def sprint_plan_to_html(project_name, jiraIssues):
                     #issue_time_spent = get_issue_field(issue, 'aggregatetimespent', '0')
                     # DO ODBLOKOWANIA AGREGATETIMESPENT
                     issue_time_spent = float(gl_tsd.table_tasks.get(issue["key"], 0.0))
-                    issue_status = status_map[get_issue_field(issue, 'status', None)["name"]]
+                    issue_status = 'Nie'
+                    stat_from_issue = get_issue_field(issue, 'status', None)["name"]
+                    if stat_from_issue in status_map:
+                        issue_status = status_map[stat_from_issue]
 
                     with tag('tr', klass='confluenceTr'):
                         line('td', issue_summary)
