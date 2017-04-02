@@ -268,12 +268,14 @@ module.exports = function(app) {
         {
 //            console.log(code)
             if (code !== 0) {  return res.send(500, code); }
-
+            console.log("A1")
             Textfile.find({"project": "PORTFOLIO", "format_type": "JSON"}).sort('-generation_date').exec(function(err, estfiles) {
+                console.log("A2")
                 if (err)
                     res.send(err);
 
                 if (estfiles.length > 0) {
+                    console.log("A3")
                     res.json(estfiles[0].data);
                 }
                 else {
