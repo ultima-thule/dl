@@ -255,7 +255,7 @@ module.exports = function(app) {
 
 
     // generate json dump from portfolio
-    app.get('/api/genportfolio/:id', function(req, res) {
+    app.get('/api/genportfolio', function(req, res) {
         //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_estimate_tofile.py ' + req.params.id]);
         //PROD
         var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_portfolio_full.py']);
@@ -268,19 +268,18 @@ module.exports = function(app) {
         {
 //            console.log(code)
             if (code !== 0) {  return res.send(500, code); }
-            console.log("A1")
             Textfile.find({"project": "PORTFOLIO", "format_type": "JSON"}).sort('-generation_date').exec(function(err, estfiles) {
-                console.log("A2")
                 if (err)
                     res.send(err);
-
-                if (estfiles.length > 0) {
-                    console.log("A3")
-                    console.log(estfiles[0].data)
-                    res.json(estfiles[0].data);
+                else {
+                    if (estfiles.length > 0) {
+                        res.json(estfiles[0].data);
+                    }
+                    else {
+                        return res.send(200, output)
+                    }
                 }
-                return res.send(200, output);
-              });
+            });
         });
     });
 

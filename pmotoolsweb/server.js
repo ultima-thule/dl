@@ -8,7 +8,7 @@ var methodOverride 	= require('method-override'); // simulate DELETE and PUT (ex
 var mongoose       	= require('mongoose');
 var morgan         	= require('morgan'); // log requests to the console (express4)
 var LeanKitClient  	= require('leankit-client');
-var timeout = require('connect-timeout'); //express v4
+var timeout         = require('connect-timeout'); //express v4
 
 // configuration ===========================================
 
