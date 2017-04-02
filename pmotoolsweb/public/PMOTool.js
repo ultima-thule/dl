@@ -13,6 +13,10 @@ window.costGen2 = function(){
     window.open ("http://pmo.cloud.onet/api/genestimate2/" + window.project);
 };
 
+window.portfolioGen = function(){
+    window.open ("http://pmo.cloud.onet/api/genportfolio/");
+};
+
 window.sprintGen = function(){
     window.sprint = $(".js-sprint-header").attr("data-sprint-id");
     window.project =   $(".ghx-project")[0].textContent;
@@ -43,5 +47,5 @@ window.hideMe = function(arrayId){
 };
 
 function addButtons() {
-    $("header#header").append('<div style="background: #a1a1a1;color:white;width:100%25;"><button onClick="sprintGen()" style="background:#3b9fa3">Strona Sprintu</button><button onClick="hideMe(pmoMenu.teams)" style="background:#79b0d3">Pokaz moje teamy</button><button onClick="pwGen()" style="background:#f2beb5">Generuj zakres</button><button onClick="costGen()" style="background:#f2beb5">Generuj kosztorys bez subtasków</button><button onClick="costGen2()" style="background:#f2beb5">Generuj kosztorys z subtaskami</button>');
+    $("header#header").append('<div style="background: #a1a1a1;color:white;width:100%25;"><button onClick="sprintGen()" style="background:#3b9fa3">Strona Sprintu</button><button onClick="hideMe(pmoMenu.teams)" style="background:#79b0d3">Pokaz moje teamy</button><button onClick="pwGen()" style="background:#f2beb5">Generuj zakres</button><button onClick="costGen()" style="background:#f2beb5">Generuj kosztorys bez subtasków</button><button onClick="costGen2()" style="background:#f2beb5">Generuj kosztorys z subtaskami</button><button onClick="portfolioGen()" style="background:#f2beb5">Generuj dane z portfolio</button>');
 };
