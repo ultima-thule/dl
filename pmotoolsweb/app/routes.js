@@ -275,6 +275,10 @@ module.exports = function(app) {
 
                 if (estfiles.length > 0) {
                     res.json(estfiles[0].data);
+                }
+                else {
+                    return res.send(200, output)
+                }
               });
         });
     });
