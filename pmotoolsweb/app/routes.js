@@ -276,11 +276,10 @@ module.exports = function(app) {
 
                 if (estfiles.length > 0) {
                     console.log("A3")
-//                    res.json(estfiles[0].data);
+                    console.log(estfiles[0].data)
+                    res.json(estfiles[0].data);
                 }
-                else {
-                    return res.send(200, output)
-                }
+                return res.send(200, output);
               });
         });
     });
