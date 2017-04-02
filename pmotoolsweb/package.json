@@ -12,6 +12,7 @@
         "lodash": "latest",
         "leankit-client": "latest",
         "oauth20-provider": "latest",
-        "python-shell": "latest"
+        "python-shell": "latest",
+        "connect-timeout": "latest"
       }
 }
