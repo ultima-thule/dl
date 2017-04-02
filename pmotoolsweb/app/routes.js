@@ -255,7 +255,7 @@ module.exports = function(app) {
 
 
     // generate json dump from portfolio
-    app.get('/api/genportfolio', function(req, res) {
+    app.get('/api/genportfolio/:id', function(req, res) {
         //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_estimate_tofile.py ' + req.params.id]);
         //PROD
         var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_portfolio_full.py']);
