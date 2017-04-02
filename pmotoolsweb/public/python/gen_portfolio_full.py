@@ -119,7 +119,7 @@ def dumper(obj):
 if __name__ == '__main__':
     project_name = "PORTFOLIO"
 
-    _initMongoConn()
+    # _initMongoConn()
 
     #init Jira connection
     user_jira = credentials.loginJira['consumer_secret']
@@ -133,15 +133,18 @@ if __name__ == '__main__':
 
     json_issues = parse_initiatives(issues)
 
-    json_data = json.dumps(json_issues, default=dumper, indent=4)
+    with open(file_name, 'w') as outfile:
+        json_data = json.dumps(json_issues, outfile, default=dumper, indent=4)
 
-    pwfile = lib.mongoLeankit.Textfile()
-
-    pwfile.data = json_data
-    pwfile.project = project_name
-    pwfile.generation_date = datetime.datetime.now()
-    pwfile.date_text = date_text
-    pwfile.format_type = "JSON"
-    pwfile.save()
+    # json_data = json.dumps(json_issues, default=dumper, indent=4)
+    #
+    # pwfile = lib.mongoLeankit.Textfile()
+    #
+    # pwfile.data = json_data
+    # pwfile.project = project_name
+    # pwfile.generation_date = datetime.datetime.now()
+    # pwfile.date_text = date_text
+    # pwfile.format_type = "JSON"
+    # pwfile.save()
 
     exit(0)
