@@ -28,11 +28,6 @@ if (app.get('env') === 'development') {
 }
 
 app.use(timeout(120000));
-app.use(haltOnTimedout);
-
-function haltOnTimedout(req, res, next){
-    if (!req.timedout) next();
-}
 
 // production error handler
 // no stacktraces leaked to user
