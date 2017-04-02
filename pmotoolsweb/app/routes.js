@@ -272,15 +272,9 @@ module.exports = function(app) {
             Textfile.find({"project": "PORTFOLIO", "format_type": "JSON"}).sort('-generation_date').exec(function(err, estfiles) {
                 if (err)
                     res.send(err);
+
                 if (estfiles.length > 0) {
-                    var date = estfiles[0].date_text;
-                    res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + '_' + date + '.json');
-                    res.append('Content-type', 'application/json');
-                    res.send(estfiles[0].data);
-                    }
-                    else {
-                        return res.send(200, output)
-                    }
+                    res.json(estfiles[0].data);
               });
         });
     });
