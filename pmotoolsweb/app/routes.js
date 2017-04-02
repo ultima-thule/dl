@@ -221,7 +221,7 @@ module.exports = function(app) {
     });
 
 
-        // generate new pw estimate with python script
+    // generate new pw estimate with python script
     app.get('/api/genestimate2/:id', function(req, res) {
         //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_estimate_tofile.py ' + req.params.id]);
         //PROD
@@ -243,6 +243,38 @@ module.exports = function(app) {
                     var date = estfiles[0].date_text;
                     res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + '_' + date + '.xlsx');
                     res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                    res.send(estfiles[0].data);
+                    }
+                    else {
+                        return res.send(200, output)
+                    }
+              });
+        });
+    });
+
+
+    // generate json dump from portfolio
+    app.get('/api/genportfolio', function(req, res) {
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_estimate_tofile.py ' + req.params.id]);
+        //PROD
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_portfolio_full.py', req.params.id]);
+        //HOME
+        //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//gen_estimate_tofile.py " + req.params.id]);
+
+        var output = "";
+        python.stdout.on('data', function(data){ output += data });
+        python.on('close', function(code)
+        {
+//            console.log(code)
+            if (code !== 0) {  return res.send(500, code); }
+
+            Pwfile.find({"project": "PORTFOLIO", "format_type": "JSON"}).sort('-generation_date').exec(function(err, estfiles) {
+                if (err)
+                    res.send(err);
+                if (estfiles.length > 0) {
+                    var date = estfiles[0].date_text;
+                    res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + '_' + date + '.json');
+                    res.append('Content-type', 'application/json');
                     res.send(estfiles[0].data);
                     }
                     else {
