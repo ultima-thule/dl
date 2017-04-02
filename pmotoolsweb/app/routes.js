@@ -276,7 +276,7 @@ module.exports = function(app) {
 
                 if (estfiles.length > 0) {
                     console.log("A3")
-                    res.json(estfiles[0].data);
+                    return res.send(200, res.json(estfiles[0].data))
                 }
                 else {
                     return res.send(200, output)
