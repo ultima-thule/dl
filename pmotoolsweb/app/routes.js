@@ -13,6 +13,7 @@ var QuarterPlan = require('./model/quarterPlan');
 var LeanKitClient  = require("leankit-client");
 var Estimate = require('./model/estimate');
 var Pwfile = require('./model/pwfile');
+var Textfile = require('./model/textfile');
 var https = require('https');
 var http = require('http');
 var _ = require('lodash');
@@ -268,7 +269,7 @@ module.exports = function(app) {
 //            console.log(code)
             if (code !== 0) {  return res.send(500, code); }
 
-            Pwfile.find({"project": "PORTFOLIO", "format_type": "JSON"}).sort('-generation_date').exec(function(err, estfiles) {
+            Textfile.find({"project": "PORTFOLIO", "format_type": "JSON"}).sort('-generation_date').exec(function(err, estfiles) {
                 if (err)
                     res.send(err);
                 if (estfiles.length > 0) {

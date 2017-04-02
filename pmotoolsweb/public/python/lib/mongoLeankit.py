@@ -181,3 +181,10 @@ class Pwfile(Document):
     generation_date = DateTimeField()
     date_text = StringField()
     format_type = StringField()
+
+class Textfile(Document):
+    data = StringField()
+    project = StringField()
+    generation_date = DateTimeField()
+    date_text = StringField()
+    format_type = StringField()

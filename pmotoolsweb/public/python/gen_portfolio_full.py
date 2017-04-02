@@ -1,13 +1,9 @@
-import argparse
 import datetime
-import operator
-import sys
-import credentials
-from mongoengine import *
-import lib.mongoLeankit
-import lib.jira
-import lib.excel_estimate
 import json
+
+import credentials
+import lib.excel_estimate
+from mongoengine import *
 
 
 def _initMongoConn ():
@@ -135,7 +131,7 @@ if __name__ == '__main__':
 
     json_data = json.dumps(json_issues, default=dumper, indent=4)
 
-    pwfile = lib.mongoLeankit.Pwfile()
+    pwfile = lib.mongoLeankit.Textfile()
 
     pwfile.data = json_data
     pwfile.project = project_name
