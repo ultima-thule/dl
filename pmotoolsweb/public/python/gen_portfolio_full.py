@@ -134,7 +134,7 @@ if __name__ == '__main__':
     json_issues = parse_initiatives(issues)
 
     with open(file_name, 'w') as outfile:
-        json_data = json.dumps(json_issues, outfile, default=dumper, indent=4)
+        json_data = json.dump(json_issues, outfile, default=dumper, indent=4)
 
     # json_data = json.dumps(json_issues, default=dumper, indent=4)
     #
