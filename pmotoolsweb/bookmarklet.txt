@@ -1,0 +1,5 @@
+// generator: http://bookmarklets.org/maker/ (tick only first and third checkbox)
+// production script url to include: http://pmo.cloud.onet/PMOTool.js
+
+// outpoot example:
+javascript:var%20pmoMenu={addScript:function(n,e){var%20a=document.createElement(%22script%22);a.type=%22text/javascript%22,a.src=n,e%26%26(a.onloadDone=!1,a.onload=function(){a.onloadDone=!0,e()},a.onReadystatechange=function(){%22loaded%22!==a.readyState||a.onloadDone||(a.onloadDone=!0,e())}),%22undefined%22!=typeof%20a%26%26document.getElementsByTagName(%22head%22)[0].appendChild(a)},teams:[%22%23childrenspan66402618-0%22,%22%23childrenspan41629682-0%22]};pmoMenu.addScript(%22http://nethandel.nazwa.pl/pmo/PMOTool.js%22,function(){addButtons()});

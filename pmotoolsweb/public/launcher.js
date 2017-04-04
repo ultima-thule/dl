@@ -22,4 +22,4 @@ var pmoMenu = {
 
 };
 
-pmoMenu.addScript('http://pmo.could.onet/PMOTool.js',function(){addButtons();});
+pmoMenu.addScript('http://pmo.cloud.onet/PMOTool.js',function(){addButtons();});
