@@ -439,8 +439,8 @@ if __name__ == '__main__':
             sprint_no += 1
 
         # closure card
-        page_content = pages_structure.get("project_close", None)
-        generate_page_close(document, page_content)
+        #page_content = pages_structure.get("project_close", None)
+        #generate_page_close(document, page_content)
 
         #create last PW pages
         generate_pw_last_page(document)
