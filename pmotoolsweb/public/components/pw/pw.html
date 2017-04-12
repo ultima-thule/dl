@@ -29,7 +29,8 @@
                     </md-input-container>
                 </div>
                 <md-progress-linear md-mode="indeterminate" ng-show="isLoading" ></md-progress-linear>
-                <md-button class="md-raised my-hue-1 md-secondary" ng-click="generatePW();" ng-disabled="pwForm.$invalid || isLoading">Create sprint summary page</md-button>
+                <md-button class="md-raised my-hue-1 md-secondary" ng-click="generatePW();" ng-disabled="pwForm.$invalid || isLoading">Create sprint summary page (with acceptance criteria)</md-button>
+                <md-button class="md-raised my-hue-1 md-secondary" ng-click="generatePWDesc();" ng-disabled="pwForm.$invalid || isLoading">Create sprint summary page (with description)</md-button>
                 <md-button class="md-raised my-hue-1 md-secondary" ng-href="{{confLink}}" ng-disabled="!confLink" target="_blank">Go to Confluence page</md-button>
                 <md-button class="md-raised my-hue-1 md-secondary" ng-href="api/createPw/{{projectName}}/true" ng-disabled="pwForm.$invalid || isLoading">Get estimate in Excel</md-button>
             </form>
