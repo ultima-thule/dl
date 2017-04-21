@@ -30,6 +30,19 @@ window.sprintGen = function(){
         })
 };
 
+window.sprintDescGen = function(){
+    window.sprint = $(".js-sprint-header").attr("data-sprint-id");
+    window.project =   $(".ghx-project")[0].textContent;
+    window.url = "http://pmo.cloud.onet/api/createpwdesc/" + window.project +"/sprint/" + window.sprint;
+    create = $.get(window.url)
+        .done(function(){
+            alert("Created subpage for project " + project);
+        })
+        .fail(function(){
+            alert("There is some errors");
+        })
+};
+
 window.hideMe = function(arrayId){
     arrayId = typeof arrayId == 'string' ? [ arrayId ] : arrayId;
     const elements = [];
@@ -47,5 +60,5 @@ window.hideMe = function(arrayId){
 };
 
 function addButtons() {
-    $("header#header").append('<div style="background: #a1a1a1;color:white;width:100%25;"><button onClick="sprintGen()" style="background:#3b9fa3">Strona Sprintu</button><button onClick="hideMe(pmoMenu.teams)" style="background:#79b0d3">Pokaz moje teamy</button><button onClick="pwGen()" style="background:#f2beb5">Generuj zakres</button><button onClick="costGen()" style="background:#f2beb5">Generuj kosztorys bez subtasków</button><button onClick="costGen2()" style="background:#f2beb5">Generuj kosztorys z subtaskami</button><button onClick="portfolioGen()" style="background:#f2beb5">Generuj dane z portfolio</button>');
+    $("header#header").append('<div style="background: #a1a1a1;color:white;width:100%25;"><button onClick="sprintGen()" style="background:#3b9fa3">Strona Sprintu (kryteria akc.)</button><button onClick="sprintDescGen()" style="background:#3b9fa3">Strona Sprintu (opis)</button><button onClick="hideMe(pmoMenu.teams)" style="background:#79b0d3">Pokaz moje teamy</button><button onClick="pwGen()" style="background:#f2beb5">Generuj zakres</button><button onClick="costGen()" style="background:#f2beb5">Generuj kosztorys bez subtasków</button><button onClick="costGen2()" style="background:#f2beb5">Generuj kosztorys z subtaskami</button><button onClick="portfolioGen()" style="background:#f2beb5">Generuj dane z portfolio</button>');
 };

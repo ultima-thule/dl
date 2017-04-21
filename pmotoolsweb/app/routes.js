@@ -336,6 +336,27 @@ module.exports = function(app) {
         });
     });
 
+    // create PW with script
+    app.get('/api/createpwdesc/:pwid/sprint/:sprintid', function(req, res) {
+
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team.py']);
+        //var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_page5.py']);
+        //prod
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_description_yattag.py', req.params.pwid, req.params.sprintid]);
+        //mac
+        //var python = require('child_process').spawn('python3', ['/Users/jgrzywna/Projects/dl/pmotoolsweb/public/python/add_sprint_page.py', req.params.pwid, req.params.sprintid]);
+//        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//add_sprint_page.py",
+//            req.params.pwid, req.params.sprintid]);
+
+        var output = "";
+        python.stdout.on('data', function(data){ output += data });
+        python.on('close', function(code)
+        {
+            if (code !== 0) {  return res.send(500, code); }
+            return res.send(200, output)
+        });
+    });
+
 
     // =========================== CONFIG ================================
 
