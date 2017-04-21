@@ -1,4 +1,6 @@
 <meta charset="utf-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+
 
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600" rel="stylesheet" type="text/css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -10,11 +12,14 @@
   padding: 0;
   box-sizing: border-box;
 }
+    
+.pmoMenuContainer {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
 .pmoMenu {
   width: auto;
   margin: 0 auto 0 auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   background-color: #f9f9f9;
   z-index: 99999;
 }
@@ -30,6 +35,15 @@
   color: #333;
   display: inline-block;
   padding: 15px;
+  position: relative;
+}
+.pmoMenu ul li.external {
+  font-family: "Open Sans", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #333;
+  display: inline-block;
+  padding: 0;
   position: relative;
 }
 .pmoMenu ul li ul {
@@ -58,7 +72,9 @@
   background-color: #ee204e;
 }
     
-.pmoMenu a, .pmoMenu a:hover {
+li.external a, li.external a:hover {
+  display: block;
+  padding: 15px;
   color: inherit !important;
   text-decoration: none;
 }
@@ -83,7 +99,8 @@
                 </ul>
             </li>
             <li onClick="portfolioGen()" title="Obecnie nieużywane">Generuj dane z portfolio</li>
-            <li title="Dokumentacja PMO Menu na Confluence"><a href="http://doc.grupa.onet/display/AG/PMO+Menu" target="_blank"><i class="fa fa-info" style="margin-right: 5px;"></i>Dokumentacja</a></li>
+            <li onClick="pmoMenuClose()" style="float:right;" class="pmoMenuClose"><i class="fa fa-window-close-o fa-2"></i></li>
+            <li title="Dokumentacja PMO Menu na Confluence" style="float:right;" class="external"><a href="http://doc.grupa.onet/display/AG/PMO+Menu" target="_blank"><i class="fa fa-info" style="margin-right: 5px;"></i>Dokumentacja</a></li>
         </ul>
     </div>
 </div>
