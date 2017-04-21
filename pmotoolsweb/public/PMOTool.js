@@ -1,15 +1,15 @@
 window.pwGen = function(){
-    window.project = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent ;
+    window.project = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
     window.open ("http://pmo.cloud.onet/api/genscope/" + window.project);
 };
 
 window.costGen = function(){
-    window.project = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent ;
+    window.project = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
     window.open ("http://pmo.cloud.onet/api/genestimate/" + window.project);
 };
 
 window.costGen2 = function(){
-    window.project = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent ;
+    window.project = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
     window.open ("http://pmo.cloud.onet/api/genestimate2/" + window.project);
 };
 
@@ -20,7 +20,7 @@ window.portfolioGen = function(){
 window.sprintGen = function(){
     window.sprint = $(".js-sprint-header").attr("data-sprint-id");
     window.project =   $(".ghx-project")[0].textContent;
-    window.url = "http://pmo.cloud.onet/api/createpw/" + window.project +"/sprint/" + window.sprint;
+    window.url = "http://pmo.cloud.onet/api/createpw/" + window.project + "/sprint/" + window.sprint;
     create = $.get(window.url)
         .done(function(){
             alert("Created subpage for project " + project);
