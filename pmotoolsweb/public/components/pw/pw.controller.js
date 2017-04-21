@@ -91,20 +91,6 @@
                 });
             }
 
-            $scope.generatePWDesc = function() {
-                $scope.isLoading = true;
-                pwService.generateDesc ($scope.projectName, $scope.selSprint)
-                .success(function(data){
-                    $scope.confLink = "http://doc.grupa.onet/pages/viewpage.action?pageId=" + data;
-                    showMessage ("Sprint page created, check Confluence link!");
-                    $scope.isLoading = false;
-                })
-                .error(function(data) {
-                    $scope.isLoading = false;
-                    showMessage ("Sprint page cannot be created, error occured.");
-                });
-            }
-
             // if requested to download a file
             if ($routeParams.project)
             {

@@ -84,7 +84,7 @@ class Jira (object):
         """ Gets all issues within project and sprint - one 50-elem batch. """
         query = "/rest/api/2/search?jql=project = '" + project_name \
                 + "' AND Type != Sub-task AND sprint = " + sprint.id \
-                + "&fields=status,issuetype,summary,description,customfield_11726,customfield_10002,aggregatetimespent" \
+                + "&fields=status,issuetype,summary,customfield_11726,customfield_10002,aggregatetimespent" \
                 + "&startAt=" + str(start_at)
         return self.search(query)
 
