@@ -2,29 +2,6 @@
 
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600" rel="stylesheet" type="text/css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-<div class="pmoMenuContainer">
-    <div class="pmoMenu">
-        <ul>
-            <li onClick="hideMe(pmoMenu.teams)" title="Filtrowanie zespołów na liście witrynek projektowych">Pokaż moje teamy</li>
-            <li onClick="pwGen()" title="Generowanie dokumentu porozumienia wykonawczego (Word) na podstawie zawartości Confluence">Generuj zakres</li>
-            <li title="Generowanie podstrony sprintu w ramach danego projektu">Generuj stronę sprintu <i class="fa fa-angle-down"></i>
-                <ul>
-                    <li onClick="sprintGen()">Strona sprintu (kryteria akceptacji)</li>
-                    <li onClick="sprintDescGen()">Strona sprintu (opis)</li>
-                </ul>
-            </li>
-            <li title="Generowanie kosztorysu dla projektu">Generuj kosztorys <i class="fa fa-angle-down"></i>
-                <ul>
-                    <li onClick="costGen()">Kosztorys bez subtasków</li>
-                    <li onClick="costGen2()">Kosztorys z subtaskami</li>
-                </ul>
-            </li>
-            <li onClick="portfolioGen()" title="Obecnie nieużywane">Generuj dane z portfolio</li>
-            <li title="Dokumentacja PMO Menu na Confluence"><a href="http://doc.grupa.onet/display/AG/PMO+Menu" target="_blank"><i class="fa fa-info" style="margin-right: 5px;"></i>Dokumentacja</a></li>
-        </ul>
-    </div>
-</div>
-
 
 <style>
     
@@ -87,3 +64,26 @@
 }
 
 </style>
+
+<div class="pmoMenuContainer">
+    <div class="pmoMenu">
+        <ul>
+            <li onClick="hideMe(pmoMenu.teams)" title="Filtrowanie zespołów na liście witrynek projektowych">Pokaż moje teamy</li>
+            <li onClick="pwGen()" title="Generowanie dokumentu porozumienia wykonawczego (Word) na podstawie zawartości Confluence">Generuj zakres</li>
+            <li title="Generowanie podstrony sprintu w ramach danego projektu">Generuj stronę sprintu <i class="fa fa-angle-down"></i>
+                <ul>
+                    <li onClick="sprintGen()">Strona sprintu (kryteria akceptacji)</li>
+                    <li onClick="sprintDescGen()">Strona sprintu (opis)</li>
+                </ul>
+            </li>
+            <li title="Generowanie kosztorysu dla projektu">Generuj kosztorys <i class="fa fa-angle-down"></i>
+                <ul>
+                    <li onClick="costGen()">Kosztorys bez subtasków</li>
+                    <li onClick="costGen2()">Kosztorys z subtaskami</li>
+                </ul>
+            </li>
+            <li onClick="portfolioGen()" title="Obecnie nieużywane">Generuj dane z portfolio</li>
+            <li title="Dokumentacja PMO Menu na Confluence"><a href="http://doc.grupa.onet/display/AG/PMO+Menu" target="_blank"><i class="fa fa-info" style="margin-right: 5px;"></i>Dokumentacja</a></li>
+        </ul>
+    </div>
+</div>
