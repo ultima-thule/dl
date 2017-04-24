@@ -1,5 +1,7 @@
 <meta charset="utf-8">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
 
 
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600" rel="stylesheet" type="text/css">
@@ -71,12 +73,25 @@
 .pmoMenu ul li:hover ul li:hover span {
   background-color: #ee204e;
 }
+
+li.docsInfo {
+    float: right;
+    padding: 0 !important;
+}   
     
-li.external a, li.external a:hover {
+li.docsInfo a, li.docsInfo a:hover {
   display: block;
   padding: 15px;
   color: inherit !important;
   text-decoration: none;
+}
+    
+li.docsInfo a i.fa-info {
+  margin-right: 5px;
+}
+    
+li.pmoMenuClose {
+  float: right;
 }
 
 </style>
@@ -99,8 +114,8 @@ li.external a, li.external a:hover {
                 </ul>
             </li>
             <li onClick="portfolioGen()" title="Obecnie nieużywane">Generuj dane z portfolio</li>
-            <li onClick="pmoMenuClose()" style="float:right;" class="pmoMenuClose"><i class="fa fa-window-close-o fa-2"></i></li>
-            <li title="Dokumentacja PMO Menu na Confluence" style="float:right;" class="external"><a href="http://doc.grupa.onet/display/AG/PMO+Menu" target="_blank"><i class="fa fa-info" style="margin-right: 5px;"></i>Dokumentacja</a></li>
+            <li onClick="pmoMenuClose()" class="pmoMenuClose"><i class="fa fa-window-close-o fa-2"></i></li>
+            <li title="Dokumentacja PMO Menu na Confluence" class="docsInfo"><a href="http://doc.grupa.onet/display/AG/PMO+Menu" target="_blank"><i class="fa fa-info"></i>Dokumentacja</a></li>
         </ul>
     </div>
 </div>
