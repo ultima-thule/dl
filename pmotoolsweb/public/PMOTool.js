@@ -1,49 +1,63 @@
-window.pwGen = function(){
-    window.project = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
-    window.open ("http://pmo.cloud.onet/api/genscope/" + window.project);
+function pwGen() {
+    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    window.open ("http://pmo.cloud.onet/api/genscope/" + projectCode);
 };
 
-window.costGen = function(){
-    window.project = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
-    window.open ("http://pmo.cloud.onet/api/genestimate/" + window.project);
+function costGen() {
+    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    window.open ("http://pmo.cloud.onet/api/genestimate/" + projectCode);
 };
 
-window.costGen2 = function(){
-    window.project = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
-    window.open ("http://pmo.cloud.onet/api/genestimate2/" + window.project);
+function costGen2() {
+    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    window.open ("http://pmo.cloud.onet/api/genestimate2/" + projectCode);
 };
 
-window.portfolioGen = function(){
+function portfolioGen(){
     window.open ("http://pmo.cloud.onet/api/genportfolio/");
 };
 
-window.sprintGen = function(){
-    window.sprint = $(".js-sprint-header").attr("data-sprint-id");
-    window.project =   $(".ghx-project")[0].textContent;
-    window.url = "http://pmo.cloud.onet/api/createpw/" + window.project + "/sprint/" + window.sprint;
-    create = $.get(window.url)
+function sprintGen(){
+    // taking sprint ID from Jira board view
+    if ($("li.aui-nav-selected").attr("data-link-id") === "com.pyxis.greenhopper.jira:global-sidebar-plan-scrum") {
+        // plan/backlog mode
+        var sprintId = $(".js-sprint-header").attr("data-sprint-id");
+    } else {
+        // work/current sprint mode
+        var sprintId = $(".ghx-sprint-meta").attr("data-sprint-id");
+    }
+    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    var apiUrl = "http://pmo.cloud.onet/api/createpw/" + projectCode + "/sprint/" + sprintId;
+    create = $.get(apiUrl)
         .done(function(){
-            alert("Created subpage for project " + project);
+            alert("Subpage for project " + projectCode + " has been created.");
         })
         .fail(function(){
-            alert("There is some errors");
+            alert("There are some errors. If you are using Confluence try to switch to the Jira.");
         })
 };
 
-window.sprintDescGen = function(){
-    window.sprint = $(".js-sprint-header").attr("data-sprint-id");
-    window.project =   $(".ghx-project")[0].textContent;
-    window.url = "http://pmo.cloud.onet/api/createpwdesc/" + window.project +"/sprint/" + window.sprint;
-    create = $.get(window.url)
+function sprintDescGen(){
+    // taking sprint ID from Jira board view
+    if ($("li.aui-nav-selected").attr("data-link-id") === "com.pyxis.greenhopper.jira:global-sidebar-plan-scrum") {
+        // plan/backlog mode
+        var sprintId = $(".js-sprint-header").attr("data-sprint-id");
+    } else {
+        // work/current sprint mode
+        var sprintId = $(".ghx-sprint-meta").attr("data-sprint-id");
+    }
+    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    var apiUrl = "http://pmo.cloud.onet/api/createpwdesc/" + projectCode + "/sprint/" + sprintId;
+    create = $.get(apiUrl)
         .done(function(){
-            alert("Created subpage for project " + project);
+            alert("Subpage for project " + projectCode + " has been created.");
         })
         .fail(function(){
-            alert("There is some errors");
+            alert("There are some errors. If you are using Confluence try to switch to the Jira.");
         })
 };
 
-window.hideMe = function(arrayId){
+function hideMe(arrayId){
     arrayId = typeof arrayId == 'string' ? [ arrayId ] : arrayId;
     const elements = [];
     arrayId.forEach(function(id){
