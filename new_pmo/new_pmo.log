@@ -1,0 +1,987 @@
+nohup: ignoring input
+Magic happens on port 80
+ok
+PL_GRO_M_SPO_SPORT.ON.UCS
+
+Tue, 05 Sep 2017 09:15:03 GMT express deprecated res.send(status, body): Use res.status(status).send(body) instead at app/routes.js:159:24
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [32m200 [0m118.951 ms - 26[0m
+Tue, 05 Sep 2017 09:15:03 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:283:13
+[0mGET /favicon.ico [32m200 [0m2.643 ms - 35[0m
+ok
+PL_GRO_M_SPO_SPORT.ON.UCS
+
+wychodze
+
+Tue, 05 Sep 2017 09:15:36 GMT express deprecated res.send(status, body): Use res.status(status).send(body) instead at app/routes.js:158:43
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [31m500 [0m121.234 ms - 1[0m
+[0mGET /favicon.ico [32m200 [0m0.886 ms - 35[0m
+[0mGET /favicon.ico [32m200 [0m0.815 ms - 35[0m
+[0mGET /login [32m200 [0m1.478 ms - 35[0m
+[0mGET /favicon.ico [32m200 [0m0.390 ms - 35[0m
+ok
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+wychodze
+
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [31m500 [0m128.180 ms - 1[0m
+[0mGET /favicon.ico [32m200 [0m2.113 ms - 35[0m
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.629 ms - 35[0m
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.401 ms - 35[0m
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m1.026 ms - 35[0m
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.563 ms - 35[0m
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.862 ms - 35[0m
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.551 ms - 35[0m
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.753 ms - 35[0m
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.948 ms - 35[0m
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.477 ms - 35[0m
+ok
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.852 ms - 35[0m
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    sprint = jira.get_sprint_data(sprint_id)
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m1.508 ms - 35[0m
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    sprint = jira.get_sprint_data(sprint_id)
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.466 ms - 35[0m
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    sprint = jira.get_sprint_data(sprint_id)
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.523 ms - 35[0m
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    sprint = jira.get_sprint_data(sprint_id)
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.510 ms - 35[0m
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    sprint = jira.get_sprint_data(sprint_id)
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+ok
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [0m- [0m- ms - -[0m
+[0mGET /favicon.ico [32m200 [0m0.471 ms - 35[0m
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    # Get the sprint general data
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+ok
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+wychodze3
+
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [31m500 [0m114.989 ms - 1[0m
+[0mGET /favicon.ico [32m200 [0m0.624 ms - 35[0m
+ok
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+wychodze3
+
+[0mGET /api/createpw/PL_GRO_M_SPO_SPORT.ON.UCS/sprint/4784 [31m500 [0m115.380 ms - 1[0m
+[0mGET /favicon.ico [32m200 [0m0.604 ms - 35[0m
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    # Get the sprint general data
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    # Get the sprint general data
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    # Get the sprint general data
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    # Get the sprint general data
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    # Get the sprint general data
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    # Get the sprint general data
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    # Get the sprint general data
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    # Get the sprint general data
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    # Get the sprint general data
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+PL_GRO_M_SPO_SPORT.ON.UCS
+readonly_pmo
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 562, in urlopen
+    body=body, headers=headers)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 387, in _make_request
+    conn.request(method, url, **httplib_request_kw)
+  File "/usr/lib/python3.4/http/client.py", line 1088, in request
+    self._send_request(method, url, body, headers)
+  File "/usr/lib/python3.4/http/client.py", line 1126, in _send_request
+    self.endheaders(body)
+  File "/usr/lib/python3.4/http/client.py", line 1084, in endheaders
+    self._send_output(message_body)
+  File "/usr/lib/python3.4/http/client.py", line 922, in _send_output
+    self.send(msg)
+  File "/usr/lib/python3.4/http/client.py", line 857, in send
+    self.connect()
+  File "/usr/lib/python3.4/http/client.py", line 834, in connect
+    self.timeout, self.source_address)
+  File "/usr/lib/python3.4/socket.py", line 512, in create_connection
+    raise err
+  File "/usr/lib/python3.4/socket.py", line 503, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 110] Connection timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 330, in send
+    timeout=timeout
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 612, in urlopen
+    raise MaxRetryError(self, url, e)
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py", line 242, in <module>
+    # Get the sprint general data
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 62, in get_sprint_data
+    return JiraSprint(sprint_id, self.search(query))
+  File "/home/httpd/dl/pmotoolsweb/public/python/lib/jira.py", line 34, in search
+    out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 55, in get
+    return request('get', url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 44, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 455, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 558, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 378, in send
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='jira.grupa.onet', port=80): Max retries exceeded with url: /rest/agile/1.0/sprint/4784 (Caused by <class 'TimeoutError'>: [Errno 110] Connection timed out)
+
