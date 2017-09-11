@@ -1,8 +1,21 @@
  // app/routes.js
 
 // grab the card model we just created
+var Team = require('./model/team');
+var Report = require('./model/report');
+var ConfigParam = require('./model/configparam');
+var Card = require('./model/card');
+var Sponsor = require('./model/sponsor');
+var Board = require('./model/board');
+var UserApp  = require('./model/userApp');
+var User  = require('./model/user');
+var QuarterPlan = require('./model/quarterPlan');
+var Estimate = require('./model/estimate');
+var Pwfile = require('./model/pwfile');
+var Textfile = require('./model/textfile');
 var https = require('https');
 var http = require('http');
+var _ = require('lodash');
 var fs = require('fs');
 var PythonShell = require('python-shell');
 var timeout         = require('connect-timeout'); //express v4
@@ -30,7 +43,7 @@ module.exports = function(app) {
         }
     };
 
-    app.use(timeout(120000));
+    app.use(timeout(1200000));
     app.get('/api/test', function(req, res) {
         res.json({ message: 'hooray! welcome to our api!' });   
     });
@@ -40,17 +53,16 @@ module.exports = function(app) {
 
     // generate new pw estimate with python script
     app.get('/api/genestimate/:id', function(req, res) {
-        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_estimate_tofile.py ' + req.params.id]);
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/new_pmo/public/python/gen_estimate_tofile.py ' + req.params.id]);
         //PROD
-        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_estimate_tofile.py', req.params.id]);
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/gen_estimate_tofile.py', req.params.id]);
         //HOME
-        //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//gen_estimate_tofile.py " + req.params.id]);
+        //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//new_pmo//public//python//gen_estimate_tofile.py " + req.params.id]);
 
         var output = "";
         python.stdout.on('data', function(data){ output += data });
         python.on('close', function(code)
         {
-//            console.log(code)
             if (code !== 0) {  return res.send(500, code); }
 
             Pwfile.find({"project": req.params.id, "format_type": "XLSX"}).sort('-generation_date').exec(function(err, estfiles) {
@@ -72,17 +84,16 @@ module.exports = function(app) {
 
     // generate new pw estimate with python script
     app.get('/api/genestimate2/:id', function(req, res) {
-        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_estimate_tofile.py ' + req.params.id]);
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/new_pmo/public/python/gen_estimate_tofile.py ' + req.params.id]);
         //PROD
-        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_estimate_tofile2.py', req.params.id]);
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/gen_estimate_tofile2.py', req.params.id]);
         //HOME
-        //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//gen_estimate_tofile.py " + req.params.id]);
+        //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//new_pmo//public//python//gen_estimate_tofile.py " + req.params.id]);
 
         var output = "";
         python.stdout.on('data', function(data){ output += data });
         python.on('close', function(code)
         {
-//            console.log(code)
             if (code !== 0) {  return res.send(500, code); }
 
             Pwfile.find({"project": req.params.id, "format_type": "XLSX"}).sort('-generation_date').exec(function(err, estfiles) {
@@ -105,56 +116,57 @@ module.exports = function(app) {
     // generate new pw scope with python script
     app.get('/api/genscope/:id', function(req, res) {
         console.log("startuje generacje");
-        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/gen_scope_tofile.py ' + req.params.id]);
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/new_pmo/public/python/gen_scope_tofile.py ' + req.params.id]);
         //PROD
-        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/gen_scope_tofile.py', req.params.id]);
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/gen_scope_tofile.py', req.params.id]);
         //HOME
-        //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//gen_scope_tofile.py " + req.params.id]);
+        //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//new_pmo//public//python//gen_scope_tofile.py " + req.params.id]);
 
         var output = "";
         python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
-        python.stdout.on('data', function(data){ console.log("mam dane"); output += data });
+        //python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
+        python.stdout.on('data', function(data){ output += data });
+
         python.on('close', function(code)
         {
-            console.log("wchodze");
-            if (code !== 0) {  console.log("bug"); return res.send(500, code); }
+           if (code !== 0) {  console.log("blad zamykania pythona"); return res.send(500, code); }
 
-            Pwfile.find({"project": req.params.id, "format_type": "DOCX"}).sort('-generation_date').exec(function(err, scopefiles) {
-                if (err){
-                    console.log("kolejny bug");
-                    res.send(err);
-                }
-                if (scopefiles.length > 0) {
-		    console.log("inna dlugosc");
-                    var date = scopefiles[0].date_text;
-                    res.append('Content-Disposition', 'attachment; filename=' + scopefiles[0].project + '_' + date + '.docx');
-                    res.append('Content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-                    res.send(scopefiles[0].data);
-                }
-                else {
-                    return res.send(200, output)
-                }
-              });
+           var x1 = Pwfile.find({"project": req.params.id, "format_type": "DOCX"});
+           var x2 = x1.sort('-generation_date');
+           var x3 = x2.exec(function(err, scopefiles) {
+               if (err){res.send(err);}
+               if (scopefiles.length > 0) {
+                     var date = scopefiles[0].date_text;
+                     res.append('Content-Disposition', 'attachment; filename=' + scopefiles[0].project + '_' + date + '.docx');
+                     res.append('Content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                     res.send(scopefiles[0].data);
+               }
+               else {return res.send(200, output);}
+           });
         });
+
     });
 
     // create PW with script
     app.get('/api/createpw/:pwid/sprint/:sprintid', function(req, res) {
 
-        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team.py']);
-        //var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_page5.py']);
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/new_pmo/public/python/py_gen_team.py']);
+        //var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/add_page5.py']);
         //prod
-        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_yattag.py', req.params.pwid, req.params.sprintid]);
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/add_sprint_page_yattag.py', req.params.pwid, req.params.sprintid]);
         //mac
-        //var python = require('child_process').spawn('python3', ['/Users/jgrzywna/Projects/dl/pmotoolsweb/public/python/add_sprint_page.py', req.params.pwid, req.params.sprintid]);
-//        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//add_sprint_page.py",
+        //var python = require('child_process').spawn('python3', ['/Users/jgrzywna/Projects/dl/new_pmo/public/python/add_sprint_page.py', req.params.pwid, req.params.sprintid]);
+//        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//new_pmo//public//python//add_sprint_page.py",
 //            req.params.pwid, req.params.sprintid]);
         var output = "";
-        console.log("ok");
+        //console.log("bledy");
         python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
-        python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
+        //console.log("dane");
+        //python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
+        python.stdout.on('data', function(data){output += data });
         python.on('close', function(code)
         {
+            console.log(output);
             if (code !== 0) {  return res.send(500, code); }
             return res.send(200, output)
         });
@@ -163,13 +175,13 @@ module.exports = function(app) {
     // create PW with script
     app.get('/api/createpwdesc/:pwid/sprint/:sprintid', function(req, res) {
 
-        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/pmotoolsweb/public/python/py_gen_team.py']);
-        //var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_page5.py']);
+        //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/new_pmo/public/python/py_gen_team.py']);
+        //var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/add_page5.py']);
         //prod
-        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/pmotoolsweb/public/python/add_sprint_page_description_yattag.py', req.params.pwid, req.params.sprintid]);
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/add_sprint_page_description_yattag.py', req.params.pwid, req.params.sprintid]);
         //mac
-        //var python = require('child_process').spawn('python3', ['/Users/jgrzywna/Projects/dl/pmotoolsweb/public/python/add_sprint_page.py', req.params.pwid, req.params.sprintid]);
-//        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//pmotoolsweb//public//python//add_sprint_page.py",
+        //var python = require('child_process').spawn('python3', ['/Users/jgrzywna/Projects/dl/new_pmo/public/python/add_sprint_page.py', req.params.pwid, req.params.sprintid]);
+//        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//new_pmo//public//python//add_sprint_page.py",
 //            req.params.pwid, req.params.sprintid]);
 
         var output = "";
@@ -179,8 +191,59 @@ module.exports = function(app) {
             if (code !== 0) {  return res.send(500, code); }
             return res.send(200, output)
         });
+        return res.send(200, output)
     });
 
+
+    // update project main page from PW with script
+    app.get('/api/createproject/:prname', function(req, res) {
+
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/add_project_page_yattag.py', req.params.prname]);
+
+        var output = "";
+        python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
+        python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
+        //python.stdout.on('data', function(data){ output += data });
+        python.on('close', function(code)
+        {
+            if (code !== 0) {  console.log("code ", code); return res.send(200).send(code); }
+            //return res.send(200)
+        });
+        //return res.send(200)
+    });
+
+    // update all sprint pages with script
+    app.get('/api/updateall/:prname', function(req, res) {
+        console.log("--------------");
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/add_all_sprint_pages_yattag.py', req.params.prname]);
+
+        var output = "";
+        python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
+        python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
+        //python.stdout.on('data', function(data){ output += data });
+        python.on('close', function(code)
+        {
+            if (code !== 0) {  console.log("code ", code); return res.send(500).send(code); }
+        });
+        return res.sendStatus(200)
+        //return res.send(200).send("Stworzono dokumentacje projektu")
+    });
+
+    // update all sprint pages with script using description
+    app.get('/api/updatealldesc/:prname', function(req, res) {
+        console.log("--------------");
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/add_all_sprint_pages_description_yattag.py', req.params.prname]);
+
+        var output = "";
+        python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
+        python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
+        //python.stdout.on('data', function(data){ output += data });
+        python.on('close', function(code)
+        {
+            if (code !== 0) {  console.log("code ", code); return res.send(200).send(code); }
+        });
+        return res.sendStatus(200)
+    });
 
     // =========================== JIRA ================================
     // get all scrum boards
