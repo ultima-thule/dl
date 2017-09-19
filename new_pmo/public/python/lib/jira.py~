@@ -16,7 +16,6 @@ class JiraProject(object):
     """ Simple holder for the project data."""
     def __init__(self, project_name, query_result):
         self.name = project_name
-        self.id = query_result["issues"][0]["key"]
         try:
             self.start_date = query_result["issues"][0]["fields"]["customfield_12232"]
             self.deploy_date = query_result["issues"][0]["fields"]["customfield_12234"]
@@ -33,6 +32,7 @@ class JiraProject(object):
             self.mpk = query_result["issues"][0]["fields"]["customfield_12623"]
             self.team = query_result["issues"][0]["fields"]["customfield_12239"]["child"]["value"]
         except Exception as msg:
+            self.sprints = ()
             print("Nie wszystkie dane zostaly wypelnione")
             print(msg)
 
@@ -98,7 +98,7 @@ class Jira (object):
                 sp.append(int(out[3:-1]))
         sp_unit = {}.fromkeys(sp).keys()
         project.sprints = sp_unit
-        return
+        return project
 
     def get_worklogs_in_sprint(self, project_name, sprint):
         """ Gets worklogs within project and only in this sprint. """
@@ -145,7 +145,7 @@ class Jira (object):
 
     def _get_sprints_for_project(self, project_name):
         query = '/rest/api/2/search?jql=project="%s"' % project_name
-        query += "&fields=customfield_10800"
+        query += "&fields=customfield_10800&maxResults=200"
         return self.search(query)
 
 

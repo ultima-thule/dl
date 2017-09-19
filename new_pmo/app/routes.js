@@ -43,7 +43,7 @@ module.exports = function(app) {
         }
     };
 
-    app.use(timeout(1200000));
+    app.use(timeout(12000000));
     app.get('/api/test', function(req, res) {
         res.json({ message: 'hooray! welcome to our api!' });   
     });
@@ -60,24 +60,38 @@ module.exports = function(app) {
         //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//new_pmo//public//python//gen_estimate_tofile.py " + req.params.id]);
 
         var output = "";
-        python.stdout.on('data', function(data){ output += data });
+        python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
+        python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
+        //python.stdout.on('data', function(data){ output += data });
+        //tutaj data jest poprawna
         python.on('close', function(code)
         {
             if (code !== 0) {  return res.send(500, code); }
-
-            Pwfile.find({"project": req.params.id, "format_type": "XLSX"}).sort('-generation_date').exec(function(err, estfiles) {
-                if (err)
-                    res.send(err);
-                if (estfiles.length > 0) {
-                    var date = estfiles[0].date_text;
-                    res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + '_' + date + '.xlsx');
-                    res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                    res.send(estfiles[0].data);
-                    }
-                    else {
-                        return res.send(200, output)
-                    }
-              });
+           else {
+               console.log("Generuje kosztorys z AC dla projektu ", req.params.id);
+               filename = "./pw_files/" + req.params.id + "_kosztorys.xlsx"
+               res.append('Content-Disposition', 'attachment; filename=' + req.params.id + '_kosztorys.xlsx');
+               res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+               res.sendfile(filename);
+           }
+           // var x1 = Pwfile.find({"project": req.params.id, "format_type": "XLSX"})
+           // var x2 = x1.sort('-generation_date')
+           // x2.exec(function(err, estfiles) {
+           //     //tutaj nie przechodzi :(
+           //     if (err){
+           //         console.log(err);
+           //         res.send(err);
+           //     }
+           //     if (estfiles.length > 0) {
+           //         var date = estfiles[0].date_text;
+           //         res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + '_' + date + '.xlsx');
+           //         res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+           //         res.send(estfiles[0].data);
+           //         }
+           //         else {
+           //             return res.send(200, output)
+           //         }
+           //   });
         });
     });
 
@@ -95,20 +109,27 @@ module.exports = function(app) {
         python.on('close', function(code)
         {
             if (code !== 0) {  return res.send(500, code); }
+           else {
+               console.log("Generuje kosztorys z opisow dla projektu ", req.params.id);
+               filename = "./pw_files/" + req.params.id + "_kosztorys.xlsx"
+               res.append('Content-Disposition', 'attachment; filename=' + req.params.id + '_kosztorys.xlsx');
+               res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+               res.sendfile(filename);
+           }
 
-            Pwfile.find({"project": req.params.id, "format_type": "XLSX"}).sort('-generation_date').exec(function(err, estfiles) {
-                if (err)
-                    res.send(err);
-                if (estfiles.length > 0) {
-                    var date = estfiles[0].date_text;
-                    res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + '_' + date + '.xlsx');
-                    res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                    res.send(estfiles[0].data);
-                    }
-                    else {
-                        return res.send(200, output)
-                    }
-              });
+           // Pwfile.find({"project": req.params.id, "format_type": "XLSX"}).sort('-generation_date').exec(function(err, estfiles) {
+           //     if (err)
+           //         res.send(err);
+           //     if (estfiles.length > 0) {
+           //         var date = estfiles[0].date_text;
+           //         res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + '_' + date + '.xlsx');
+           //         res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+           //         res.send(estfiles[0].data);
+           //         }
+           //         else {
+           //             return res.send(200, output)
+           //         }
+           //   });
         });
     });
 
@@ -119,30 +140,39 @@ module.exports = function(app) {
         //var python = require('child_process').spawn('/usr/bin/python3', ['/home/asia/git/dl/new_pmo/public/python/gen_scope_tofile.py ' + req.params.id]);
         //PROD
         var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/gen_scope_tofile.py', req.params.id]);
+        //var python = PythonShell.run('/home/httpd/dl/new_pmo/public/python/gen_scope_tofile.py');
         //HOME
         //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//new_pmo//public//python//gen_scope_tofile.py " + req.params.id]);
 
         var output = "";
-        python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
-        //python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
+        python.stderr.on('data', function(data){ console.log("bug: ", uint8arrayToString(data)) });
+        //python.stdout.on('data', function(data){ console.log("dane: ", uint8arrayToString(data)); output += data });
         python.stdout.on('data', function(data){ output += data });
 
         python.on('close', function(code)
         {
            if (code !== 0) {  console.log("blad zamykania pythona"); return res.send(500, code); }
+           else {
+               filename = "./pw_files/" + req.params.id + ".docx"
+               console.log("Generuje plik pw dla projektu: ", req.params.id);
+               res.append('Content-Disposition', 'attachment; filename=' + req.params.id + '.docx');
+               res.append('Content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+               res.sendfile(filename);
+           }
 
-           var x1 = Pwfile.find({"project": req.params.id, "format_type": "DOCX"});
-           var x2 = x1.sort('-generation_date');
-           var x3 = x2.exec(function(err, scopefiles) {
-               if (err){res.send(err);}
-               if (scopefiles.length > 0) {
-                     var date = scopefiles[0].date_text;
-                     res.append('Content-Disposition', 'attachment; filename=' + scopefiles[0].project + '_' + date + '.docx');
-                     res.append('Content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-                     res.send(scopefiles[0].data);
-               }
-               else {return res.send(200, output);}
-           });
+           //var x1 = Pwfile.find({"project": req.params.id, "format_type": "DOCX"});
+           //var x2 = x1.sort('-generation_date');
+           //var x3 = x2.exec(function(err, scopefiles) {
+           //    console.log("wchodze w watek")
+           //    if (err){res.send(err);}
+           //    if (scopefiles.length > 0) {
+           //          var date = scopefiles[0].date_text;
+           //          res.append('Content-Disposition', 'attachment; filename=' + scopefiles[0].project + '_' + date + '.docx');
+           //          res.append('Content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+           //          res.send(scopefiles[0].data);
+           //    }
+           ////    else {return res.send(200, output);}
+           //});
         });
 
     });
@@ -159,9 +189,7 @@ module.exports = function(app) {
 //        var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//new_pmo//public//python//add_sprint_page.py",
 //            req.params.pwid, req.params.sprintid]);
         var output = "";
-        //console.log("bledy");
         python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
-        //console.log("dane");
         //python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
         python.stdout.on('data', function(data){output += data });
         python.on('close', function(code)

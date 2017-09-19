@@ -9,14 +9,19 @@ class JiraSprint(object):
     def __init__(self, sprint_id, query_result):
         self.id = sprint_id
         self.name = query_result["name"]
-        self.date_from = parser.parse(query_result["startDate"]).strftime('%Y-%m-%d')
-        self.date_to = parser.parse(query_result["endDate"]).strftime('%Y-%m-%d')
+        try:
+            self.date_from = parser.parse(query_result["startDate"]).strftime('%Y-%m-%d')
+        except:
+            self.date_from = "n/a"
+        try:
+            self.date_to = parser.parse(query_result["endDate"]).strftime('%Y-%m-%d')
+        except:
+            sef.date_from = "n/a"
 
 class JiraProject(object):
     """ Simple holder for the project data."""
     def __init__(self, project_name, query_result):
         self.name = project_name
-        self.id = query_result["issues"][0]["key"]
         try:
             self.start_date = query_result["issues"][0]["fields"]["customfield_12232"]
             self.deploy_date = query_result["issues"][0]["fields"]["customfield_12234"]
@@ -33,6 +38,7 @@ class JiraProject(object):
             self.mpk = query_result["issues"][0]["fields"]["customfield_12623"]
             self.team = query_result["issues"][0]["fields"]["customfield_12239"]["child"]["value"]
         except Exception as msg:
+            self.sprints = ()
             print("Nie wszystkie dane zostaly wypelnione")
             print(msg)
 
@@ -145,7 +151,7 @@ class Jira (object):
 
     def _get_sprints_for_project(self, project_name):
         query = '/rest/api/2/search?jql=project="%s"' % project_name
-        query += "&fields=customfield_10800"
+        query += "&fields=customfield_10800&maxResults=200"
         return self.search(query)
 
 

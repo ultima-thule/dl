@@ -134,9 +134,9 @@ if __name__ == '__main__':
     jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 
     date_text = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    file_name = project_name + "_kosztorys_" + date_text + ".xlsx"
+    file_name = "./pw_files/" + project_name + "_kosztorys.xlsx"
 
-    excelReport = lib.excel_estimate.ExcelEstimate(file_name, "Kosztorys", True)
+    excelReport = lib.excel_estimate.ExcelEstimate(file_name, "Kosztorys", False)
 
     issues = jira.get_all_issues(project_name)
     data = {
@@ -149,13 +149,15 @@ if __name__ == '__main__':
     excelReport.generate_report()
     data = excelReport.close()
 
-    pwfile = lib.mongoLeankit.Pwfile()
+    #document.save("./pw_files/%s.docx" % project_name)
 
-    pwfile.data = data
-    pwfile.project = project_name
-    pwfile.generation_date = datetime.datetime.now()
-    pwfile.date_text = date_text
-    pwfile.format_type = "XLSX"
-    pwfile.save()
+    #pwfile = lib.mongoLeankit.Pwfile()
+
+    #pwfile.data = data
+    #pwfile.project = project_name
+    #pwfile.generation_date = datetime.datetime.now()
+    #pwfile.date_text = date_text
+    #pwfile.format_type = "XLSX"
+    #pwfile.save()
 
     exit(0)

@@ -12,6 +12,7 @@ from lxml.html.clean import clean_html
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml.shared import OxmlElement, qn
 import sys
+import time
 
 import credentials
 import lib.confluence
@@ -373,11 +374,8 @@ def get_page_tree(cf_server, page):
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         exit("Usage: " + sys.argv[0] + " projectname")
-    print("aaaaaA")
     project_name = sys.argv[1]
 
-    print(project_name)
-    exit(0)
     _initMongoConn()
 
     #init Confluence connection
@@ -392,7 +390,7 @@ if __name__ == '__main__':
     document = docx.Document()
 
     project_page = confl.get_page(project_name)
-    print(project_page)
+    #print(project_page)
     if project_page is not None:
         #create title PW pages
         generate_pw_first_page(document, project_name)
@@ -443,19 +441,20 @@ if __name__ == '__main__':
         #create last PW pages
         generate_pw_last_page(document)
 
-    target_stream = io.BytesIO()
-    print("target_stream")
-    document.save(target_stream)
-    target_stream.seek(0)
-    pwfile = lib.mongoLeankit.Pwfile()
+    # workaround na przekazywanie pliku do frontu
+    document.save("%s.docx" % project_name)
 
-    pwfile.data = target_stream.read()
-    pwfile.project = project_name
-    pwfile.generation_date = datetime.datetime.now()
-    pwfile.date_text = date_text
-    pwfile.format_type = "DOCX"
-    pwfile.save()
+    # wylaczam, robie workaround jak powyżej
+    #target_stream = io.BytesIO()
+    #document.save(target_stream)
+    #target_stream.seek(0)
+    #pwfile = lib.mongoLeankit.Pwfile()
 
-    target_stream.close()
-
+    #pwfile.data = target_stream.read()
+    #pwfile.project = project_name
+    #pwfile.generation_date = datetime.datetime.now()
+    #pwfile.date_text = date_text
+    #pwfile.format_type = "DOCX"
+    #pwfile.save()
+    #target_stream.close()
     exit(0)

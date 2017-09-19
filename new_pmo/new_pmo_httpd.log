@@ -1,0 +1,17 @@
+nohup: ignoring input
+Magic happens on port 8080
+startuje generacje
+Generuje plik pw dla projektu:  PL_GRO_M_SPO_SPORT.ON.UCS
+Tue, 19 Sep 2017 10:24:28 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:160:20
+[0mGET /api/genscope/PL_GRO_M_SPO_SPORT.ON.UCS [32m200 [0m2264.619 ms - 51356[0m
+/usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z AC dla projektu  PL_GRO_M_SPO_SPORT.ON.UCS
+Tue, 19 Sep 2017 10:24:42 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:75:20
+[0mGET /api/genestimate/PL_GRO_M_SPO_SPORT.ON.UCS [32m200 [0m2197.981 ms - 9247[0m
+/usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z AC dla projektu  PL_DL_IT_MOB_SDK.1.2_L
+[0mGET /api/genestimate/PL_DL_IT_MOB_SDK.1.2_L [32m200 [0m3718.767 ms - 10236[0m
