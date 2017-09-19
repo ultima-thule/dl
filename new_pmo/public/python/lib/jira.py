@@ -16,7 +16,7 @@ class JiraSprint(object):
         try:
             self.date_to = parser.parse(query_result["endDate"]).strftime('%Y-%m-%d')
         except:
-            sef.date_from = "n/a"
+            self.date_from = "n/a"
 
 class JiraProject(object):
     """ Simple holder for the project data."""
