@@ -2,6 +2,7 @@ import json
 import re
 import requests
 from dateutil import parser
+from time import sleep
 
 
 class JiraSprint(object):
@@ -22,25 +23,35 @@ class JiraProject(object):
     """ Simple holder for the project data."""
     def __init__(self, project_name, query_result):
         self.name = project_name
-        try:
-            self.start_date = query_result["issues"][0]["fields"]["customfield_12232"]
-            self.deploy_date = query_result["issues"][0]["fields"]["customfield_12234"]
-            self.deploy_lbe = query_result["issues"][0]["fields"]["customfield_12233"]
-            self.end_date = query_result["issues"][0]["fields"]["customfield_12228"]
-            self.description = query_result["issues"][0]["fields"]["description"]
-            self.pm = "nimrod"
-            self.po = query_result["issues"][0]["fields"]["customfield_12244"]["displayName"]
-            self.cost_lbe = query_result["issues"][0]["fields"]["customfield_12223"]
-            self.cost_planned = query_result["issues"][0]["fields"]["customfield_12222"]
-            self.cost_current = query_result["issues"][0]["fields"]["customfield_12238"]
-            self.milestones = []
-            self.sprints = query_result["issues"][0]["fields"]["customfield_10800"]
-            self.mpk = query_result["issues"][0]["fields"]["customfield_12623"]
-            self.team = query_result["issues"][0]["fields"]["customfield_12239"]["child"]["value"]
-        except Exception as msg:
+        self.project_data = query_result
+        #try:
+        #    self.project_data = query_result["issues"][0]["fields"]
+        #except Exception as msg:
+        #    self.sprints = ()
+        #    print("Nie ma takiego projektu")
+        #    return
+        self.start_date = self.project_data.get("customfield_12232")
+        self.project_code = self.project_data.get("customfield_12243")
+        self.deploy_date = self.project_data.get("customfield_12234")
+        self.deploy_lbe = self.project_data.get("customfield_12233")
+        self.end_date = self.project_data.get("customfield_12228")
+        self.description = self.project_data.get("description")
+        self.pm = self.project_data.get("assignee")
+        self.cost_lbe = self.project_data.get("customfield_12223")
+        self.cost_planned = self.project_data.get("customfield_12222")
+        self.cost_current = self.project_data.get("customfield_12238")
+        self.milestones = []
+        self.sprints = self.project_data.get("customfield_10800", ())
+        if self.sprints is None:
             self.sprints = ()
-            print("Nie wszystkie dane zostaly wypelnione")
-            print(msg)
+        self.mpk = self.project_data.get("customfield_12623")
+        try:
+            self.po = self.project_data.get("customfield_12244", {})["displayName"]
+            self.team = self.project_data.get("customfield_12239")["child"]["value"]
+        except Exception as msg:
+            self.po = None
+            self.team = None
+            print("nie chcialo mi sie tego parsowac:P")
 
 
 class JiraTimeSpent (object):
@@ -61,7 +72,11 @@ class Jira (object):
 
     def search(self, jql_search, result_key=None):
         """ Generic search method."""
-        out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+        try:
+            out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+        except requests.exceptions.ConnectionError as msg:
+            print("The connection to jira has just been timeouted")
+        sleep(3)
         results = json.loads(out.content.decode())
         if result_key is not None:
             return results.get(result_key)
@@ -93,18 +108,37 @@ class Jira (object):
 
     def get_project_data(self, project_name):
         """ Gets project general data from Jira. """
-        project_data = self._get_all_project_batch(project_name)
-        project = JiraProject(project_name, project_data)
-        sprints = self._get_sprints_for_project(project_name)
-        sp = []
-        for data in sprints["issues"]:
-            x = data["fields"]["customfield_10800"]
-            if x is not None:
-                out = re.search("id=.*?,", x[0]).group(0)
-                sp.append(int(out[3:-1]))
-        sp_unit = {}.fromkeys(sp).keys()
-        project.sprints = sp_unit
-        return project
+        try:
+            project_data = self._get_all_project_batch(project_name)
+            try:
+                query_data = project_data["issues"][0]["fields"]
+            except Exception as msg:
+                print("Nie ma takiego projektu")
+                return
+            project = JiraProject(project_name, query_data)
+            sprints = self._get_sprints_for_project(project_name)
+            sp = []
+            for data in sprints["issues"]:
+                x = data["fields"]["customfield_10800"]
+                if x is not None:
+                    out = re.search("id=.*?,", x[0]).group(0)
+                    sp.append(int(out[3:-1]))
+            sp_unit = {}.fromkeys(sp).keys()
+            project.sprints = sp_unit
+            return project
+        except Exception as msg:
+            print("Jakas dupa z projektem %s" % project_name)
+            print(msg)
+
+    def get_portfolio_data(self):
+        """ Gets current project portfolio general data from Jira. """
+        portfolio_data = self._get_all_portfolio_batch()
+        projects = {}
+        for p in portfolio_data:
+            print(p["fields"]["customfield_12243"])
+            projects.update({p["fields"]["customfield_12243"] : JiraProject(p.name, p["fields"])})
+        print(projects)
+        return projects
 
     def get_worklogs_in_sprint(self, project_name, sprint):
         """ Gets worklogs within project and only in this sprint. """
@@ -157,37 +191,23 @@ class Jira (object):
 
     def _get_all_initiatives_batch(self, project_name, start_at):
         """ Gets all issues within project - one 50-elem batch.
-        Custom fields codes:
-        customfield_12237 - Inititative status
-        customfield_12227 - Risk status
-        customfield_12240 - Risk description
-        customfield_12231 - BO
-        customfield_12239 - Owned by team
-        customfield_12243 - Project code
-        customfield_12226 - Project card
-        customfield_12230 - Contract status
-        customfield_12222 - Planned cost
-        customfield_12223 - Cost LBE
-        customfield_12238 - Current cost
-        customfield_12232 - Started on
-        customfield_12234 - Planned release on
-        customfield_12233 - Release LBE on
-        customfield_12228 - Finish on
-        customfield_12244 - Product Owner
-        customfield_12235 - Program manager or Coordinator
-
-        summary,description,assignee,status,customfield_12237,customfield_12227,customfield_12240,customfield_12231,
-        customfield_12239,customfield_12243,customfield_12226,customfield_12230,customfield_12222,customfield_12223,
-        customfield_12238,customfield_12232,customfield_12234,customfield_12233,customfield_12228,customfield_12244
-
         """
         query = "/rest/api/2/search?jql=project='" + project_name + "' and fixVersion in unreleasedVersions()"
-        # query += "&fields=summary,description,assignee,status,epicLink,customfield_12237,customfield_12227,"
-        # query += "customfield_12240,customfield_12231,customfield_12239,customfield_12243,customfield_12226,"
-        # query += "customfield_12230,customfield_12222,customfield_12223,customfield_12238,customfield_12232,"
-        # query += "customfield_12234,customfield_12233,customfield_12228,customfield_12244,customfield_12235"
         query += "&expand=changelog&startAt=" + str(start_at)
 
+        return self.search(query)
+
+    def _get_all_portfolio_batch(self):
+        """ Gets all issues within portfolio - one 50-elem batch.
+        """
+        query = "/rest/api/2/search?jql=project='PORT' and status not in (roadmap) "
+        query += "&fields=summary,description,assignee,status,epicLink,customfield_12237,customfield_12227,"
+        query += "customfield_12240,customfield_12231,customfield_12239,customfield_12243,customfield_12226,"
+        query += "customfield_12230,customfield_12222,customfield_12223,customfield_12238,customfield_12232,"
+        query += "customfield_12234,customfield_12233,customfield_12228,customfield_12244,customfield_12235,"
+        query += "customfield_12623, customfield_10800"
+        #query += "&expand=changelog&startAt=" + str(start_at)
+        print(query)
         return self.search(query)
 
     def _get_all_project_batch(self, project_name):
