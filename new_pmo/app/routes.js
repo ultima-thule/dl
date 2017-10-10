@@ -273,6 +273,21 @@ module.exports = function(app) {
         return res.sendStatus(200)
     });
 
+    // generate portfolio report
+    app.get('/api/getportfolioreport', function(req, res) {
+        var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/portfolio_stats.py', req.params.prname]);
+
+        var output = "";
+        python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
+        python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
+        //python.stdout.on('data', function(data){ output += data });
+        python.on('close', function(code)
+        {
+            if (code !== 0) {  console.log("code ", code); return res.send(200).send(code); }
+        });
+        return res.send(200, output)
+    });
+
     // =========================== JIRA ================================
     // get all scrum boards
     app.get('/api/jira/boards', function(req, res) {

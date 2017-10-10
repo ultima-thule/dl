@@ -209,7 +209,7 @@ def count_real_reported_time (jira_hours, sprint):
 
 
 if __name__ == '__main__':
-    dev = 0 
+    dev = 0
     if len(sys.argv) < 3:
         exit("Usage: " + sys.argv[0] + " projectname sprint")
 
@@ -246,7 +246,7 @@ if __name__ == '__main__':
 
 
     #====================================================
-    # BUILD HTML 
+    # BUILD HTML
     #====================================================
     doc, tag, text = Doc().tagtext()
 

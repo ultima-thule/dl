@@ -68,7 +68,7 @@ def createCfPage(cfServer, userToken, spaceKey, title, parentID, content, pageId
     return newPage
 
 if __name__ == '__main__':
-    dev = 0 
+    dev = 0
 
 
     #============CONST============
@@ -102,7 +102,7 @@ if __name__ == '__main__':
     dateFrom = parser.parse(jira_sprint_data["startDate"])
     dateTo = parser.parse(jira_sprint_data["endDate"])
     # TODO: change on console
-    #dateFrom = datetime.now() - timedelta(days=14) 
+    #dateFrom = datetime.now() - timedelta(days=14)
     #dateTo = datetime.now()
     #real reported hours
     jira_hours_search = "http://jira.grupa.onet/rest/api/2/search?jql=project='" + projectname + "' \

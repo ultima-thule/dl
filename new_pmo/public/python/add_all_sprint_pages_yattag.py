@@ -42,6 +42,9 @@ if __name__ == '__main__':
     # Get the sprint general data
     print("get project data for " + project_name)
     project = jira.get_project_data(project_name)
+    if project is None:
+        print("Blad pobierania projektu")
+        exit(1)
     print("create sprint pages")
     for sprint in project.sprints:
         os.system("python3.4 /home/httpd/dl/new_pmo/public/python/add_sprint_page_yattag.py %s %d"%(project_name, sprint))

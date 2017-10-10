@@ -31,10 +31,10 @@ class Confluence (object):
 
     def get_or_create_page(self, title, parent_id, content):
         page_id = None
-
         try:
             page_id = self.server.confluence2.getPage(self.token, self.spacekey, title)
-        except:
+        except Exception as msg:
+            print(msg)
             if self.create_page(title, parent_id, content) is not None:
                 page_id = self.server.confluence2.getPage(self.token, self.spacekey, title)
 
@@ -45,15 +45,18 @@ class Confluence (object):
 
         try:
             page_id = self.server.confluence2.getPage(self.token, self.spacekey, title)
-        except:
+        except Exception as msg:
+            print("=======")
+            print(msg)
             if self.create_page(title, parent_id, content) is not None:
                 page_id = self.server.confluence2.getPage(self.token, self.spacekey, title)
                 return page_id
         try:
             if self.create_page(title, parent_id, content, page_id) is not None:
                 return page_id
-        except:
-            #print(msg)
+        except Exception as msg:
+            print("-------")
+            print(msg)
             pass
         return page_id
 
