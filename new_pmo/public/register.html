@@ -1,12 +1,152 @@
 <html>
+
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet">
+    
 <title>Agile Newsletter</title>
+
+<script type="text/javascript">/* <![CDATA[ */
+accConf = {"events":{"endpointPaths":["/a8f4d8cd95e164917035b64b867a45dd"]}};
+/* ]]> */
+</script>
+    
+<style>
+    
+    body {
+        font-family: 'Roboto', sans-serif;
+        color: #fff;
+        background: url(img/bg.png) 28% center repeat-y, linear-gradient(to right, #31b1ff 0%,#573dff 100%);
+    }
+    
+    .main {
+        margin-top: 2em;
+        margin-bottom: 2em;
+        padding-bottom: 1em;
+        background: rgba(0,0,0,.1);
+    }
+    
+    .main img {
+        position: absolute;
+        bottom: -10px;
+        right: 0;
+    }
+    
+    .main h3 {
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+    
+    form input {
+        display: inline-block;
+        box-sizing: border-box;
+        color: #fff;
+        background: rgba(49, 177, 255, 0.9);
+        border: 0 none;
+        padding: 10px 20px;
+        outline: 0;
+        width: 400px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+    
+    form input::-webkit-input-placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    input:focus::-webkit-input-placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    form button {
+        display: inline-block;
+        width: 100px;
+        background: rgba(87, 61, 255, .8);
+        font-weight: bold;
+        color: white;
+        border: 0 none;
+        cursor: pointer;
+        padding: 10px 5px;
+        margin-left: 1em;
+    }
+    
+    form button:hover {
+        background: rgba(87, 61, 255, 1);
+    }
+    
+    .info {
+        padding-top: 5px;
+        font-size: 10px;
+    }
+    
+    @media (max-width: 991px) { /* bootstrap breakpoint */
+        form input {
+            width: 250px;
+        }
+    }
+    
+    @media (max-width: 575px) { /* bootstrap breakpoint */
+        form input {
+            display: block;
+            width: 100%;
+        }
+        
+        form button {
+            display: block;
+            margin-top: 1em;
+            margin-left: 0;
+            width: 100%;
+        }
+    }
+    
+</style>
+    
+    
 </head>
-<h1>Zapisz się do naszego newslettera</h1>
-<form method="post" action="https://app.freshmail.com/pl/actions/subscribe/"><br />
-    <input type="hidden" name="subscribers_list_hash" value="uvi7zpe9c8" /><br />
-    <label for="freshmail_email">Email</label><br /><br />
-    <input type="text" id="freshmail_email" name="freshmail_email"/> <br/><br />
-    <input type="submit" value="Wyślij" /><br />
-</form>
+    
+
+<body>
+    
+
+<div class="container main">
+
+    <div class="row justify-content-center">
+        <div class="col col-12 col-md-10">
+            <h3 class="text-center">Agile Newsletter - zapisz się!</h3>
+            <p>Project Management Office zaprasza wszystkich zainteresowanych do zapisu do Agile Newslettera!</p>
+            <p>Zdobędziesz wiedzę m.in. na temat: LOREM IPSUM LOREM IPSUM</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col col-12 col-md-10">
+            <form method="post" action="https://app.freshmail.com/pl/actions/subscribe/">
+                <div class="row justify-content-center">
+                    <div class="col col-12 col-sm-10 d-flex justify-content-center flex-column flex-sm-row">
+                        <input id="freshmail_email" name="freshmail_email" type="email" placeholder="Podaj swój adres e-mail.">
+                        <input name="subscribers_list_hash" value="uvi7zpe9c8" type="hidden">
+                        <button type="submit" value="Zapisz">ZAPISZ</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div claSS="col col-12">
+                        <p class="info text-center">Wysyłka newsletterów obsługiwa przez FreshMail. W każdej chwili możesz samodzielnie się wypisać.</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col col-12">
+            <img src="img/logo_dl.png">
+        </div>
+    </div>
+
+</div>
+
+    
+</body>
 </html>
