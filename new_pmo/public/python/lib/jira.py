@@ -238,7 +238,8 @@ class Jira (object):
         customfield_12238,customfield_12232,customfield_12234,customfield_12233,customfield_12228,customfield_12244
 
         """
-        query = '/rest/api/2/search?jql=project=PORT AND resolution=Unresolved AND "Project code"~"%s"' % project_name
+        #query = '/rest/api/2/search?jql=project=PORT AND resolution=Unresolved AND "Project code"~"%s"' % project_name
+        query = '/rest/api/2/search?jql=project=PORT AND "Project code"~"%s"' % project_name
         query += "&fields=summary,description,assignee,status,epicLink,customfield_12237,customfield_12227,"
         query += "customfield_12240,customfield_12231,customfield_12239,customfield_12243,customfield_12226,"
         query += "customfield_12230,customfield_12222,customfield_12223,customfield_12238,customfield_12232,"
