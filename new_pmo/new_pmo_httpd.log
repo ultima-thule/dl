@@ -22,3 +22,33 @@ Generuje kosztorys z AC dla projektu  PL_GRO_AD_U8.DREAMADSERVER.INT_P
 Wed, 11 Oct 2017 11:55:56 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:76:24
 [0mGET /api/genestimate/PL_GRO_AD_U8.DREAMADSERVER.INT_P [32m200 [0m14720.988 ms - 9775[0m
 [0mGET /api/genestimate/KP%20%7C%20PL_GRO_AD_U8.DREAMADSERVER.INT_P [0m- [0m- ms - -[0m
+Traceback (most recent call last):
+  File "/home/httpd/dl/new_pmo/public/python/gen_estimate_tofile.py", line 141, in <module>
+    issues = jira.get_all_issues(project_name)
+  File "/home/httpd/dl/new_pmo/public/python/lib/jira.py", line 185, in get_all_issues
+    return self._search_in_batches(self._get_all_issues_batch, project_name)
+  File "/home/httpd/dl/new_pmo/public/python/lib/jira.py", line 96, in _search_in_batches
+    no_of_batches = int(total / max_results)
+TypeError: unsupported operand type(s) for /: 'int' and 'str'
+
+Exception ignored in: <bound method Workbook.__del__ of <xlsxwriter.workbook.Workbook object at 0x7fc67cad7710>>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.4/dist-packages/xlsxwriter/workbook.py", line 147, in __del__
+Exception: Exception caught in workbook destructor. Explicit close() may be required for workbook.
+
+code  1
+[0mGET /api/genestimate/null [0m- [0m- ms - -[0m
+Wed, 11 Oct 2017 13:15:13 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:390:17
+[0mGET /apple-touch-icon-precomposed.png [32m200 [0m1.405 ms - 332[0m
+[0mGET /apple-touch-icon.png [32m200 [0m0.414 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m2.523 ms - 332[0m
+[0mGET /apple-touch-icon-precomposed.png [32m200 [0m0.656 ms - 332[0m
+[0mGET /apple-touch-icon.png [32m200 [0m0.860 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.420 ms - 332[0m
+[0mGET /apple-touch-icon-precomposed.png [32m200 [0m0.471 ms - 332[0m
+[0mGET /apple-touch-icon.png [32m200 [0m0.338 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.534 ms - 332[0m
+[0mGET /apple-touch-icon-precomposed.png [32m200 [0m0.389 ms - 332[0m
+[0mGET /apple-touch-icon.png [32m200 [0m0.417 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.882 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.644 ms - 332[0m
