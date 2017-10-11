@@ -91,7 +91,7 @@ class Jira (object):
         data = func(*(args + (0,)))
         issues = data.get("issues", [])
         start_at = data.get("startAt", [])
-        max_results = data.get("maxResults", "")
+        max_results = data.get("maxResults", 1)
         total = data.get("total", 0)
         no_of_batches = int(total / max_results)
         if total % max_results != 0:

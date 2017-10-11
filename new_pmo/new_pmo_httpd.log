@@ -52,3 +52,11 @@ Wed, 11 Oct 2017 13:15:13 GMT express deprecated res.sendfile: Use res.sendFile 
 [0mGET /apple-touch-icon.png [32m200 [0m0.417 ms - 332[0m
 [0mGET /favicon.ico [32m200 [0m0.882 ms - 332[0m
 [0mGET /favicon.ico [32m200 [0m0.644 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.684 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.697 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m1.425 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.635 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.533 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.473 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m2.450 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.607 ms - 332[0m
