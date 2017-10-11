@@ -1,25 +1,57 @@
 function pwGen() {
     var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
-    window.open ("http://pmo.cloud.onet/api/genscope/" + projectCode);
+    if(projectCode === undefined || projectCode == ''){
+        projectCode = prompt("Wpisz kod projektu:");
+    };
+    if(projectCode === null || projectCode == ""){
+        alert("Dziękujemy za rezygnację generowania pw dla projektu");
+    }
+    else{
+        window.open ("http://pmo.cloud.onet/api/genscope/" + projectCode);
+    }
 };
 
 function costGen() {
     var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    if(projectCode === undefined || projectCode == ''){
+        projectCode = prompt("Wpisz kod projektu:");
+    };
+    if(projectCode == null || projectCode == "" ){
+        alert("Dziękujemy za rezygnację generowania pw dla projektu");
+    };
     window.open ("http://pmo.cloud.onet/api/genestimate/" + projectCode);
 };
 
 function costGen2() {
     var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    if(projectCode === undefined || projectCode == ''){
+        projectCode = prompt("Wpisz kod projektu:");
+    };
+    if(projectCode == null || projectCode == "" ){
+        alert("Dziękujemy za rezygnację generowania pw dla projektu");
+    };
     window.open ("http://pmo.cloud.onet/api/genestimate2/" + projectCode);
 };
 
 function fullGen() {
     var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    if(projectCode === undefined || projectCode == ''){
+        projectCode = prompt("Wpisz kod projektu:");
+    };
+    if(projectCode == null || projectCode == "" ){
+        alert("Dziękujemy za rezygnację generowania pw dla projektu");
+    };
     window.open ("http://pmo.cloud.onet/api/updateall/" + projectCode);
 };
 
 function fullGenDesc() {
     var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    if(projectCode === undefined || projectCode == ''){
+        projectCode = prompt("Wpisz kod projektu:");
+    };
+    if(projectCode == null || projectCode == "" ){
+        alert("Dziękujemy za rezygnację generowania pw dla projektu");
+    };
     window.open ("http://pmo.cloud.onet/api/updatealldesc/" + projectCode);
 };
 
@@ -132,6 +164,16 @@ function hideMe(arrayId){
     });
 };
 
+// Project management
+function openProject(){
+    alert("In progress");
+};
+
+function closeProject(){
+    alert("In progress");
+};
+
+//---------------------- MAIN MENU FUNCTIONS------------------------------
 function pmoMenuClose() {
     $(".pmoMenuContainer").remove();
     $("script[src$='PMOTool.js']").remove();
@@ -193,6 +235,10 @@ function addButtons() {
     menu_val += ' <ul>  <li onClick="fullGen()">Dokumentacja projektu(kryteria akceptacji)</li> ';
     menu_val += '<li onClick="fullGenDesc()">Dokumentacja projektu (opis)</li> </ul> </li> ';
     menu_val += '<li onClick="portfolioGen()" title="Obecnie nieużywane">Generuj dane z portfolio</li> ';
+    menu_val += '<li title="Zarządzanie projektem">Projekt<i class="fa fa-angle-down"></i> ';
+    menu_val += '<ul>  <li onClick="openProject()">Uruchom projekt</li>';
+    menu_val += ' <li onClick="closeProject()">Zamknij projekt</li>';
+    menu_val += '</ul></li> ';
     menu_val += '<li onClick="pmoMenuClose()" class="pmoMenuClose"><i class="fa fa-window-close-o fa-2"></i></li> ';
     menu_val += '<li title="Dokumentacja PMO Menu na Confluence" class="external"><a href="http://doc.grupa.onet/display/AG/PMO+Menu" target="_blank"><i class="fa fa-info"></i>Dokumentacja</a></li>';
     menu_val += '<li title="Pełna wersja PMO Tools" class="external"><a href="http://pmo.cloud.onet" target="_blank"><i class="fa fa-key"></i>PMO Tools</a></li></ul> </div></div>';

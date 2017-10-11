@@ -73,22 +73,26 @@ class Jira (object):
     def search(self, jql_search, result_key=None):
         """ Generic search method."""
         try:
-            out = requests.get(self.url + jql_search, auth=(self.username, self.password))
-        except requests.exceptions.ConnectionError as msg:
-            print("The connection to jira has just been timeouted")
-        sleep(3)
-        results = json.loads(out.content.decode())
-        if result_key is not None:
-            return results.get(result_key)
-        return results
+            try:
+                out = requests.get(self.url + jql_search, auth=(self.username, self.password))
+            except requests.exceptions.ConnectionError as msg:
+                print("The connection to jira has just been timeouted")
+            sleep(3)
+            results = json.loads(out.content.decode())
+            if result_key is not None:
+                return results.get(result_key)
+            return results
+        except Exception as msg:
+            print("Problem z pobraniem danych z jiry")
+            print(msg)
 
     def _search_in_batches(self, func, *args):
         """ Reads all 50-elem batches of data from Jira. """
         data = func(*(args + (0,)))
-        issues = data["issues"]
-        start_at = data["startAt"]
-        max_results = data["maxResults"]
-        total = data["total"]
+        issues = data.get("issues", [])
+        start_at = data.get("startAt", [])
+        max_results = data.get("maxResults", "")
+        total = data.get("total", 0)
         no_of_batches = int(total / max_results)
         if total % max_results != 0:
             no_of_batches += 1
@@ -103,8 +107,12 @@ class Jira (object):
 
     def get_sprint_data(self, sprint_id):
         """ Gets sprint general data from Jira. """
-        query = "/rest/agile/1.0/sprint/" + sprint_id
-        return JiraSprint(sprint_id, self.search(query))
+        try:
+            query = "/rest/agile/1.0/sprint/" + sprint_id
+            return JiraSprint(sprint_id, self.search(query))
+        except Exception as msg:
+            print("problem z pobraniem identyfikatora sprintu")
+            print(msg)
 
     def get_project_data(self, project_name):
         """ Gets project general data from Jira. """
@@ -142,6 +150,7 @@ class Jira (object):
 
     def get_worklogs_in_sprint(self, project_name, sprint):
         """ Gets worklogs within project and only in this sprint. """
+        print("Pobieram dane ze sprintu: %s"%str(sprint))
         return self._search_in_batches(self._get_worklogs_in_sprint_batch, project_name, sprint)
 
     def _get_worklogs_in_sprint_batch(self, project_name, sprint, start_at):
@@ -157,7 +166,11 @@ class Jira (object):
 
     def get_issues_in_sprint(self, project_name, sprint):
         """ Gets all issues within project and sprint, in several batches. """
-        return self._search_in_batches(self._get_issues_in_sprint_batch, project_name, sprint)
+        try:
+            return self._search_in_batches(self._get_issues_in_sprint_batch, project_name, sprint)
+        except Exception as msg:
+            print("Problem z pobraniem taskow ze sprintu")
+            print(msg)
 
     def _get_issues_in_sprint_batch(self, project_name, sprint, start_at):
         """ Gets all issues within project and sprint - one 50-elem batch. """
@@ -207,7 +220,6 @@ class Jira (object):
         query += "customfield_12234,customfield_12233,customfield_12228,customfield_12244,customfield_12235,"
         query += "customfield_12623, customfield_10800"
         #query += "&expand=changelog&startAt=" + str(start_at)
-        print(query)
         return self.search(query)
 
     def _get_all_project_batch(self, project_name):
@@ -238,11 +250,15 @@ class Jira (object):
         customfield_12238,customfield_12232,customfield_12234,customfield_12233,customfield_12228,customfield_12244
 
         """
-        #query = '/rest/api/2/search?jql=project=PORT AND resolution=Unresolved AND "Project code"~"%s"' % project_name
-        query = '/rest/api/2/search?jql=project=PORT AND "Project code"~"%s"' % project_name
-        query += "&fields=summary,description,assignee,status,epicLink,customfield_12237,customfield_12227,"
-        query += "customfield_12240,customfield_12231,customfield_12239,customfield_12243,customfield_12226,"
-        query += "customfield_12230,customfield_12222,customfield_12223,customfield_12238,customfield_12232,"
-        query += "customfield_12234,customfield_12233,customfield_12228,customfield_12244,customfield_12235,"
-        query += "customfield_12623, customfield_10800"
-        return self.search(query)
+        try:
+            #query = '/rest/api/2/search?jql=project=PORT AND resolution=Unresolved AND "Project code"~"%s"' % project_name
+            query = '/rest/api/2/search?jql=project=PORT AND "Project code"~"%s"' % project_name
+            query += "&fields=summary,description,assignee,status,epicLink,customfield_12237,customfield_12227,"
+            query += "customfield_12240,customfield_12231,customfield_12239,customfield_12243,customfield_12226,"
+            query += "customfield_12230,customfield_12222,customfield_12223,customfield_12238,customfield_12232,"
+            query += "customfield_12234,customfield_12233,customfield_12228,customfield_12244,customfield_12235,"
+            query += "customfield_12623, customfield_10800"
+            return self.search(query)
+        except Exception as msg:
+            print("Problem z pobraniem danych projektowych z portfolio")
+            print(msg)

@@ -1,185 +1,24 @@
 nohup: ignoring input
 Magic happens on port 8080
---------------
-[0mGET /api/updateall/PL_RAS_M_BUS_FORBES [32m200 [0m9.939 ms - 2[0m
-Mon, 09 Oct 2017 11:31:53 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:389:13
-[0mGET /favicon.ico [32m200 [0m6.813 ms - 332[0m
-generuje strone dla PL_RAS_M_BUS_FORBES dla sprintu 4530
-new page id = 68083202
+Traceback (most recent call last):
+  File "/home/httpd/dl/new_pmo/public/python/gen_estimate_tofile.py", line 141, in <module>
+    issues = jira.get_all_issues(project_name)
+  File "/home/httpd/dl/new_pmo/public/python/lib/jira.py", line 185, in get_all_issues
+    return self._search_in_batches(self._get_all_issues_batch, project_name)
+  File "/home/httpd/dl/new_pmo/public/python/lib/jira.py", line 93, in _search_in_batches
+    start_at = data["startAt"]
+KeyError: 'startAt'
 
---------------
-[0mGET /api/updateall/PL_RAS_M_BUS_FORBES [32m200 [0m4.331 ms - 2[0m
-[0mGET /favicon.ico [32m200 [0m0.970 ms - 332[0m
-generuje strone dla PL_RAS_M_BUS_FORBES dla sprintu 4791
-new page id = 68083206
+Exception ignored in: <bound method Workbook.__del__ of <xlsxwriter.workbook.Workbook object at 0x7f128e9c7a58>>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.4/dist-packages/xlsxwriter/workbook.py", line 147, in __del__
+Exception: Exception caught in workbook destructor. Explicit close() may be required for workbook.
 
-get project data for PL_RAS_M_BUS_FORBES
-dict_keys([4530, 4791])
-create sprint pages
+code  1
+/usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
 
-generuje strone dla PL_RAS_M_BUS_FORBES dla sprintu 4530
-new page id = 68083202
-
-generuje strone dla PL_RAS_M_BUS_FORBES dla sprintu 4791
-new page id = 68083206
-
-get project data for PL_RAS_M_BUS_FORBES
-dict_keys([4530, 4791])
-create sprint pages
-
-[0mGET /apple-touch-icon-precomposed.png [32m200 [0m0.655 ms - 332[0m
-[0mGET /apple-touch-icon.png [32m200 [0m1.380 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.398 ms - 332[0m
-[0mGET /apple-touch-icon-precomposed.png [32m200 [0m1.267 ms - 332[0m
-[0mGET /apple-touch-icon.png [32m200 [0m0.457 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m1.753 ms - 332[0m
-[0mGET /apple-touch-icon-precomposed.png [32m200 [0m0.667 ms - 332[0m
-[0mGET /apple-touch-icon.png [32m200 [0m0.474 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m1.201 ms - 332[0m
-[0mGET /apple-touch-icon-precomposed.png [32m200 [0m0.448 ms - 332[0m
-[0mGET /apple-touch-icon.png [32m200 [0m0.507 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.777 ms - 332[0m
-Mon, 09 Oct 2017 12:20:10 GMT express deprecated res.send(status, body): Use res.status(status).send(body) instead at app/routes.js:111:43
-[0mGET /api/genestimate2/Sprint%204530%20%7C%20PL_RAS_M_BUS_FORBES [31m500 [0m3736.202 ms - 1[0m
-[0mGET /favicon.ico [32m200 [0m0.586 ms - 332[0m
-[0mGET /api/genestimate2/Sprint%204530%20%7C%20PL_RAS_M_BUS_FORBES [31m500 [0m3704.621 ms - 1[0m
---------------
-[0mGET /api/updateall/PL_RAS_M_BUS_FORBES.POZAMVP [32m200 [0m5.216 ms - 2[0m
---------------
-[0mGET /api/updateall/PL_RAS_M_BUS_FORBES.POZAMVP [32m200 [0m3.336 ms - 2[0m
-[0mGET /favicon.ico [32m200 [0m0.540 ms - 332[0m
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4368
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083369
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4368
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083369
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4529
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083371
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4529
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083371
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4530
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083373
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4530
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083373
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4499
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083375
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4499
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083375
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4500
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083377
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4500
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083377
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4422
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083379
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4422
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083379
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4602
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083381
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4602
-new page id = 68083381
-
-Generuje kosztorys z opisow dla projektu  PL_RAS_M_BUS_FORBES.POZAMVP
-Mon, 09 Oct 2017 12:35:35 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:117:20
-[0mGET /api/genestimate2/PL_RAS_M_BUS_FORBES.POZAMVP [33m404 [0m10716.393 ms - 231[0m
-Error: ENOENT, stat '/home/httpd/dl/new_pmo/pw_files/PL_RAS_M_BUS_FORBES.POZAMVP_kosztorys.xlsx'
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4476
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083383
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4476
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083383
-
-Generuje kosztorys z opisow dla projektu  PL_RAS_M_BUS_FORBES.POZAMVP
-[0mGET /api/genestimate2/PL_RAS_M_BUS_FORBES.POZAMVP [33m404 [0m10695.205 ms - 231[0m
-Error: ENOENT, stat '/home/httpd/dl/new_pmo/pw_files/PL_RAS_M_BUS_FORBES.POZAMVP_kosztorys.xlsx'
-Generuje kosztorys z opisow dla projektu  PL_RAS_M_BUS_FORBES.POZAMVP
-[0mGET /api/genestimate2/PL_RAS_M_BUS_FORBES.POZAMVP [33m404 [0m10700.664 ms - 231[0m
-Error: ENOENT, stat '/home/httpd/dl/new_pmo/pw_files/PL_RAS_M_BUS_FORBES.POZAMVP_kosztorys.xlsx'
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4301
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083385
-
-get project data for PL_RAS_M_BUS_FORBES.POZAMVP
-create sprint pages
-
-generuje strone dla PL_RAS_M_BUS_FORBES.POZAMVP dla sprintu 4301
-=======
-<Fault 0: "java.lang.Exception: com.atlassian.confluence.rpc.RemoteException: You're not allowed to view that page, or it does not exist.">
-new page id = 68083385
-
-get project data for PL_RAS_M_BUS_FORBES.POZAMVP
-create sprint pages
-
-Generuje kosztorys z opisow dla projektu  PL_RAS_M_BUS_FORBES.POZAMVP
-[0mGET /api/genestimate2/PL_RAS_M_BUS_FORBES.POZAMVP [33m404 [0m10721.891 ms - 231[0m
-Error: ENOENT, stat '/home/httpd/dl/new_pmo/pw_files/PL_RAS_M_BUS_FORBES.POZAMVP_kosztorys.xlsx'
-[0mGET /img/logo_dl.png [32m200 [0m0.584 ms - 332[0m
-[0mGET /img/bg.png [32m200 [0m0.306 ms - 332[0m
-[0mGET /img/logo_dl.png [32m200 [0m0.411 ms - 332[0m
-[0mGET /api/genportfolio/ [32m200 [0m0.911 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.355 ms - 332[0m
-[0mGET /api/genestimate2/ [32m200 [0m1.485 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.997 ms - 332[0m
-[0mGET /img/logo_dl.png [32m200 [0m0.604 ms - 332[0m
-[0mGET /img/bg.png [32m200 [0m0.442 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.576 ms - 332[0m
-[0mGET /newsletter [32m200 [0m1.184 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.433 ms - 332[0m
-[0mGET /newsletter [32m200 [0m0.919 ms - 332[0m
-[0mGET /newsletter [32m200 [0m2.070 ms - 332[0m
-[0mGET /img/logo_dl.png [32m200 [0m0.501 ms - 332[0m
-[0mGET /img/bg.png [32m200 [0m0.343 ms - 332[0m
-[0mGET /img/logo_dl.png [32m200 [0m0.327 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.636 ms - 332[0m
-[0mGET /img/logo_dl.png [32m200 [0m0.411 ms - 332[0m
-[0mGET /img/bg.png [32m200 [0m1.106 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.891 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.742 ms - 332[0m
-[0mGET /newsletter/img/logo_dl.png [32m200 [0m12.447 ms - 332[0m
-[0mGET /newsletter/img/bg.png [32m200 [0m0.707 ms - 332[0m
-[0mGET /newsletter/img/logo_dl.png [32m200 [0m0.387 ms - 332[0m
-[0mGET /newsletter/img/bg.png [32m200 [0m0.394 ms - 332[0m
-[0mGET /newsletter/img/logo_dl.png [32m200 [0m0.489 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m3.729 ms - 332[0m
+Generuje kosztorys z AC dla projektu  PL_GRO_AD_U8.DREAMADSERVER.INT_P
+Wed, 11 Oct 2017 11:55:56 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:76:24
+[0mGET /api/genestimate/PL_GRO_AD_U8.DREAMADSERVER.INT_P [32m200 [0m14720.988 ms - 9775[0m
+[0mGET /api/genestimate/KP%20%7C%20PL_GRO_AD_U8.DREAMADSERVER.INT_P [0m- [0m- ms - -[0m
