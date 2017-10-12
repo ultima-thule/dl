@@ -232,7 +232,7 @@ function addButtons() {
     menu_val += '<ul> <li onClick="costGen()">Kosztorys bez subtasków</li>  ';
     menu_val += '<li onClick="costGen2()">Kosztorys z subtaskami</li> </ul>  </li> ';
     menu_val += '<li title="Generowanie awaryjne kompletnej dokumentacji całego projektu"><b>EMERGENCY</b> <i class="fa fa-angle-down"></i> ';
-    menu_val += ' <ul>  <li onClick="fullGen()">Dokumentacja projektu(kryteria akceptacji)</li> ';
+    menu_val += ' <ul>  <li onClick="fullGen()">Dokumentacja projektu (kryteria akceptacji)</li> ';
     menu_val += '<li onClick="fullGenDesc()">Dokumentacja projektu (opis)</li> </ul> </li> ';
     menu_val += '<li onClick="portfolioGen()" title="Obecnie nieużywane">Generuj dane z portfolio</li> ';
     menu_val += '<li title="Zarządzanie projektem">Projekt <i class="fa fa-angle-down"></i> ';
