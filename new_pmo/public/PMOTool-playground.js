@@ -20,8 +20,8 @@ function addButtons() {
     menu_val += '</ul></li>';
 
     menu_val += '<li title="Generowanie kosztorysu dla projektu">Generuj kosztorys <i class="fa fa-angle-down"></i> ';
-    menu_val += '<ul><li onClick="costGen()">Kosztorys bez subtasków</li>  ';
-    menu_val += '<li onClick="costGen2()">Kosztorys z subtaskami</li> </ul>  </li> ';
+    menu_val += '<ul><li onClick="costGenGeneral()">Kosztorys bez subtasków</li>  ';
+    menu_val += '<li onClick="costGenDetailed()">Kosztorys z subtaskami</li> </ul>  </li> ';
     menu_val += '<li title="Generowanie awaryjne kompletnej dokumentacji całego projektu"><b>EMERGENCY</b> <i class="fa fa-angle-down"></i> ';
     menu_val += '<ul><li onClick="fullGen()">Dokumentacja projektu (kryteria akceptacji)</li> ';
     menu_val += '<li onClick="fullGenDesc()">Dokumentacja projektu (opis)</li> </ul> </li> ';
@@ -39,6 +39,7 @@ function pmoMenuClose() {
     $("link[href$='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600']").remove();
     $("link[href$='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css']").remove();
 };
+
 
 //---------------------- LAYER GLOBAL & COMMON FUNCTIONS ------------------------------//
 
@@ -64,6 +65,7 @@ function pmoMenuLayerClose() {
     $(".pmoMenuLayer").remove(); 
 }
 
+
 //---------------------- SPECIFIC FUNCTIONS FOR PMOMENU OPTIONS ------------------------------//
 
 // main function for generating scope (Generuj zakres), starting layer with proper data
@@ -75,7 +77,7 @@ function pwGen() {
     pmoMenuLayer();
     
     // adding styles for specific elements
-    $("head").append('<style>#pwGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 20px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;} #pwGenGenerate {display: inline-block; width: 100px; margin-top: 2em; background: #205081; font-weight: bold; color: white; border: 0 none; cursor: pointer; padding: 10px 5px;}</style>');
+    $("head").append('<style>#pwGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;} #pwGenGenerate {display: inline-block; width: 100px; margin-top: 2em; background: #205081; font-weight: bold; color: white; border: 0 none; cursor: pointer; padding: 10px 5px;}</style>');
     
     // adding specific html elements
     $("#formWrapper").prepend('<input id="pwGenProjectCode" name="pwGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><button onclick="pwGenSecond()" id="pwGenGenerate" type="submit" value="Generuj">GENERUJ</button>');
@@ -101,29 +103,70 @@ function pwGenSecond() {
     }
 };
 
-//
-function costGen() {
+// main function for generating cost document (Generuj kosztorys), starting layer with proper data
+function costGenGeneral() {
+    // taking project code from jira/confluence
     var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
-    if(projectCode === undefined || projectCode == ''){
-        projectCode = prompt("Wpisz kod projektu:");
+    
+    // starting layer with default elements
+    pmoMenuLayer();
+
+    // adding styles for specific elements
+    $("head").append('<style>#costGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;} #costGenOptions {display: inline-block; box-sizing: border-box; margin-right: 2em; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0;} #costGenGenerate {display: inline-block; width: 100px; margin-top: 2em; background: #205081; font-weight: bold; color: white; border: 0 none; cursor: pointer; padding: 10px 5px;}</style>');
+    
+    // adding specific html elements
+    $("#formWrapper").prepend('<input id="costGenProjectCode" name="costGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><select id="costGenOptions"><option>z subtaskami</option><option>bez subtasków</option></select><button onclick="" id="costGenGenerate" type="submit" value="Generuj">GENERUJ</button>');
+    
+    // adding proper title/header
+    $("#pmoMenuTitle").prepend('Generuj kosztorys');
+    
+    // putting project code to the input (if it was taken from jira/confluence)
+    document.getElementById("costGenProjectCode").setAttribute('value', projectCode);   
+}
+
+// exact function for generating final cost document (without subtasks) from the layer view
+function costGenGeneralSecond() {
+    if (projectCode === undefined || projectCode == '') {
+        document.getElementById('formMessage').innerHTML = "";
+        $("#formMessage").append('Błąd: błędny kod projektu. Sprawdź ponownie wprowadzane dane.');
+    }
+    else {
+        document.getElementById('formMessage').innerHTML = "";
+       $("#formMessage").append('Generowanie kosztorysu dla projektu ' + projectCode + '.');
     };
-    if(projectCode == null || projectCode == "" ){
-        alert("Dziękujemy za rezygnację generowania pw dla projektu");
-    };
-    window.open ("http://pmo.cloud.onet/api/genestimate/" + projectCode);
 };
 
-//
-function costGen2() {
-    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
-    if(projectCode === undefined || projectCode == ''){
-        projectCode = prompt("Wpisz kod projektu:");
+// exact function for generating final cost document (with subtasks) from the layer view
+function costGenDetailedSecond() {
+    if (projectCode === undefined || projectCode == '') {
+        document.getElementById('formMessage').innerHTML = "";
+        $("#formMessage").append('Błąd: błędny kod projektu. Sprawdź ponownie wprowadzane dane.');
+    }
+    else {
+        document.getElementById('formMessage').innerHTML = "";
+        $("#formMessage").append('Generowanie kosztorysu dla projektu ' + projectCode + '.');
+        window.open ("http://pmo.cloud.onet/api/genestimate2/" + projectCode);
     };
-    if(projectCode == null || projectCode == "" ){
-        alert("Dziękujemy za rezygnację generowania pw dla projektu");
-    };
-    window.open ("http://pmo.cloud.onet/api/genestimate2/" + projectCode);
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //
 function fullGen() {
@@ -147,11 +190,6 @@ function fullGenDesc() {
         alert("Dziękujemy za rezygnację generowania pw dla projektu");
     };
     window.open ("http://pmo.cloud.onet/api/updatealldesc/" + projectCode);
-};
-
-// currently not working, deleted from pmomenu options
-function portfolioGen(){
-    window.open ("http://pmo.cloud.onet/api/genportfolio/");
 };
 
 //
@@ -269,4 +307,9 @@ function openProject(){
 
 function closeProject(){
     alert("In progress");
+};
+
+// currently not working, deleted from pmomenu options
+function portfolioGen(){
+    window.open ("http://pmo.cloud.onet/api/genportfolio/");
 };
