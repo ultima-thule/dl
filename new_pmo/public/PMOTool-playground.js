@@ -20,8 +20,8 @@ function addButtons() {
     menu_val += '</ul></li>';
 
     menu_val += '<li title="Generowanie kosztorysu dla projektu">Generuj kosztorys <i class="fa fa-angle-down"></i> ';
-    menu_val += '<ul><li onClick="costGenGeneral()">Kosztorys bez subtasków</li>  ';
-    menu_val += '<li onClick="costGenDetailed()">Kosztorys z subtaskami</li> </ul>  </li> ';
+    menu_val += '<ul><li onClick="costGenGeneral(\'withoutSubtasks\')">Kosztorys bez subtasków</li>  ';
+    menu_val += '<li onClick="costGenGeneral(\'withSubtasks\')">Kosztorys z subtaskami</li> </ul>  </li> ';
     menu_val += '<li title="Generowanie awaryjne kompletnej dokumentacji całego projektu"><b>EMERGENCY</b> <i class="fa fa-angle-down"></i> ';
     menu_val += '<ul><li onClick="fullGen()">Dokumentacja projektu (kryteria akceptacji)</li> ';
     menu_val += '<li onClick="fullGenDesc()">Dokumentacja projektu (opis)</li> </ul> </li> ';
@@ -68,6 +68,8 @@ function pmoMenuLayerClose() {
 
 //---------------------- SPECIFIC FUNCTIONS FOR PMOMENU OPTIONS ------------------------------//
 
+// GENERUJ ZAKRES //
+
 // main function for generating scope (Generuj zakres), starting layer with proper data
 function pwGen() {
     // taking project code from jira/confluence
@@ -103,8 +105,10 @@ function pwGenSecond() {
     }
 };
 
+// GENERUJ KOSZTORYS
+
 // main function for generating cost document (Generuj kosztorys), starting layer with proper data
-function costGenGeneral() {
+function costGenGeneral(type) {
     // taking project code from jira/confluence
     var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
     
@@ -115,7 +119,16 @@ function costGenGeneral() {
     $("head").append('<style>#costGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;} #costGenOptions {display: inline-block; box-sizing: border-box; margin-right: 2em; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0;} #costGenGenerate {display: inline-block; width: 100px; margin-top: 2em; background: #205081; font-weight: bold; color: white; border: 0 none; cursor: pointer; padding: 10px 5px;}</style>');
     
     // adding specific html elements
-    $("#formWrapper").prepend('<input id="costGenProjectCode" name="costGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><select id="costGenOptions"><option>z subtaskami</option><option>bez subtasków</option></select><button onclick="" id="costGenGenerate" type="submit" value="Generuj">GENERUJ</button>');
+    $("#formWrapper").prepend('<input id="costGenProjectCode" name="costGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><select id="costGenOptions" onchange="changeTargetGeneration()"><option>z subtaskami</option><option>bez subtasków</option></select><button onclick="" id="costGenGenerate" type="submit" value="Generuj">GENERUJ</button>');
+    
+    // choosing proper option as default from select field
+    if (type == 'withSubtasks') { 
+        $("#costGenOptions").prop("selectedIndex", 0);
+        document.getElementById('costGenGenerate').setAttribute('onclick','costGenDetailedSecond()');
+    } else {
+        $("#costGenOptions").prop("selectedIndex", 1);
+        document.getElementById('costGenGenerate').setAttribute('onclick','costGenGeneralSecond()'); 
+    };
     
     // adding proper title/header
     $("#pmoMenuTitle").prepend('Generuj kosztorys');
@@ -124,25 +137,45 @@ function costGenGeneral() {
     document.getElementById("costGenProjectCode").setAttribute('value', projectCode);   
 }
 
+// choosing proper function to execute based on selected option
+function changeTargetGeneration() {
+    if (document.getElementById("costGenOptions").selectedIndex == '0') {
+        document.getElementById('costGenGenerate').setAttribute('onclick','costGenDetailedSecond()');
+    } else {
+        document.getElementById('costGenGenerate').setAttribute('onclick','costGenGeneralSecond()');  
+    };
+}
+
 // exact function for generating final cost document (without subtasks) from the layer view
 function costGenGeneralSecond() {
+    // taking project code from input field
+    var projectCode = $("#costGenProjectCode").val();
+    // check if project code is not empty
     if (projectCode === undefined || projectCode == '') {
+        // empty project code = error message
         document.getElementById('formMessage').innerHTML = "";
         $("#formMessage").append('Błąd: błędny kod projektu. Sprawdź ponownie wprowadzane dane.');
     }
     else {
+        // correct project code = final generate with success message
         document.getElementById('formMessage').innerHTML = "";
-       $("#formMessage").append('Generowanie kosztorysu dla projektu ' + projectCode + '.');
+        $("#formMessage").append('Generowanie kosztorysu dla projektu ' + projectCode + '.');
+        window.open ("http://pmo.cloud.onet/api/genestimate/" + projectCode);
     };
 };
 
 // exact function for generating final cost document (with subtasks) from the layer view
 function costGenDetailedSecond() {
+    // taking project code from input field
+    var projectCode = $("#costGenProjectCode").val();
+    // check if project code is not empty
     if (projectCode === undefined || projectCode == '') {
+        // empty project code = error message
         document.getElementById('formMessage').innerHTML = "";
         $("#formMessage").append('Błąd: błędny kod projektu. Sprawdź ponownie wprowadzane dane.');
     }
     else {
+        // correct project code = final generate with success message
         document.getElementById('formMessage').innerHTML = "";
         $("#formMessage").append('Generowanie kosztorysu dla projektu ' + projectCode + '.');
         window.open ("http://pmo.cloud.onet/api/genestimate2/" + projectCode);
