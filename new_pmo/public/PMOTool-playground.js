@@ -68,7 +68,25 @@ function pmoMenuLayerClose() {
 
 //---------------------- SPECIFIC FUNCTIONS FOR PMOMENU OPTIONS ------------------------------//
 
-// GENERUJ ZAKRES //
+// POKAŻ MOJE TEAMY
+
+function hideMe(arrayId) {
+    arrayId = typeof arrayId == 'string' ? [ arrayId ] : arrayId;
+    const elements = [];
+    arrayId.forEach(function(id){
+        elements.push($(id).parent().parent().index());
+    });
+    const found = $(arrayId[0]).parent().parent();
+    const parent = found.parent();
+    parent.children().each(function(ind, el){
+        console.log(elements, ind);
+        if(elements.indexOf($(el).index()) == -1 ){
+            $(el).hide();
+        }
+    });
+};
+
+// GENERUJ ZAKRES
 
 // main function for generating scope (Generuj zakres), starting layer with proper data
 function pwGen() {
@@ -182,6 +200,144 @@ function costGenDetailedSecond() {
     };
 };
 
+// GENERUJ STRONĘ SPRINTU
+
+// main function for generating sprint page (Generuj stronę sprintu), starting layer with proper data
+function sprintGen(type){
+    // taking project code from jira/confluence
+    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    
+    // taking sprint id from jira/confluence
+    var sprintId = '';
+    if ($("a.aui-nav-item").attr("data-link-id") === "com.pyxis.greenhopper.jira:global-sidebar-plan-scrum") {
+         // plan/backlog mode
+         sprintId = $(".ghx-sprint-meta").attr("data-sprint-id");
+    } else {
+        // work/current sprint mode
+        sprintId = $(".ghx-sprint-meta").attr("data-sprint-id");
+    }
+
+    // starting layer with default elements
+    pmoMenuLayer();
+
+    // adding styles for specific elements
+    $("head").append('<style>#pwGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;} #pwGenSprint {} #pwGenOptions {display: inline-block; box-sizing: border-box; margin-right: 2em; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0;} #pwGenGenerate {display: inline-block; width: 100px; margin-top: 2em; background: #205081; font-weight: bold; color: white; border: 0 none; cursor: pointer; padding: 10px 5px;}</style>');
+    
+    // adding specific html elements
+    $("#formWrapper").prepend('<input id="pwGenProjectCode" name="pwGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><input id="pwGenSprint" name="pwGenSprint" type="text" placeholder="Wprowadź ID sprintu."><select id="pwGenOptions" onchange="changeTargetGeneration()"><option>z kryteriami akceptacji</option><option>z opisem</option></select><button onclick="" id="pwGenGenerate" type="submit" value="Generuj">GENERUJ</button>');
+    
+    // choosing proper option as default from select field
+    if (type == 'withCriteria') { 
+        $("#costGenOptions").prop("selectedIndex", 0);
+        document.getElementById('costGenGenerate').setAttribute('onclick','costGenDetailedSecond()');
+    } else {
+        $("#costGenOptions").prop("selectedIndex", 1);
+        document.getElementById('costGenGenerate').setAttribute('onclick','costGenGeneralSecond()'); 
+    };
+    
+    // adding proper title/header
+    $("#pmoMenuTitle").prepend('Generuj stronę sprintu');
+    
+    // putting project code to the input (if it was taken from jira/confluence)
+    document.getElementById("costGenProjectCode").setAttribute('value', projectCode); 
+    
+    // putting project code to the input (if it was taken from jira/confluence)
+    document.getElementById("pwGenSprint").setAttribute('value', sprintId);  
+    
+}
+
+//
+function sprintCriteriaGen(){
+    // taking sprint ID from Jira board view
+    if ($("a.aui-nav-item").attr("data-link-id") === "com.pyxis.greenhopper.jira:global-sidebar-plan-scrum") {
+         // plan/backlog mode
+         var sprintId = $(".ghx-sprint-meta").attr("data-sprint-id");
+    //if ($("li.aui-nav-selected").attr("data-link-id") === "com.pyxis.greenhopper.jira:global-sidebar-plan-scrum") {
+    //    // plan/backlog mode
+    //    var sprintId = $(".js-sprint-header").attr("data-sprint-id");
+    } else {
+        // work/current sprint mode
+        var sprintId = $(".ghx-sprint-meta").attr("data-sprint-id");
+    }
+    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    var apiUrl = "http://pmo.cloud.onet/api/createpw/" + projectCode + "/sprint/" + sprintId;
+    create = $.get(apiUrl)
+        .done(function(){
+            alert("Subpage for project " + projectCode + " has been created.");
+        })
+        .fail(function (jqXHR, textStatus, error) {
+            alert('Wystąpił problem, sprawdź poprawność wprowadzanych danych.');
+        })
+};
+
+//
+function sprintDescGen(){
+    // taking sprint ID from Jira board view
+
+    if ($("a.aui-nav-item").attr("data-link-id") === "com.pyxis.greenhopper.jira:global-sidebar-plan-scrum") {
+         // plan/backlog mode
+        var sprintId = $(".ghx-sprint-meta").attr("data-sprint-id");
+    //if ($("li.aui-nav-selected").attr("data-link-id") === "com.pyxis.greenhopper.jira:global-sidebar-plan-scrum") {
+    //    // plan/backlog mode
+    //    var sprintId = $(".js-sprint-header").attr("data-sprint-id");
+    } else {
+        // work/current sprint mode
+        var sprintId = $(".ghx-sprint-meta").attr("data-sprint-id");
+    }
+    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    var apiUrl = "http://pmo.cloud.onet/api/createpwdesc/" + projectCode + "/sprint/" + sprintId;
+    create = $.get(apiUrl)
+        .done(function(){
+            alert("Subpage for project " + projectCode + " has been created.");
+        })
+        .fail(function (jqXHR, textStatus, error) {
+            alert(error);
+            //alert("There are some errors. If you are using Confluence try to switch to the Jira.");
+        })
+};
+
+//
+function sprintPastGen(){
+    // taking sprint ID from Jira board view
+    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    var sprintId = prompt("Wpisz identyfikator sprintu:");
+    if (sprintId == null || sprintId == "") {
+            alert("Dziękujemy za rezygnację z wygenerowania sprintu");
+            return;
+    } else {
+    var apiUrl = "http://pmo.cloud.onet/api/createpw/" + projectCode + "/sprint/" + sprintId;
+    create = $.get(apiUrl)
+        .done(function(){
+            alert("Subpage for project " + projectCode + " has been created.");
+        })
+        .fail(function (jqXHR, textStatus, error) {
+            alert('Wystąpił problem, sprawdź poprawność wprowadzanych danych.');
+        })
+    }
+};
+
+//
+function sprintDescPastGen(){
+    // taking sprint ID from Jira board view
+    var sprintId = prompt("Wpisz identyfikator sprintu:");
+    if (sprintId == null || sprintId == "") {
+            alert("Dziękujemy za rezygnację z wygenerowania sprintu");
+            return;
+    } else {
+    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    var apiUrl = "http://pmo.cloud.onet/api/createpwdesc/" + projectCode + "/sprint/" + sprintId;
+    create = $.get(apiUrl)
+        .done(function(){
+            alert("Subpage for project " + projectCode + " has been created.");
+        })
+        .fail(function (jqXHR, textStatus, error) {
+            alert(error);
+            //alert("There are some errors. If you are using Confluence try to switch to the Jira.");
+        })
+    }
+};
+
+
 
 
 
@@ -223,114 +379,6 @@ function fullGenDesc() {
         alert("Dziękujemy za rezygnację generowania pw dla projektu");
     };
     window.open ("http://pmo.cloud.onet/api/updatealldesc/" + projectCode);
-};
-
-//
-function sprintGen(){
-    // taking sprint ID from Jira board view
-    if ($("a.aui-nav-item").attr("data-link-id") === "com.pyxis.greenhopper.jira:global-sidebar-plan-scrum") {
-         // plan/backlog mode
-         var sprintId = $(".ghx-sprint-meta").attr("data-sprint-id");
-    //if ($("li.aui-nav-selected").attr("data-link-id") === "com.pyxis.greenhopper.jira:global-sidebar-plan-scrum") {
-    //    // plan/backlog mode
-    //    var sprintId = $(".js-sprint-header").attr("data-sprint-id");
-    } else {
-        // work/current sprint mode
-        var sprintId = $(".ghx-sprint-meta").attr("data-sprint-id");
-    }
-    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
-    var apiUrl = "http://pmo.cloud.onet/api/createpw/" + projectCode + "/sprint/" + sprintId;
-    create = $.get(apiUrl)
-        .done(function(){
-            alert("Subpage for project " + projectCode + " has been created.");
-        })
-        .fail(function (jqXHR, textStatus, error) {
-            alert('Wystąpił problem, sprawdź poprawność wprowadzanych danych.');
-        })
-};
-
-//
-function sprintPastGen(){
-    // taking sprint ID from Jira board view
-    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
-    var sprintId = prompt("Wpisz identyfikator sprintu:");
-    if (sprintId == null || sprintId == "") {
-            alert("Dziękujemy za rezygnację z wygenerowania sprintu");
-            return;
-    } else {
-    var apiUrl = "http://pmo.cloud.onet/api/createpw/" + projectCode + "/sprint/" + sprintId;
-    create = $.get(apiUrl)
-        .done(function(){
-            alert("Subpage for project " + projectCode + " has been created.");
-        })
-        .fail(function (jqXHR, textStatus, error) {
-            alert('Wystąpił problem, sprawdź poprawność wprowadzanych danych.');
-        })
-    }
-};
-
-//
-function sprintDescGen(){
-    // taking sprint ID from Jira board view
-
-    if ($("a.aui-nav-item").attr("data-link-id") === "com.pyxis.greenhopper.jira:global-sidebar-plan-scrum") {
-         // plan/backlog mode
-        var sprintId = $(".ghx-sprint-meta").attr("data-sprint-id");
-    //if ($("li.aui-nav-selected").attr("data-link-id") === "com.pyxis.greenhopper.jira:global-sidebar-plan-scrum") {
-    //    // plan/backlog mode
-    //    var sprintId = $(".js-sprint-header").attr("data-sprint-id");
-    } else {
-        // work/current sprint mode
-        var sprintId = $(".ghx-sprint-meta").attr("data-sprint-id");
-    }
-    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
-    var apiUrl = "http://pmo.cloud.onet/api/createpwdesc/" + projectCode + "/sprint/" + sprintId;
-    create = $.get(apiUrl)
-        .done(function(){
-            alert("Subpage for project " + projectCode + " has been created.");
-        })
-        .fail(function (jqXHR, textStatus, error) {
-            alert(error);
-            //alert("There are some errors. If you are using Confluence try to switch to the Jira.");
-        })
-};
-
-//
-function sprintDescPastGen(){
-    // taking sprint ID from Jira board view
-    var sprintId = prompt("Wpisz identyfikator sprintu:");
-    if (sprintId == null || sprintId == "") {
-            alert("Dziękujemy za rezygnację z wygenerowania sprintu");
-            return;
-    } else {
-    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
-    var apiUrl = "http://pmo.cloud.onet/api/createpwdesc/" + projectCode + "/sprint/" + sprintId;
-    create = $.get(apiUrl)
-        .done(function(){
-            alert("Subpage for project " + projectCode + " has been created.");
-        })
-        .fail(function (jqXHR, textStatus, error) {
-            alert(error);
-            //alert("There are some errors. If you are using Confluence try to switch to the Jira.");
-        })
-    }
-};
-
-//
-function hideMe(arrayId){
-    arrayId = typeof arrayId == 'string' ? [ arrayId ] : arrayId;
-    const elements = [];
-    arrayId.forEach(function(id){
-        elements.push($(id).parent().parent().index());
-    });
-    const found = $(arrayId[0]).parent().parent();
-    const parent = found.parent();
-    parent.children().each(function(ind, el){
-        console.log(elements, ind);
-        if(elements.indexOf($(el).index()) == -1 ){
-            $(el).hide();
-        }
-    });
 };
 
 // currently not working, deleted from pmomenu options
