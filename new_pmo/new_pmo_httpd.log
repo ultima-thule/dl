@@ -1,62 +1,40 @@
 nohup: ignoring input
 Magic happens on port 8080
-Traceback (most recent call last):
-  File "/home/httpd/dl/new_pmo/public/python/gen_estimate_tofile.py", line 141, in <module>
-    issues = jira.get_all_issues(project_name)
-  File "/home/httpd/dl/new_pmo/public/python/lib/jira.py", line 185, in get_all_issues
-    return self._search_in_batches(self._get_all_issues_batch, project_name)
-  File "/home/httpd/dl/new_pmo/public/python/lib/jira.py", line 93, in _search_in_batches
-    start_at = data["startAt"]
-KeyError: 'startAt'
-
-Exception ignored in: <bound method Workbook.__del__ of <xlsxwriter.workbook.Workbook object at 0x7f128e9c7a58>>
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.4/dist-packages/xlsxwriter/workbook.py", line 147, in __del__
-Exception: Exception caught in workbook destructor. Explicit close() may be required for workbook.
-
-code  1
-/usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+Tue, 24 Oct 2017 21:33:02 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:394:17
+[0mGET /favicon.ico [32m200 [0m4.757 ms - 332[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
   warn("Image file '%s' not found." % force_unicode(filename))
 
-Generuje kosztorys z AC dla projektu  PL_GRO_AD_U8.DREAMADSERVER.INT_P
-Wed, 11 Oct 2017 11:55:56 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:76:24
-[0mGET /api/genestimate/PL_GRO_AD_U8.DREAMADSERVER.INT_P [32m200 [0m14720.988 ms - 9775[0m
-[0mGET /api/genestimate/KP%20%7C%20PL_GRO_AD_U8.DREAMADSERVER.INT_P [0m- [0m- ms - -[0m
-Traceback (most recent call last):
-  File "/home/httpd/dl/new_pmo/public/python/gen_estimate_tofile.py", line 141, in <module>
-    issues = jira.get_all_issues(project_name)
-  File "/home/httpd/dl/new_pmo/public/python/lib/jira.py", line 185, in get_all_issues
-    return self._search_in_batches(self._get_all_issues_batch, project_name)
-  File "/home/httpd/dl/new_pmo/public/python/lib/jira.py", line 96, in _search_in_batches
-    no_of_batches = int(total / max_results)
-TypeError: unsupported operand type(s) for /: 'int' and 'str'
+Generuje kosztorys z opisow dla projektu  PL_RAS_M_SPO_PS.ON.UCS
+Tue, 24 Oct 2017 21:33:14 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:120:24
+[0mGET /api/genestimate2/PL_RAS_M_SPO_PS.ON.UCS [32m200 [0m7197.357 ms - 6821[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
 
-Exception ignored in: <bound method Workbook.__del__ of <xlsxwriter.workbook.Workbook object at 0x7fc67cad7710>>
-Traceback (most recent call last):
-  File "/usr/local/lib/python3.4/dist-packages/xlsxwriter/workbook.py", line 147, in __del__
-Exception: Exception caught in workbook destructor. Explicit close() may be required for workbook.
+Generuje kosztorys z opisow dla projektu  PL_RAS_M_SPO_PS.ON.UCS
+[0mGET /api/genestimate2/PL_RAS_M_SPO_PS.ON.UCS [32m200 [0m7187.320 ms - 6821[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
 
-code  1
-[0mGET /api/genestimate/null [0m- [0m- ms - -[0m
-Wed, 11 Oct 2017 13:15:13 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:390:17
-[0mGET /apple-touch-icon-precomposed.png [32m200 [0m1.405 ms - 332[0m
-[0mGET /apple-touch-icon.png [32m200 [0m0.414 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m2.523 ms - 332[0m
-[0mGET /apple-touch-icon-precomposed.png [32m200 [0m0.656 ms - 332[0m
-[0mGET /apple-touch-icon.png [32m200 [0m0.860 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.420 ms - 332[0m
-[0mGET /apple-touch-icon-precomposed.png [32m200 [0m0.471 ms - 332[0m
-[0mGET /apple-touch-icon.png [32m200 [0m0.338 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.534 ms - 332[0m
-[0mGET /apple-touch-icon-precomposed.png [32m200 [0m0.389 ms - 332[0m
-[0mGET /apple-touch-icon.png [32m200 [0m0.417 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.882 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.644 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.684 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.697 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m1.425 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.635 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.533 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.473 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m2.450 ms - 332[0m
-[0mGET /favicon.ico [32m200 [0m0.607 ms - 332[0m
+Generuje kosztorys z opisow dla projektu  PL_GRO_M_LFST_PORTALWIEDZY.MIGR
+[0mGET /api/genestimate2/PL_GRO_M_LFST_PORTALWIEDZY.MIGR [32m200 [0m7198.516 ms - 6497[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z opisow dla projektu  PL_GRO_M_LFST_PORTALWIEDZY.MIGR
+[0mGET /api/genestimate2/PL_GRO_M_LFST_PORTALWIEDZY.MIGR [32m200 [0m7206.217 ms - 6497[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z opisow dla projektu  PL_GRO_M_LFST_PORTALWIEDZY.MIGR
+[0mGET /api/genestimate2/PL_GRO_M_LFST_PORTALWIEDZY.MIGR [32m200 [0m7195.072 ms - 6497[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z opisow dla projektu  PL_GRO_M_LFST_PORTALWIEDZY.MIGR
+[0mGET /api/genestimate2/PL_GRO_M_LFST_PORTALWIEDZY.MIGR [32m200 [0m7213.892 ms - 6497[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z opisow dla projektu  PL_GRO_M_LFST_PORTALWIEDZY.MIGR
+[0mGET /api/genestimate2/PL_GRO_M_LFST_PORTALWIEDZY.MIGR [32m200 [0m7212.771 ms - 6497[0m

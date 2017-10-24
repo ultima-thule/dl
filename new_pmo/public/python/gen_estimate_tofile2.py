@@ -3,6 +3,7 @@ import argparse
 import datetime
 import operator
 import sys
+import time
 import credentials
 from mongoengine import *
 import lib.mongoLeankit
@@ -133,10 +134,10 @@ if __name__ == '__main__':
     pwd_jira = credentials.loginJira['password']
     jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 
-    date_text = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    file_name = project_name + "_kosztorys_" + date_text + ".xlsx"
+    #date_text = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    file_name = "./pw_files/" + project_name + "_kosztorys.xlsx"
 
-    excelReport = lib.excel_estimate.ExcelEstimate(file_name, "Kosztorys", True)
+    excelReport = lib.excel_estimate.ExcelEstimate(file_name, "Kosztorys", False)
 
     issues = jira.get_all_issues(project_name)
     data = {
@@ -144,18 +145,18 @@ if __name__ == '__main__':
         "projectName": project_name,
         "show_subtasks": True
     }
-
     excelReport.init_report(data)
     excelReport.generate_report()
-    data = excelReport.close()
+    excelReport.close()
 
-    pwfile = lib.mongoLeankit.Pwfile()
+    # WORKAROUND Z POMINIECIEM MONGO
+    ## zapis dokumentu do bazy mongo
+    #pwfile = lib.mongoLeankit.Pwfile()
 
-    pwfile.data = data
-    pwfile.project = project_name
-    pwfile.generation_date = datetime.datetime.now()
-    pwfile.date_text = date_text
-    pwfile.format_type = "XLSX"
-    pwfile.save()
-
+    #pwfile.data = data
+    #pwfile.project = project_name
+    #pwfile.generation_date = datetime.datetime.now()
+    #pwfile.date_text = date_text
+    #pwfile.format_type = "XLSX"
+    #pwfile.save()
     exit(0)

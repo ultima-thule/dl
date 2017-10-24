@@ -147,7 +147,7 @@ if __name__ == '__main__':
 
     excelReport.init_report(data)
     excelReport.generate_report()
-    data = excelReport.close()
+    excelReport.close()
 
     #document.save("./pw_files/%s.docx" % project_name)
 

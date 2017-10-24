@@ -1,4 +1,4 @@
- // app/routes.js
+// app/routes.js
 
 // grab the card model we just created
 var Team = require('./model/team');
@@ -44,7 +44,7 @@ try{
             }
         };
     
-        app.use(timeout(12000000));
+        app.use(timeout(120000000));
         app.get('/api/test', function(req, res) {
             res.json({ message: 'hooray! welcome to our api!' });   
         });
@@ -106,7 +106,9 @@ try{
             //var python = require('child_process').spawn('E://Programs//Dev//Python35-32//python.exe', ["E://Development//Projects//dl//new_pmo//public//python//gen_estimate_tofile.py " + req.params.id]);
     
             var output = "";
-            python.stdout.on('data', function(data){ output += data });
+            //python.stdout.on('data', function(data){ output += data });
+            python.stderr.on('data', function(data){ console.log("bug: ", uint8arrayToString(data)) });
+            python.stdout.on('data', function(data){ console.log("dane: ", uint8arrayToString(data)); output += data });
             python.on('close', function(code)
             {
                 if (code !== 0) {  console.log("code ", code); }
@@ -118,19 +120,21 @@ try{
                    res.sendfile(filename);
                }
     
-               // Pwfile.find({"project": req.params.id, "format_type": "XLSX"}).sort('-generation_date').exec(function(err, estfiles) {
-               //     if (err)
-               //         res.send(err);
-               //     if (estfiles.length > 0) {
-               //         var date = estfiles[0].date_text;
-               //         res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + '_' + date + '.xlsx');
-               //         res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-               //         res.send(estfiles[0].data);
-               //         }
-               //         else {
-               //             return res.send(200, output)
-               //         }
-               //   });
+                // Pwfile.find({"project": req.params.id, "format_type": "XLSX"}).sort('-generation_date').exec(function(err, estfiles) {
+                //    if (err){
+                //        console.log("dane ", err);
+                //        res.send(err);
+                //    }
+                //    if (estfiles.length > 0) {
+                //        var date = estfiles[0].date_text;
+                //        res.append('Content-Disposition', 'attachment; filename=' + estfiles[0].project + '_' + date + '.xlsx');
+                //        res.append('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                //        res.send(estfiles[0].data);
+                //        }
+                //        else {
+                //            return res.send(200, output)
+                //        }
+                //  });
             });
         });
     
