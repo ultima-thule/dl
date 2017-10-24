@@ -166,7 +166,7 @@ function hideMe(arrayId){
 
 // Project management
 function openProject(){
-    alert("In progress");
+    window.open("http://pmo.cloud.onet/add_project.html");
 };
 
 function closeProject(){

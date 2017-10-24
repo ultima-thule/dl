@@ -38,3 +38,7 @@ bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserW
 
 Generuje kosztorys z opisow dla projektu  PL_GRO_M_LFST_PORTALWIEDZY.MIGR
 [0mGET /api/genestimate2/PL_GRO_M_LFST_PORTALWIEDZY.MIGR [32m200 [0m7212.771 ms - 6497[0m
+[0mGET /favicon.ico [32m200 [0m0.631 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.547 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.569 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m1.673 ms - 332[0m
