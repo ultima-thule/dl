@@ -68,6 +68,7 @@ function pmoMenuLayerClose() {
 
 // POKAŻ MOJE TEAMY
 
+// exact function to hide different than configured teams in confluence tree
 function hideMe(arrayId) {
     arrayId = typeof arrayId == 'string' ? [ arrayId ] : arrayId;
     const elements = [];
@@ -111,11 +112,14 @@ function pwGen() {
 // exact function for generating final document from the layer view
 function pwGenSecond() {
     projectCode = $('#pwGenProjectCode').val();
+    // checking if necessary inputs are fulfilled
     if (projectCode === null || projectCode == ""){
+        // errors
         document.getElementById('formMessage').innerHTML = "";
         $("#formMessage").append('Błąd: brak kodu projektu. Sprawdź ponownie wprowadzane dane.');
     }
     else {
+        // success
         document.getElementById('formMessage').innerHTML = "";
         window.open ("http://pmo.cloud.onet/api/genscope/" + projectCode);
         $("#formMessage").append('Żadanie wygenerowania zakresu projektu ' + projectCode + ' zostało wysłane.');
@@ -204,7 +208,7 @@ function costGenDetailedSecond() {
 // GENERUJ STRONĘ SPRINTU
 
 // main function for generating sprint page (Generuj stronę sprintu), starting layer with proper data
-function sprintGen(type){
+function sprintGen(type) {
     // taking project code from jira/confluence
     var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
     
@@ -260,17 +264,19 @@ function changeTargetPwGeneration() {
 }
 
 // exact function to generate sprint page with acceptance criteria
-function sprintCriteriaGen(){
+function sprintCriteriaGen() {
     
     // taking project code and sprint ID from the layer form
     var projectCode = $("#pwGenProjectCode").val();
     var sprintId = $("#pwGenSprint").val();
     
-    if (projectCode === null || projectCode == ""){
+    // checking if necessary inputs are fulfilled
+    if (projectCode === null || projectCode == "" || sprintId === null || sprintId == "") {
+        // errors
         document.getElementById('formMessage').innerHTML = "";
-        $("#formMessage").append('Błąd: brak kodu projektu. Sprawdź ponownie wprowadzane dane.');
-    }
-    else {
+        $("#formMessage").append('Błąd: formularz niekompletny. Sprawdź ponownie wprowadzane dane.');
+    } else {
+        // success
         // configuring api
         var apiUrl = "http://pmo.cloud.onet/api/createpw/" + projectCode + "/sprint/" + sprintId;
 
@@ -286,7 +292,7 @@ function sprintCriteriaGen(){
                 setTimeout(function() {
                     $('#loader').hide();
                     $("#formMessage").append('Żądanie wygenerowania strony sprintu zostało wysłane.');
-                }, 1000);
+                }, 1500);
             }
         }); 
     }
@@ -294,18 +300,19 @@ function sprintCriteriaGen(){
 };
 
 // exact function to generate sprint page with description
-function sprintDescGen(){
+function sprintDescGen() {
     
     // taking project code and sprint ID from the layer form
     var projectCode = $("#pwGenProjectCode").val();
     var sprintId = $("#pwGenSprint").val();
     
-    
-    if (projectCode === null || projectCode == ""){
+    // checking if necessary inputs are fulfilled
+    if (projectCode === null || projectCode == "" || sprintId === null || sprintId == "") {
+        // errors
         document.getElementById('formMessage').innerHTML = "";
-        $("#formMessage").append('Błąd: brak kodu projektu. Sprawdź ponownie wprowadzane dane.');
-    }
-    else {
+        $("#formMessage").append('Błąd: formularz niekompletny. Sprawdź ponownie wprowadzane dane.');
+    } else {
+        // success
         // configuring api
         var apiUrl = "http://pmo.cloud.onet/api/createpwdesc/" + projectCode + "/sprint/" + sprintId;
 
@@ -321,7 +328,7 @@ function sprintDescGen(){
                 setTimeout(function() {
                     $('#loader').hide();
                     $("#formMessage").append('Żądanie wygenerowania strony sprintu zostało wysłane.');
-                }, 1000);
+                }, 1500);
             }
         });
     }
@@ -331,7 +338,7 @@ function sprintDescGen(){
 // EMERGENCY
 
 // main function for generating sprint page (Generuj stronę sprintu), starting layer with proper data
-function fullGen(type){
+function fullGen(type) {
 
     // taking project code from jira/confluence
     var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
@@ -377,11 +384,14 @@ function fullGenCriteria() {
     // taking project code from the layer form
     var projectCode = $("#pwFullGenProjectCode").val();
     
-    if (projectCode === null || projectCode == ""){
+    // checking if necessary inputs are fulfilled
+    if (projectCode === null || projectCode == "") {
+        // errors
         document.getElementById('formMessage').innerHTML = "";
         $("#formMessage").append('Błąd: brak kodu projektu. Sprawdź ponownie wprowadzane dane.');
     }
     else {
+        // success
         // configuring api
         var apiUrl = "http://pmo.cloud.onet/api/updateall/" + projectCode;
 
@@ -397,7 +407,7 @@ function fullGenCriteria() {
                 setTimeout(function() {
                     $('#loader').hide();
                     $("#formMessage").append('Żądanie wygenerowania dokumentacji projektu zostało wysłane.');
-                }, 1000);
+                }, 1500);
             }
         });   
     }
@@ -409,11 +419,14 @@ function fullGenDesc() {
     // taking project code from the layer form
     var projectCode = $("#pwFullGenProjectCode").val();
     
-    if (projectCode === null || projectCode == ""){
+    // checking if necessary inputs are fulfilled
+    if (projectCode === null || projectCode == "") {
+        // errors
         document.getElementById('formMessage').innerHTML = "";
         $("#formMessage").append('Błąd: brak kodu projektu. Sprawdź ponownie wprowadzane dane.');
     }
     else {
+        // success
         // configuring api
         var apiUrl = "http://pmo.cloud.onet/api/updatealldesc/" + projectCode;
 
@@ -429,25 +442,25 @@ function fullGenDesc() {
                 setTimeout(function() {
                     $('#loader').hide();
                     $("#formMessage").append('Żądanie wygenerowania dokumentacji projektu zostało wysłane.');
-                }, 1000);
+                }, 1500);
             }
         });
     }
 };
 
 
-// OTHER OR OLD STUFF
+// OTHER, OLD OR NOT READY STUFF
 
 // currently not working, deleted from pmomenu options
-function openProject(){
+function openProject() {
     window.open("http://pmo.cloud.onet/add_project.html");
 };
 
-function closeProject(){
+function closeProject() {
     alert("In progress");
 };
 
 // currently not working, deleted from pmomenu options
-function portfolioGen(){
+function portfolioGen() {
     window.open ("http://pmo.cloud.onet/api/genportfolio/");
 };
