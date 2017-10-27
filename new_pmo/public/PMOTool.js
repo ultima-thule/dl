@@ -2,32 +2,49 @@
 
 // main function responsible for adding entire pmoenu to browser/page
 function addButtons() {
+    
+    // checking if pmomenu is already added
+    if ($('.pmoMenuContainer').length > 0) { 
+        
+        // starting layer with default elements
+        pmoMenuLayer();
+        
+        // adding proper title/header
+        $("#pmoMenuTitle").prepend('Błąd dodawania PMO Menu');
+        
+        // error message
+        document.getElementById('formMessage').innerHTML = "";
+        $("#formMessage").append('PMO Menu jest już dodane do strony.');
+        
+    } else {
 
-    var menu_val = '<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600" rel="stylesheet" type="text/css">';
-    menu_val += '<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">';
-    menu_val += '<style>.pmoMenuContainer, .pmoMenuContainer *, .pmoMenuContainer *:before, .pmoMenuContainer *:after{margin: 0; padding: 0; box-sizing: border-box;}.pmoMenuContainer{box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);}.pmoMenu{width: auto; margin: 0 auto 0 auto; background-color: #d2e4e6; z-index: 99999;}.pmoMenu ul{font-size: 0; list-style-type: none; z-index: 99999}.pmoMenu ul li{font-family: "Open Sans", sans-serif; font-size: 1rem; font-weight: 400; color: #333; display: inline-block; padding: 15px; position: relative;}.pmoMenu ul li.external{font-family: "Open Sans", sans-serif; font-size: 1rem; font-weight: 400; color: #333; display: inline-block; padding: 0; position: relative;}.pmoMenu ul li ul{display: none;}.pmoMenu ul li:hover{cursor: pointer; background-color: #c4e4e8;}.pmoMenu ul li:hover ul{display: block; margin-top: 15px; width: auto; left: 0; position: absolute; white-space: nowrap;}.pmoMenu ul li:hover ul li{display: block; background-color: #d2e4e6;}.pmoMenu ul li:hover ul li:hover{background-color: #c4e4e8;}.pmoMenu ul li:hover ul li:hover span{background-color: #ee204e;}li.external{float: right; padding: 0 !important;}li.external a, li.external a:hover{display: block; padding: 15px; color: inherit !important; text-decoration: none;}li.external a i.fa-info, li.external a i.fa-key, li.teams i.fa-male{margin-right: 5px;}li.pmoMenuClose{float: right;}</style>';
-    menu_val += '<div class="pmoMenuContainer">';
-    menu_val += '<div class="pmoMenu"> <ul>  i';
-    menu_val += '<li onClick="hideMe(pmoMenu.teams)" title="Filtrowanie zespołów na liście witrynek projektowych" class="teams">';
-    menu_val += '<i class="fa fa-male"></i>Pokaż moje teamy</li>';
-    menu_val += '<li onClick="pwGen()" title="Generowanie dokumentu porozumienia wykonawczego (Word) na podstawie zawartości Confluence">Generuj zakres</li>';
+        var menu_val = '<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600" rel="stylesheet" type="text/css">';
+        menu_val += '<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">';
+        menu_val += '<style>.pmoMenuContainer, .pmoMenuContainer *, .pmoMenuContainer *:before, .pmoMenuContainer *:after{margin: 0; padding: 0; box-sizing: border-box;}.pmoMenuContainer{box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);}.pmoMenu{width: auto; margin: 0 auto 0 auto; background-color: #d2e4e6; z-index: 99999;}.pmoMenu ul{font-size: 0; list-style-type: none; z-index: 99999}.pmoMenu ul li{font-family: "Open Sans", sans-serif; font-size: 1rem; font-weight: 400; color: #333; display: inline-block; padding: 15px; position: relative;}.pmoMenu ul li.external{font-family: "Open Sans", sans-serif; font-size: 1rem; font-weight: 400; color: #333; display: inline-block; padding: 0; position: relative;}.pmoMenu ul li ul{display: none;}.pmoMenu ul li:hover{cursor: pointer; background-color: #c4e4e8;}.pmoMenu ul li:hover ul{display: block; margin-top: 15px; width: auto; left: 0; position: absolute; white-space: nowrap;}.pmoMenu ul li:hover ul li{display: block; background-color: #d2e4e6;}.pmoMenu ul li:hover ul li:hover{background-color: #c4e4e8;}.pmoMenu ul li:hover ul li:hover span{background-color: #ee204e;}li.external{float: right; padding: 0 !important;}li.external a, li.external a:hover{display: block; padding: 15px; color: inherit !important; text-decoration: none;}li.external a i.fa-info, li.external a i.fa-key, li.teams i.fa-male{margin-right: 5px;}li.pmoMenuClose{float: right;}</style>';
+        menu_val += '<div class="pmoMenuContainer">';
+        menu_val += '<div class="pmoMenu"> <ul>  i';
+        menu_val += '<li onClick="hideMe(pmoMenu.teams)" title="Filtrowanie zespołów na liście witrynek projektowych" class="teams">';
+        menu_val += '<i class="fa fa-male"></i>Pokaż moje teamy</li>';
+        menu_val += '<li onClick="pwGen()" title="Generowanie dokumentu porozumienia wykonawczego (Word) na podstawie zawartości Confluence">Generuj zakres</li>';
 
-    menu_val += '<li title="Generowanie podstrony sprintu w ramach danego projektu">Generuj stronę sprintu <i class="fa fa-angle-down"></i>  ';
-    menu_val += '<ul><li onClick="sprintGen(\'withCriteria\')">Strona sprintu (kryteria akceptacji)</li>';
-    menu_val += '<li onClick="sprintGen(\'withDescription\')">Strona sprintu (opis)</li>';
-    menu_val += '</ul></li>';
+        menu_val += '<li title="Generowanie podstrony sprintu w ramach danego projektu">Generuj stronę sprintu <i class="fa fa-angle-down"></i>  ';
+        menu_val += '<ul><li onClick="sprintGen(\'withCriteria\')">Strona sprintu (kryteria akceptacji)</li>';
+        menu_val += '<li onClick="sprintGen(\'withDescription\')">Strona sprintu (opis)</li>';
+        menu_val += '</ul></li>';
 
-    menu_val += '<li title="Generowanie kosztorysu dla projektu">Generuj kosztorys <i class="fa fa-angle-down"></i> ';
-    menu_val += '<ul><li onClick="costGenGeneral(\'withoutSubtasks\')">Kosztorys bez subtasków</li>  ';
-    menu_val += '<li onClick="costGenGeneral(\'withSubtasks\')">Kosztorys z subtaskami</li> </ul>  </li> ';
-    menu_val += '<li title="Generowanie awaryjne kompletnej dokumentacji całego projektu"><b>EMERGENCY</b> <i class="fa fa-angle-down"></i> ';
-    menu_val += '<ul><li onClick="fullGen(\'withCriteria\')">Dokumentacja projektu (kryteria akceptacji)</li> ';
-    menu_val += '<li onClick="fullGen(\'withDescription\')">Dokumentacja projektu (opis)</li> </ul> </li> ';
-    menu_val += '<li onClick="pmoMenuClose()" class="pmoMenuClose"><i class="fa fa-window-close-o fa-2"></i></li> ';
-    menu_val += '<li title="Dokumentacja PMO Menu na Confluence" class="external"><a href="http://doc.grupa.onet/display/AG/PMO+Menu" target="_blank"><i class="fa fa-info"></i>Dokumentacja</a></li>';
-    menu_val += '</ul></div></div>';
+        menu_val += '<li title="Generowanie kosztorysu dla projektu">Generuj kosztorys <i class="fa fa-angle-down"></i> ';
+        menu_val += '<ul><li onClick="costGenGeneral(\'withoutSubtasks\')">Kosztorys bez subtasków</li>  ';
+        menu_val += '<li onClick="costGenGeneral(\'withSubtasks\')">Kosztorys z subtaskami</li> </ul>  </li> ';
+        menu_val += '<li title="Generowanie awaryjne kompletnej dokumentacji całego projektu"><b>EMERGENCY</b> <i class="fa fa-angle-down"></i> ';
+        menu_val += '<ul><li onClick="fullGen(\'withCriteria\')">Dokumentacja projektu (kryteria akceptacji)</li> ';
+        menu_val += '<li onClick="fullGen(\'withDescription\')">Dokumentacja projektu (opis)</li> </ul> </li> ';
+        menu_val += '<li onClick="pmoMenuClose()" class="pmoMenuClose"><i class="fa fa-window-close-o fa-2"></i></li> ';
+        menu_val += '<li title="Dokumentacja PMO Menu na Confluence" class="external"><a href="http://doc.grupa.onet/display/AG/PMO+Menu" target="_blank"><i class="fa fa-info"></i>Dokumentacja</a></li>';
+        menu_val += '</ul></div></div>';
 
-    $("header#header").append(menu_val); 
+        $("header#header").append(menu_val); 
+        
+    }
 };
 
 // closing and cleaning up after the pmomenu
