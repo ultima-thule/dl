@@ -305,9 +305,10 @@ function sprintCriteriaGen() {
                 document.getElementById('formMessage').innerHTML = "";
                 $('#loader').show();
             },
-            complete: function(){
+            complete: function() {
                 setTimeout(function() {
                     $('#loader').hide();
+                    document.getElementById('formMessage').innerHTML = "";
                     $("#formMessage").append('Żądanie wygenerowania strony sprintu zostało wysłane.');
                 }, 1500);
             }
@@ -344,6 +345,7 @@ function sprintDescGen() {
             complete: function() {
                 setTimeout(function() {
                     $('#loader').hide();
+                    document.getElementById('formMessage').innerHTML = "";
                     $("#formMessage").append('Żądanie wygenerowania strony sprintu zostało wysłane.');
                 }, 1500);
             }
@@ -423,6 +425,7 @@ function fullGenCriteria() {
             complete: function(){
                 setTimeout(function() {
                     $('#loader').hide();
+                    document.getElementById('formMessage').innerHTML = "";
                     $("#formMessage").append('Żądanie wygenerowania dokumentacji projektu zostało wysłane.');
                 }, 1500);
             }
@@ -458,6 +461,7 @@ function fullGenDesc() {
             complete: function(){
                 setTimeout(function() {
                     $('#loader').hide();
+                    document.getElementById('formMessage').innerHTML = "";
                     $("#formMessage").append('Żądanie wygenerowania dokumentacji projektu zostało wysłane.');
                 }, 1500);
             }
