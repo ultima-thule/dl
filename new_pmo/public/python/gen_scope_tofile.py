@@ -276,6 +276,8 @@ def generate_table(document, tables, table_format=True):
             ths = t.xpath("./tbody/tr/th")
             if len(ths) == 0:
                 ths = t.xpath("./thead/tr/th")
+            if len(ths) == 0:
+                continue
 
             # do nothing if table contains sprint details or cost info
             if len(ths) > 0 and ths[0].text == "Kod sprintu":
