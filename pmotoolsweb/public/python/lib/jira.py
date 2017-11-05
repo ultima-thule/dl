@@ -219,3 +219,44 @@ class Jira (object):
         query += "customfield_12234,customfield_12233,customfield_12228,customfield_12244,customfield_12235,"
         query += "customfield_12623, customfield_10800"
         return self.search(query)
+
+
+    def get_mobile_portfolio(self):
+        """ Gets all issues within Mobile Program, in several batches. """
+        return self._search_in_batches(self._get_mobile_portfolio_batch)
+
+
+    def _get_mobile_portfolio_batch(self, start_at):
+        """ Gets all issues within Mobile Program - one 50-elem batch.
+        Custom fields codes:
+        customfield_12237 - Inititative status
+        customfield_12227 - Risk status
+        customfield_12240 - Risk description
+        customfield_12231 - BO
+        customfield_12239 - Owned by team
+        customfield_12243 - Project code
+        customfield_12226 - Project card
+        customfield_12230 - Contract status
+        customfield_12222 - Planned cost
+        customfield_12223 - Cost LBE
+        customfield_12238 - Current cost
+        customfield_12232 - Started on
+        customfield_12234 - Planned release on
+        customfield_12233 - Release LBE on
+        customfield_12228 - Finish on
+        customfield_12244 - Product Owner
+        customfield_12235 - Program manager or Coordinator
+
+        summary,description,assignee,status,customfield_12237,customfield_12227,customfield_12240,customfield_12231,
+        customfield_12239,customfield_12243,customfield_12226,customfield_12230,customfield_12222,customfield_12223,
+        customfield_12238,customfield_12232,customfield_12234,customfield_12233,customfield_12228,customfield_12244
+
+        """
+        query = "/rest/api/2/search?jql=project='PORTFOLIO' and 'Epic Link'=PORT-2456 and fixVersion in unreleasedVersions() order by status ASC, 'Started on'"
+        # query += "&fields=summary,description,assignee,status,epicLink,customfield_12237,customfield_12227,"
+        # query += "customfield_12240,customfield_12231,customfield_12239,customfield_12243,customfield_12226,"
+        # query += "customfield_12230,customfield_12222,customfield_12223,customfield_12238,customfield_12232,"
+        # query += "customfield_12234,customfield_12233,customfield_12228,customfield_12244,customfield_12235"
+        query += "&expand=changelog&startAt=" + str(start_at)
+
+        return self.search(query)
