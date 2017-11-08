@@ -38,21 +38,49 @@ if __name__ == '__main__':
     usernameJira = credentials.loginJira['consumer_secret']
     passwordJira = credentials.loginJira['password']
 
-    # Get the $sprint_number from the given $project
+
+    #=====================================================
+    # CONST
+    #=====================================================
+    headers = {"Content-Type": "application/json",
+            "User-Agent": "Chrome"
+            }
     jira_api = "http://jira.grupa.onet/rest/api/2/issue/"
     project_name = "MIS"
+    story = {"name": "Story"}
+    task = {"name": "Task"}
+    epic = {"name": "Epic"}
+    subtask = {"id" : "5"}
+    #=====================================================
+    #epic_name = ""
+    # in case of creating subtasks
+    #parent = {"key": "KEY_ID-123"}
+    #
+    #input_params = {
+    #        "fields": {
+    #                "project": {"key" : project_name},
+    #                "issuetype": story,
+    #                "summary": "",
+    #                "description": "",
+    #                "customfield_11300" : epic_name,
+    #                "labels": "",
+    #                #"parent" : parent,
+    #            }
+    #        }
+    #=====================================================
+    #=====================================================
+    epic_name = "Umowa crm_id=%s" % str(ident)
+
     input_params = {"fields": {
                         "project": { "key" : project_name},
-                        "issuetype": {"name" : "Story"},
-                        "summary" : "simple test summary for id = %s"%ident,
+                        "issuetype": epic,
+                        "customfield_11301": epic_name,
+                        "summary" : "Agreement for CRM id = %s " % str(ident),
                     }
             }
 
     input_json = json.dumps(input_params)
     # JIRA SPRINT PART
-    headers = {"Content-Type": "application/json",
-            "User-Agent": "Chrome"
-            }
     out = requests.post(jira_api, auth=HTTPBasicAuth(usernameJira, passwordJira), headers=headers, data = input_json)
     #jira_issues = json.loads(out.content.decode())
     jira_issues = out.content
