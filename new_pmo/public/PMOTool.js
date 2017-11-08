@@ -6,6 +6,9 @@ function addButtons() {
     // checking if pmomenu is already added
     if ($('.pmoMenuContainer').length > 0) { 
         
+        // checking if layer with message is already shown
+        if ($('.pmoMenuLayer').length == 0) { 
+            
         // starting layer with default elements
         pmoMenuLayer();
         
@@ -15,6 +18,8 @@ function addButtons() {
         // error message
         document.getElementById('formMessage').innerHTML = "";
         $("#formMessage").append('PMO Menu jest już dodane do strony.');
+        
+        }
         
     } else {
 
@@ -73,6 +78,7 @@ function pmoMenuLayer() {
             pmoMenuLayerClose();
         }
     });
+    
 }
 
 // closing and cleaning up after the layer
