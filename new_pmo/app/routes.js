@@ -292,6 +292,20 @@ try{
             });
             return res.send(200, output)
         });
+
+        // JIRA API tests
+        app.get('/api/polygon/:testedid', function(req, res) {
+            var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/polygon.py', req.params.testedid]);
+            var output = "";
+            python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
+            python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
+            //python.stdout.on('data', function(data){ output += data });
+            python.on('close', function(code)
+            {
+                if (code !== 0) {  console.log("code ", code); }
+            });
+            return res.send(200, output)
+        });
     
         // =========================== JIRA ================================
         // get all scrum boards
@@ -387,6 +401,22 @@ try{
             });
         });
     
+        app.get('/api/restart', function(req, res){
+            console.log("test");
+            var sys = require('sys')
+            var exec = require('child_process').exec;
+        var child;
+        // executes `pwd`
+         child = exec("killall node ; sleep 2 ; nohup node server.js > restart.log 2>&1 & nohup node server_httpd.js > new_pmo_httpd.log 2>&1 &", function (error, stdout, stderr) {
+         //child = exec("nohup node server_httpd.js > new_pmo_httpd.log 2>&1 &", function (error, stdout, stderr) {
+             sys.print('stdout: ' + stdout);
+             sys.print('stderr: ' + stderr);
+               if (error !== null) {
+                   console.log('exec error: ' + error);
+                }
+            });
+         res.status(200).send('PMOTool has been restarted');
+        });
     
         // =========================== FRONTEND IN ANGULAR ================================
         // route to handle all angular requests
@@ -395,6 +425,7 @@ try{
         });
     
     };
+
 }
 catch(err){
     alert("Problem", err);
