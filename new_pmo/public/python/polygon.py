@@ -11,6 +11,7 @@
 # ident - id from CRM
 # services - list of services given to the agreement
 # offer - one-word label for MIŚ type (to statistics purpose)
+# TYPE: PoC
 
 import json
 import requests
