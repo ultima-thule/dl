@@ -1,0 +1,44 @@
+nohup: ignoring input
+Magic happens on port 8080
+Tue, 24 Oct 2017 21:33:02 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:394:17
+[0mGET /favicon.ico [32m200 [0m4.757 ms - 332[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z opisow dla projektu  PL_RAS_M_SPO_PS.ON.UCS
+Tue, 24 Oct 2017 21:33:14 GMT express deprecated res.sendfile: Use res.sendFile instead at app/routes.js:120:24
+[0mGET /api/genestimate2/PL_RAS_M_SPO_PS.ON.UCS [32m200 [0m7197.357 ms - 6821[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z opisow dla projektu  PL_RAS_M_SPO_PS.ON.UCS
+[0mGET /api/genestimate2/PL_RAS_M_SPO_PS.ON.UCS [32m200 [0m7187.320 ms - 6821[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z opisow dla projektu  PL_GRO_M_LFST_PORTALWIEDZY.MIGR
+[0mGET /api/genestimate2/PL_GRO_M_LFST_PORTALWIEDZY.MIGR [32m200 [0m7198.516 ms - 6497[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z opisow dla projektu  PL_GRO_M_LFST_PORTALWIEDZY.MIGR
+[0mGET /api/genestimate2/PL_GRO_M_LFST_PORTALWIEDZY.MIGR [32m200 [0m7206.217 ms - 6497[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z opisow dla projektu  PL_GRO_M_LFST_PORTALWIEDZY.MIGR
+[0mGET /api/genestimate2/PL_GRO_M_LFST_PORTALWIEDZY.MIGR [32m200 [0m7195.072 ms - 6497[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z opisow dla projektu  PL_GRO_M_LFST_PORTALWIEDZY.MIGR
+[0mGET /api/genestimate2/PL_GRO_M_LFST_PORTALWIEDZY.MIGR [32m200 [0m7213.892 ms - 6497[0m
+bug:  /usr/local/lib/python3.4/dist-packages/xlsxwriter/worksheet.py:1049: UserWarning: Image file './lib/logo.png' not found.
+  warn("Image file '%s' not found." % force_unicode(filename))
+
+Generuje kosztorys z opisow dla projektu  PL_GRO_M_LFST_PORTALWIEDZY.MIGR
+[0mGET /api/genestimate2/PL_GRO_M_LFST_PORTALWIEDZY.MIGR [32m200 [0m7212.771 ms - 6497[0m
+[0mGET /favicon.ico [32m200 [0m0.631 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.547 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m0.569 ms - 332[0m
+[0mGET /favicon.ico [32m200 [0m1.673 ms - 332[0m

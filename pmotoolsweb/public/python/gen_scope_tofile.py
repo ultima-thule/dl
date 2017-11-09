@@ -373,14 +373,10 @@ def get_page_tree(cf_server, page):
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         exit("Usage: " + sys.argv[0] + " projectname")
+    print("aaaaaA")
     project_name = sys.argv[1]
 
-    _initMongoConn()
-
-    if len(sys.argv) < 2:
-        exit("Usage: " + sys.argv[0] + " projectname")
-    project_name = sys.argv[1]
-
+    print(project_name)
     _initMongoConn()
 
     #init Confluence connection
@@ -449,14 +445,11 @@ if __name__ == '__main__':
     document.save(target_stream)
     target_stream.seek(0)
     pwfile = lib.mongoLeankit.Pwfile()
-
     pwfile.data = target_stream.read()
     pwfile.project = project_name
     pwfile.generation_date = datetime.datetime.now()
     pwfile.date_text = date_text
     pwfile.format_type = "DOCX"
     pwfile.save()
-
     target_stream.close()
-
     exit(0)

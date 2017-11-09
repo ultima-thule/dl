@@ -3,6 +3,7 @@
 
 import getpass
 import sys
+import os
 
 import credentials
 import lib.confluence
@@ -209,7 +210,9 @@ def count_real_reported_time (jira_hours, sprint):
 
 
 if __name__ == '__main__':
-    dev = 0 
+    os.path('/home/httpd/dl/pmotoolsweb/public/python')
+    print("aaaaaaaaaa")
+    dev = 1
     if len(sys.argv) < 3:
         exit("Usage: " + sys.argv[0] + " projectname sprint")
 
@@ -230,9 +233,11 @@ if __name__ == '__main__':
     #====================================================
     # CONSOLERUN: comment two lines:
     user_jira = credentials.loginJira['consumer_secret']
+    #print(credentials.loginJira['consumer_secret'])
     pwd_jira = credentials.loginJira['password']
     jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 
+    #exit("wychodze3")
     #====================================================
     # GET-DATA BLOCK
     #====================================================
@@ -246,7 +251,7 @@ if __name__ == '__main__':
 
 
     #====================================================
-    # BUILD HTML 
+    # BUILD HTML
     #====================================================
     doc, tag, text = Doc().tagtext()
 
@@ -264,22 +269,21 @@ if __name__ == '__main__':
     # dev variable- if is "1" the content won't be written in the confluence
     if dev != 1:
 
+        print("generuje strone dla " + project_name + " dla sprintu " + sprint_id)
         user_cf = credentials.loginConfluence['consumer_secret']
         pwd_cf = credentials.loginConfluence['password']
 
         # CONSOLERUN: uncomment on console
-        #usernameCF = usernameJira
-        #passwordCF = passwordJira
 
         url = "http://doc.grupa.onet/rpc/xmlrpc"
         confl = lib.confluence.Confluence(url, user_cf, pwd_cf, "PROJEKTY")
         # CONSOLERUN: uncomment on console
-        #confl = lib.confluence.Confluence(url, usernameCF, passwordCF, "trozanski")
+        #confl = lib.confluence.Confluence(url, usernameCF, passwordCF, "PROJEKTY")
 
         parent_page_title = project_name
         child_page_title = "Sprint " + sprint_id + " | " + project_name
-
-        parent_id = confl.get_or_create_page(parent_page_title, "64070870", "")
+        #parent_id = confl.get_or_create_page(parent_page_title, "64070870", "")
+        parent_id = confl.get_or_create_page(parent_page_title, "38054088", "")
         # CONSOLERUN: uncomment on console- this id is related to trozanski space
         #parentID = {"id": "64072422"}
 

@@ -1,5 +1,5 @@
 import json
-
+import re
 import requests
 from dateutil import parser
 
@@ -11,6 +11,30 @@ class JiraSprint(object):
         self.name = query_result["name"]
         self.date_from = parser.parse(query_result["startDate"]).strftime('%Y-%m-%d')
         self.date_to = parser.parse(query_result["endDate"]).strftime('%Y-%m-%d')
+
+class JiraProject(object):
+    """ Simple holder for the project data."""
+    def __init__(self, project_name, query_result):
+        self.name = project_name
+        self.id = query_result["issues"][0]["key"]
+        try:
+            self.start_date = query_result["issues"][0]["fields"]["customfield_12232"]
+            self.deploy_date = query_result["issues"][0]["fields"]["customfield_12234"]
+            self.deploy_lbe = query_result["issues"][0]["fields"]["customfield_12233"]
+            self.end_date = query_result["issues"][0]["fields"]["customfield_12228"]
+            self.description = query_result["issues"][0]["fields"]["description"]
+            self.pm = "nimrod"
+            self.po = query_result["issues"][0]["fields"]["customfield_12244"]["displayName"]
+            self.cost_lbe = query_result["issues"][0]["fields"]["customfield_12223"]
+            self.cost_planned = query_result["issues"][0]["fields"]["customfield_12222"]
+            self.cost_current = query_result["issues"][0]["fields"]["customfield_12238"]
+            self.milestones = []
+            self.sprints = query_result["issues"][0]["fields"]["customfield_10800"]
+            self.mpk = query_result["issues"][0]["fields"]["customfield_12623"]
+            self.team = query_result["issues"][0]["fields"]["customfield_12239"]["child"]["value"]
+        except Exception as msg:
+            print("Nie wszystkie dane zostaly wypelnione")
+            print(msg)
 
 
 class JiraTimeSpent (object):
@@ -61,6 +85,21 @@ class Jira (object):
         query = "/rest/agile/1.0/sprint/" + sprint_id
         return JiraSprint(sprint_id, self.search(query))
 
+    def get_project_data(self, project_name):
+        """ Gets project general data from Jira. """
+        project_data = self._get_all_project_batch(project_name)
+        project = JiraProject(project_name, project_data)
+        sprints = self._get_sprints_for_project(project_name)
+        sp = []
+        for data in sprints["issues"]:
+            x = data["fields"]["customfield_10800"]
+            if x is not None:
+                out = re.search("id=.*?,", x[0]).group(0)
+                sp.append(int(out[3:-1]))
+        sp_unit = {}.fromkeys(sp).keys()
+        project.sprints = sp_unit
+        return project
+
     def get_worklogs_in_sprint(self, project_name, sprint):
         """ Gets worklogs within project and only in this sprint. """
         return self._search_in_batches(self._get_worklogs_in_sprint_batch, project_name, sprint)
@@ -104,6 +143,12 @@ class Jira (object):
         """ Gets all issues within project, in several batches. """
         return self._search_in_batches(self._get_all_initiatives_batch, project_name)
 
+    def _get_sprints_for_project(self, project_name):
+        query = '/rest/api/2/search?jql=project="%s"' % project_name
+        query += "&fields=customfield_10800"
+        return self.search(query)
+
+
     def _get_all_initiatives_batch(self, project_name, start_at):
         """ Gets all issues within project - one 50-elem batch.
         Custom fields codes:
@@ -131,6 +176,83 @@ class Jira (object):
 
         """
         query = "/rest/api/2/search?jql=project='" + project_name + "' and fixVersion in unreleasedVersions()"
+        # query += "&fields=summary,description,assignee,status,epicLink,customfield_12237,customfield_12227,"
+        # query += "customfield_12240,customfield_12231,customfield_12239,customfield_12243,customfield_12226,"
+        # query += "customfield_12230,customfield_12222,customfield_12223,customfield_12238,customfield_12232,"
+        # query += "customfield_12234,customfield_12233,customfield_12228,customfield_12244,customfield_12235"
+        query += "&expand=changelog&startAt=" + str(start_at)
+
+        return self.search(query)
+
+    def _get_all_project_batch(self, project_name):
+        """ Gets all issues within project - one 50-elem batch.
+        Custom fields codes:
+        customfield_12237 - Inititative status
+        customfield_12227 - Risk status
+        customfield_12240 - Risk description
+        customfield_12231 - BO
+        customfield_12239 - Owned by team
+        customfield_12243 - Project code
+        customfield_12226 - Project card
+        customfield_12230 - Contract status
+        customfield_12222 - Planned cost
+        customfield_12223 - Cost LBE
+        customfield_12238 - Current cost
+        customfield_12232 - Started on
+        customfield_12234 - Planned release on
+        customfield_12233 - Release LBE on
+        customfield_12228 - Finish on
+        customfield_12244 - Product Owner
+        customfield_12235 - Program manager or Coordinator
+        customfield_12623 - MPK or PC
+        customfield_10800 - Sprint
+
+        summary,description,assignee,status,customfield_12237,customfield_12227,customfield_12240,customfield_12231,
+        customfield_12239,customfield_12243,customfield_12226,customfield_12230,customfield_12222,customfield_12223,
+        customfield_12238,customfield_12232,customfield_12234,customfield_12233,customfield_12228,customfield_12244
+
+        """
+        query = '/rest/api/2/search?jql=project=PORT AND resolution=Unresolved AND "Project code"~"%s"' % project_name
+        query += "&fields=summary,description,assignee,status,epicLink,customfield_12237,customfield_12227,"
+        query += "customfield_12240,customfield_12231,customfield_12239,customfield_12243,customfield_12226,"
+        query += "customfield_12230,customfield_12222,customfield_12223,customfield_12238,customfield_12232,"
+        query += "customfield_12234,customfield_12233,customfield_12228,customfield_12244,customfield_12235,"
+        query += "customfield_12623, customfield_10800"
+        return self.search(query)
+
+
+    def get_mobile_portfolio(self):
+        """ Gets all issues within Mobile Program, in several batches. """
+        return self._search_in_batches(self._get_mobile_portfolio_batch)
+
+
+    def _get_mobile_portfolio_batch(self, start_at):
+        """ Gets all issues within Mobile Program - one 50-elem batch.
+        Custom fields codes:
+        customfield_12237 - Inititative status
+        customfield_12227 - Risk status
+        customfield_12240 - Risk description
+        customfield_12231 - BO
+        customfield_12239 - Owned by team
+        customfield_12243 - Project code
+        customfield_12226 - Project card
+        customfield_12230 - Contract status
+        customfield_12222 - Planned cost
+        customfield_12223 - Cost LBE
+        customfield_12238 - Current cost
+        customfield_12232 - Started on
+        customfield_12234 - Planned release on
+        customfield_12233 - Release LBE on
+        customfield_12228 - Finish on
+        customfield_12244 - Product Owner
+        customfield_12235 - Program manager or Coordinator
+
+        summary,description,assignee,status,customfield_12237,customfield_12227,customfield_12240,customfield_12231,
+        customfield_12239,customfield_12243,customfield_12226,customfield_12230,customfield_12222,customfield_12223,
+        customfield_12238,customfield_12232,customfield_12234,customfield_12233,customfield_12228,customfield_12244
+
+        """
+        query = "/rest/api/2/search?jql=project='PORTFOLIO' and 'Epic Link'=PORT-2456 and fixVersion in unreleasedVersions() order by status ASC, 'Started on'"
         # query += "&fields=summary,description,assignee,status,epicLink,customfield_12237,customfield_12227,"
         # query += "customfield_12240,customfield_12231,customfield_12239,customfield_12243,customfield_12226,"
         # query += "customfield_12230,customfield_12222,customfield_12223,customfield_12238,customfield_12232,"
