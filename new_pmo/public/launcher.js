@@ -1,19 +1,19 @@
 var pmoMenu = {
 
-    addScript: function(filename,callback){
+    addScript: function(filename,callback) {
         var e=document.createElement('script');
         e.type = 'text/javascript';
         e.src = filename;
-        if(callback){
-            e.onloadDone=false;//for Opera
+        if(callback) {
+            e.onloadDone=false; //for Opera
             e.onload=function(){e.onloadDone=true;callback();};
-            e.onReadystatechange=function(){
-                if(e.readyState==='loaded'&& !e.onloadDone){
+            e.onReadystatechange=function() {
+                if(e.readyState==='loaded'&& !e.onloadDone) {
                     e.onloadDone=true;callback();
                 }
             }
         }
-        if(typeof(e)!=='undefined'){
+        if(typeof(e)!=='undefined') {
             document.getElementsByTagName('head')[0].appendChild(e);
         }
     },
