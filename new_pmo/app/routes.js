@@ -27,6 +27,7 @@ var uint8arrayToString = function(data){
     return String.fromCharCode.apply(null, data);
 };
 
+
 try{
     module.exports = function(app) {
     
@@ -293,7 +294,7 @@ try{
             return res.send(200, output)
         });
 
-        // JIRA API tests
+        // JIRA API tests for MIS process
         app.get('/api/polygon/:testedid', function(req, res) {
             var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/polygon.py', req.params.testedid]);
             var output = "";
@@ -306,7 +307,72 @@ try{
             });
             return res.send(200, output)
         });
+        // END OF TEST
+
+        app.get('/api/updateprojects', function(req, res) {
+            var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/set_all_projects.py']);
+            var output = "";
+            python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
+            python.stdout.on('data', function(data){ output += data });
+            python.on('close', function(code)
+            {
+                if (code !== 0) {  console.log("code ", code); }
+            });
+            return res.send(200, output)
+        });
     
+        app.get('/api/myprojects/:user', function(req, res) {
+            //res.setHeader('content-type', 'text/html');
+            var uname = req.params.user;
+            console.log('Obecnie testuje stronę: ', uname);
+            fs.readFile('./projects.json', 'utf8', function (err, data) {
+                    if (err) throw err; // we'll not consider error handling for now
+                    var projects = JSON.parse(data);
+                    var myProjects = projects.filter(function(obj){return obj.lead.name === uname;}).sort(function(a,b){
+                            var x = a.id; var y = b.id;
+                            return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+                    });
+                    var outhtml = '<h1>Projekty dla ' + myProjects[0].lead.displayName + "</h1> *godziny nie są jeszcze podpięte*";
+                    var inprogress = "<h2> Projekty w toku </h2>";
+                    var closed = "<h2> Projekty zamknięte </h2>";
+                    var maitenance = "<h2> Utrzymaniowe </h2>";
+                    var backlog = "<h2>Kody backlogowe</h2>";
+                    var rest = "<h2> Pozostałe </h2>";
+
+                    myProjects.forEach(function(pr){
+                        var catName = (("projectCategory" in pr)  ? pr.projectCategory.name : 'n/a');
+
+                        var query = '/rest/api/2/search?jql=project=PORT AND "Project code"~"' + pr.name + '"';
+                        query += "&fields=summary,description,assignee,status,epicLink,customfield_12237,customfield_12227,";
+                        query += "customfield_12240,customfield_12231,customfield_12239,customfield_12243,customfield_12226,";
+                        query += "customfield_12230,customfield_12222,customfield_12223,customfield_12238,customfield_12232,";
+                        query += "customfield_12234,customfield_12233,customfield_12228,customfield_12244,customfield_12235,";
+                        query += "customfield_12623, customfield_10800";
+
+                        //var d = httpGet('10.174.12.239' + query); //jira.grupa.onet
+                        //console.log(d);
+
+                        var outtmphtml = pr.id + " \t <a href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr.name + "'>" 
+                                + pr.name 
+                                + '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updateall/' + pr.key + '\'">Generuj doc (AC)</button> \t' 
+                                + '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updatealldesc/' + pr.key + '\'">Generuj doc (Desc)</button> \t' 
+                                + catName + ' spalonych godzin: 145/1200 \t deadline: 25.12.2017<br />';
+
+                        if(catName == "PROJEKTY W TOKU"){inprogress += outtmphtml;}
+                        else if(catName == "Zamknięte"){closed += outtmphtml;}
+                        else if(catName == "ROZWÓJ"){maitenance += outtmphtml;}
+                        else if(catName == "BACKLOG"){backlog += outtmphtml;}
+                        else{rest += outtmphtml;}
+                    }); 
+                outhtml += inprogress;
+                outhtml += closed;
+                outhtml += maitenance;
+                outhtml += rest;
+                outhtml += backlog;
+                return res.send(200, outhtml);
+            });
+        });
+
         // =========================== JIRA ================================
         // get all scrum boards
         app.get('/api/jira/boards', function(req, res) {
@@ -335,6 +401,27 @@ try{
             http.get({
                     host: 'jira.grupa.onet',
                     path: '/rest/agile/1.0/board/' + req.params.id,
+                    auth: jiraAuth
+            }, function(response) {
+                // Continuously update stream with data
+                var body = '';
+                response.on('data', function(d) {
+                    body += d;
+                });
+                response.on('end', function() {
+                    res.send(JSON.parse(body));
+                });
+            }).on('error', function(e) {
+                console.error("Error: " + e.message);
+                res.status(500).send('Error ' + e.message);
+            });;
+        });
+        
+        // get all fields 
+        app.get('/api/jira/fields', function(req, res) {
+            http.get({
+                    host: 'jira.grupa.onet',
+                    path: '/rest/api/2/field',
                     auth: jiraAuth
             }, function(response) {
                 // Continuously update stream with data
