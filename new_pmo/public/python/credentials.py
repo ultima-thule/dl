@@ -1,3 +1,8 @@
+#loginJira = {
+#    'password': 'CbobBsps?!',
+#    'consumer_secret': 'readonly_pmo'
+#}
+
 loginJira = {
     'password': 'CbobBsps?!',
     'consumer_secret': 'readonly_pmo'
