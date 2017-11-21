@@ -1,6 +1,7 @@
 // app/routes.js
 
 // grab the card model we just created
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var Team = require('./model/team');
 var Report = require('./model/report');
 var ConfigParam = require('./model/configparam');
@@ -26,6 +27,7 @@ var jiraAuth = 'readonly_pmo:CbobBsps?!';
 var uint8arrayToString = function(data){
     return String.fromCharCode.apply(null, data);
 };
+
 
 
 try{
@@ -265,7 +267,6 @@ try{
     
         // update all sprint pages with script using description
         app.get('/api/updatealldesc/:prname', function(req, res) {
-            console.log("--------------");
             var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/add_all_sprint_pages_description_yattag.py', req.params.prname]);
     
             var output = "";
@@ -321,6 +322,19 @@ try{
             return res.send(200, output)
         });
     
+        app.get('/api/getprojects/:user', function(req, res) {
+            var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/get_all_projects.py', req.params.user]);
+            var output = "";
+            python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
+            python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
+            //python.stdout.on('data', function(data){ output += data;});
+            python.on('close', function(code)
+            {
+                if (code !== 0) {  console.log("code ", code); }
+            });
+            setTimeout(function(){return res.send(200, output)}, 1000);
+        });
+
         app.get('/api/myprojects/:user', function(req, res) {
             //res.setHeader('content-type', 'text/html');
             var uname = req.params.user;
@@ -342,21 +356,13 @@ try{
                     myProjects.forEach(function(pr){
                         var catName = (("projectCategory" in pr)  ? pr.projectCategory.name : 'n/a');
 
-                        var query = '/rest/api/2/search?jql=project=PORT AND "Project code"~"' + pr.name + '"';
-                        query += "&fields=summary,description,assignee,status,epicLink,customfield_12237,customfield_12227,";
-                        query += "customfield_12240,customfield_12231,customfield_12239,customfield_12243,customfield_12226,";
-                        query += "customfield_12230,customfield_12222,customfield_12223,customfield_12238,customfield_12232,";
-                        query += "customfield_12234,customfield_12233,customfield_12228,customfield_12244,customfield_12235,";
-                        query += "customfield_12623, customfield_10800";
-
-                        //var d = httpGet('10.174.12.239' + query); //jira.grupa.onet
-                        //console.log(d);
-
+                        var portfolio="";
                         var outtmphtml = pr.id + " \t <a href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr.name + "'>" 
                                 + pr.name 
-                                + '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updateall/' + pr.key + '\'">Generuj doc (AC)</button> \t' 
-                                + '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updatealldesc/' + pr.key + '\'">Generuj doc (Desc)</button> \t' 
-                                + catName + ' spalonych godzin: 145/1200 \t deadline: 25.12.2017<br />';
+                                + '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updateall/' + pr.name + '\'">Generuj doc (AC)</button> \t' 
+                                + '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updatealldesc/' + pr.name + '\'">Generuj doc (Desc)</button> \t' 
+                                + catName + ' spalonych godzin: 145/1200 \t deadline: 25.12.2017'
+                                + ' Portfolio: ' + portfolio + '<br />';
 
                         if(catName == "PROJEKTY W TOKU"){inprogress += outtmphtml;}
                         else if(catName == "Zamknięte"){closed += outtmphtml;}
@@ -417,6 +423,27 @@ try{
             });;
         });
         
+        // get project
+        app.get('/api/jira/getproject/:name', function(req, res) {
+            http.get({
+                    host: 'jira.grupa.onet',
+                    path: '/rest/api/2/search?jql=project=PORT%20AND%20"Project%20code"~"' + req.params.name + '"',
+                    auth: jiraAuth
+            }, function(response) {
+                // Continuously update stream with data
+                var body = '';
+                response.on('data', function(d) {
+                    body += d;
+                });
+                response.on('end', function() {
+                    res.send(JSON.parse(body));
+                });
+            }).on('error', function(e) {
+                console.error("Error: " + e.message);
+                res.status(500).send('Error ' + e.message);
+            });;
+        });
+    
         // get all fields 
         app.get('/api/jira/fields', function(req, res) {
             http.get({
