@@ -323,15 +323,9 @@ try{
         });
     
         app.get('/api/getprojects/:user', function(req, res) {
-            var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/get_all_projects.py', req.params.user]);
-            var output = "";
-            python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
-            python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
-            //python.stdout.on('data', function(data){ output += data;});
-            python.on('close', function(code)
-            {
-                if (code !== 0) {  console.log("code ", code); }
-            });
+            var python = require('child_process').spawnSync('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/get_all_projects.py', req.params.user], {encoding: 'utf-8'});
+            var output = python.output[1];
+            console.log(python.stderr)
             setTimeout(function(){return res.send(200, output)}, 1000);
         });
 
