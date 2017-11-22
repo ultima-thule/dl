@@ -113,7 +113,10 @@ def _get_all_projects(user):
 
     for data in inprogress:
         htmlinprogress += parse_html(data)
-        htmlinprogress += parse_extras(data)
+        try:
+            htmlinprogress += parse_extras(data)
+        except:
+            htmlinprogress += "<font color='red'>Jakiś problem z połączeniem z jirą. Sprawdź, czy jesteś zalogowany</font>"
         htmlinprogress += "<br />"
     for data in closed:
         htmlclosed += parse_html(data)
