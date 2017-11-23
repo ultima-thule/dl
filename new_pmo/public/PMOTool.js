@@ -67,7 +67,7 @@ function pmoMenuClose() {
 function pmoMenuLayer() {
 
     // adding necessary css styles
-    $("head").append('<style>.pmoMenuLayer {position: fixed; display: block; width: auto; height: auto; top:0; bottom:0; left:0; right:0; background-color: rgba(0, 0, 0, .6); z-index: 9999999; overflow: hidden;} .pmoMenuLayerShadow {position: relative; display: block; margin: 0 auto; width: 80%; height: auto; margin-top: 2em; color: #ffffff; background-color: rgba(0, 0, 0, .65)} .pmoMenuLayerShadowWrapper {display: block; position: relative; padding: 2em 2em;} #pmoMenuTitle {color: #ffffff;} .pmoMenuLayerShadow i.close {position: absolute; right: 0.5em; top: 0.5em; font-size: 2em;} .pmoMenuLayerShadow i.close:hover {cursor: pointer;} #formMessage {display: block; margin: 2em 0; color: #ffffff} #loader {display: none;}</style>');
+    $("head").append('<style>.pmoMenuLayer {position: fixed; display: block; width: auto; height: auto; top:0; bottom:0; left:0; right:0; background-color: rgba(0, 0, 0, .6); z-index: 9999999; overflow: hidden;} .pmoMenuLayerShadow {position: relative; display: block; margin: 0 auto; width: 80%; height: auto; margin-top: 2em; color: #ffffff; background-color: rgba(0, 0, 0, .65)} .pmoMenuLayerShadowWrapper {display: block; position: relative; padding: 2em 2em;} #pmoMenuTitle {color: #ffffff;} .pmoMenuLayerShadow i.close {position: absolute; right: 0.5em; top: 0.5em; font-size: 2em;} .pmoMenuLayerShadow i.close:hover {cursor: pointer;} .generateButton {display: inline-block; width: 100px; margin-top: 2em; background: rgb(32, 80, 129); font-weight: bold; color: white; border: 0 none; cursor: pointer; padding: 10px 5px;} .generateButton:hover {background: rgb(18, 61, 105)} #formMessage {display: block; margin: 2em 0; color: #ffffff} #loader {display: none;}</style>');
 
     // adding necessary html code
     $("body").prepend('<div class="pmoMenuLayer"><div class="pmoMenuLayerShadow" id="pmoMenuLayerShadow"><div class="pmoMenuLayerShadowWrapper"><h1 id="pmoMenuTitle"></h1><div id="formWrapper"></div><p id="formMessage"></p><img id="loader" src="http://pmo.cloud.onet/loader.svg"></div><i onclick="pmoMenuLayerClose()" class="fa fa-window-close-o fa-2 close"></div></div>');
@@ -120,10 +120,10 @@ function pwGen() {
     pmoMenuLayer();
     
     // adding styles for specific elements
-    $("head").append('<style>#pwGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;} #pwGenGenerate {display: inline-block; width: 100px; margin-top: 2em; background: #205081; font-weight: bold; color: white; border: 0 none; cursor: pointer; padding: 10px 5px;}</style>');
+    $("head").append('<style>#pwGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;}</style>');
     
     // adding specific html elements
-    $("#formWrapper").prepend('<input id="pwGenProjectCode" name="pwGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><button onclick="pwGenSecond()" id="pwGenGenerate" type="submit" value="Generuj">GENERUJ</button>');
+    $("#formWrapper").prepend('<input id="pwGenProjectCode" name="pwGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><button onclick="pwGenSecond()" id="pwGenGenerate" class="generateButton" type="submit" value="Generuj">GENERUJ</button>');
     
     // adding proper title/header
     $("#pmoMenuTitle").prepend('Generuj zakres');
@@ -161,10 +161,10 @@ function costGenGeneral(type) {
     pmoMenuLayer();
 
     // adding styles for specific elements
-    $("head").append('<style>#costGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;} #costGenOptions {display: inline-block; box-sizing: border-box; margin-right: 2em; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0;} #costGenGenerate {display: inline-block; width: 100px; margin-top: 2em; background: #205081; font-weight: bold; color: white; border: 0 none; cursor: pointer; padding: 10px 5px;}</style>');
+    $("head").append('<style>#costGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;} #costGenOptions {display: inline-block; box-sizing: border-box; margin-right: 2em; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0;}}</style>');
     
     // adding specific html elements
-    $("#formWrapper").prepend('<input id="costGenProjectCode" name="costGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><select id="costGenOptions" onchange="changeTargetCostGeneration()"><option>z subtaskami</option><option>bez subtasków</option></select><button onclick="" id="costGenGenerate" type="submit" value="Generuj">GENERUJ</button>');
+    $("#formWrapper").prepend('<input id="costGenProjectCode" name="costGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><select id="costGenOptions" onchange="changeTargetCostGeneration()"><option>z subtaskami</option><option>bez subtasków</option></select><button onclick="" id="costGenGenerate" class="generateButton" type="submit" value="Generuj">GENERUJ</button>');
     
     // choosing proper option as default from select field
     if (type == 'withSubtasks') { 
@@ -252,10 +252,10 @@ function sprintGen(type) {
     pmoMenuLayer();
 
     // adding styles for specific elements
-    $("head").append('<style>#pwGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;} #pwGenSprint {display: inline-block; box-sizing: border-box; margin-right: 2em; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 150px; -webkit-appearance: none; -moz-appearance: none;} #pwGenOptions {display: inline-block; box-sizing: border-box; margin-right: 2em; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0;} #pwGenGenerate {display: inline-block; width: 100px; margin-top: 2em; background: #205081; font-weight: bold; color: white; border: 0 none; cursor: pointer; padding: 10px 5px;}</style>');
+    $("head").append('<style>#pwGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;} #pwGenSprint {display: inline-block; box-sizing: border-box; margin-right: 2em; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 150px; -webkit-appearance: none; -moz-appearance: none;} #pwGenOptions {display: inline-block; box-sizing: border-box; margin-right: 2em; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0;}</style>');
     
     // adding specific html elements
-    $("#formWrapper").prepend('<input id="pwGenProjectCode" name="pwGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><input id="pwGenSprint" name="pwGenSprint" type="text" placeholder="Wprowadź ID sprintu."><select id="pwGenOptions" onchange="changeTargetPwGeneration()"><option>z kryteriami akceptacji</option><option>z opisem</option></select><button onclick="" id="pwGenGenerate" type="submit" value="Generuj">GENERUJ</button>');
+    $("#formWrapper").prepend('<input id="pwGenProjectCode" name="pwGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><input id="pwGenSprint" name="pwGenSprint" type="text" placeholder="Wprowadź ID sprintu."><select id="pwGenOptions" onchange="changeTargetPwGeneration()"><option>z kryteriami akceptacji</option><option>z opisem</option></select><button onclick="" id="pwGenGenerate" class="generateButton" type="submit" value="Generuj">GENERUJ</button>');
     
     // choosing proper option as default from select field
     if (type == 'withCriteria') { 
@@ -372,10 +372,10 @@ function fullGen(type) {
     pmoMenuLayer();
 
     // adding styles for specific elements
-    $("head").append('<style>#pwFullGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;} #pwFullGenOptions {display: inline-block; box-sizing: border-box; margin-right: 2em; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0;} #pwFullGenGenerate {display: inline-block; width: 100px; margin-top: 2em; background: #205081; font-weight: bold; color: white; border: 0 none; cursor: pointer; padding: 10px 5px;}</style>');
+    $("head").append('<style>#pwFullGenProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;} #pwFullGenOptions {display: inline-block; box-sizing: border-box; margin-right: 2em; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0;}</style>');
     
     // adding specific html elements
-    $("#formWrapper").prepend('<input id="pwFullGenProjectCode" name="pwFullGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><select id="pwFullGenOptions" onchange="changeTargetFullPwGeneration()"><option>z kryteriami akceptacji</option><option>z opisem</option></select><button onclick="" id="pwFullGenGenerate" type="submit" value="Generuj">GENERUJ</button>');
+    $("#formWrapper").prepend('<input id="pwFullGenProjectCode" name="pwFullGenProjectCode" type="text" placeholder="Wprowadź kod projektu."><select id="pwFullGenOptions" onchange="changeTargetFullPwGeneration()"><option>z kryteriami akceptacji</option><option>z opisem</option></select><button onclick="" id="pwFullGenGenerate" class="generateButton" type="submit" value="Generuj">GENERUJ</button>');
     
     // choosing proper option as default from select field
     if (type == 'withCriteria') { 
