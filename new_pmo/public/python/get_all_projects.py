@@ -16,6 +16,7 @@ import lib.jira
 #################################################################
 import getpass
 from datetime import datetime, timedelta
+from time import gmtime, strftime
 import pprint
 from operator import itemgetter
 from dateutil import parser
@@ -64,7 +65,7 @@ def _get_all_projects(user):
     htmlout = '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>'
     htmlout += '<h1><img src="' + project_dict_my[0]["lead"]["avatarUrls"]["32x32"] + '"/>'
     htmlout += ' ' + project_dict_my[0]["lead"]["displayName"]
-    htmlout += "- projekty</h1> ";
+    htmlout += "- projekty</h1> (Uwaga- lista odświeża się co 24h)"
     htmlinprogress = "<h2> Projekty w toku </h2>"
     htmlclosed = "<h2> Projekty zamknięte </h2>"
     htmlmaitenance = "<h2> Utrzymaniowe </h2>"
@@ -115,10 +116,13 @@ def _get_all_projects(user):
                 project.deploy_date = project.end_date
             outtmphtml += "Projekt trwa od: " + str(project.start_date) + " do: " + str(project.end_date) + "<br />"
             try:
-                outtmphtml += "Do wdrożenia ostatecznej wersji pozostało: " + str(parser.parse(project.deploy_date) - parser.parse(project.start_date))+ " dni <br />"
-                outtmphtml += "Do końca projektu pozostało: " + str(parser.parse(project.end_date) - parser.parse(project.start_date))+ "  dni <br />"
-            except:
-                outtmphtml += "Ustaw datę zakończenia projektu<br />"
+                curdate = parser.parse(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+                deploy = parser.parse(project.deploy_date) - curdate
+                endofproject = parser.parse(project.end_date) - curdate
+                outtmphtml += "Do wdrożenia ostatecznej wersji pozostało: " + str(deploy) + " dni <br />"
+                outtmphtml += "Do końca projektu pozostało: " + str(endofproject) + "  dni <br />"
+            except Exception as msg:
+                outtmphtml += "Ustaw datę zakończenia projektui <br />"
             outtmphtml += "</p>"
         return outtmphtml
 
@@ -131,6 +135,7 @@ def _get_all_projects(user):
         htmlinprogress += "<br />"
     i = 0
     for data in closed:
+        # nie ma sensu wyświetlać więcej niż 10
         if i > 10:
             break
         htmlclosed += parse_old_html(data)
