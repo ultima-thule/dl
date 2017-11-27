@@ -325,53 +325,19 @@ try{
         app.get('/api/getprojects/:user', function(req, res) {
             var python = require('child_process').spawnSync('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/get_all_projects.py', req.params.user], {encoding: 'utf-8'});
             var output = python.output[1];
-            console.log(python.stderr)
+            console.log(python.stderr);
+            //console.log(python.output[1]);
+            setTimeout(function(){return res.send(200, output)}, 1000);
+        });
+        
+        app.get('/api/myprojects/:user', function(req, res) {
+            var python = require('child_process').spawnSync('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/get_all_projects.py', req.params.user], {encoding: 'utf-8'});
+            var output = python.output[1];
+            console.log(python.stderr);
+            //console.log(python.output[1]);
             setTimeout(function(){return res.send(200, output)}, 1000);
         });
 
-        app.get('/api/myprojects/:user', function(req, res) {
-            //res.setHeader('content-type', 'text/html');
-            var uname = req.params.user;
-            console.log('Obecnie testuje stronę: ', uname);
-            fs.readFile('./projects.json', 'utf8', function (err, data) {
-                    if (err) throw err; // we'll not consider error handling for now
-                    var projects = JSON.parse(data);
-                    var myProjects = projects.filter(function(obj){return obj.lead.name === uname;}).sort(function(a,b){
-                            var x = a.id; var y = b.id;
-                            return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-                    });
-                    var outhtml = '<h1>Projekty dla ' + myProjects[0].lead.displayName + "</h1> *godziny nie są jeszcze podpięte*";
-                    var inprogress = "<h2> Projekty w toku </h2>";
-                    var closed = "<h2> Projekty zamknięte </h2>";
-                    var maitenance = "<h2> Utrzymaniowe </h2>";
-                    var backlog = "<h2>Kody backlogowe</h2>";
-                    var rest = "<h2> Pozostałe </h2>";
-
-                    myProjects.forEach(function(pr){
-                        var catName = (("projectCategory" in pr)  ? pr.projectCategory.name : 'n/a');
-
-                        var portfolio="";
-                        var outtmphtml = pr.id + " \t <a href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr.name + "'>" 
-                                + pr.name 
-                                + '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updateall/' + pr.name + '\'">Generuj doc (AC)</button> \t' 
-                                + '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updatealldesc/' + pr.name + '\'">Generuj doc (Desc)</button> \t' 
-                                + catName + ' spalonych godzin: 145/1200 \t deadline: 25.12.2017'
-                                + ' Portfolio: ' + portfolio + '<br />';
-
-                        if(catName == "PROJEKTY W TOKU"){inprogress += outtmphtml;}
-                        else if(catName == "Zamknięte"){closed += outtmphtml;}
-                        else if(catName == "ROZWÓJ"){maitenance += outtmphtml;}
-                        else if(catName == "BACKLOG"){backlog += outtmphtml;}
-                        else{rest += outtmphtml;}
-                    }); 
-                outhtml += inprogress;
-                outhtml += closed;
-                outhtml += maitenance;
-                outhtml += rest;
-                outhtml += backlog;
-                return res.send(200, outhtml);
-            });
-        });
 
         // =========================== JIRA ================================
         // get all scrum boards
