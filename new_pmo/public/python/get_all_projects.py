@@ -129,9 +129,13 @@ def _get_all_projects(user):
         except:
             htmlinprogress += "<font color='red'>Jakiś problem z połączeniem z jirą. Sprawdź, czy jesteś zalogowany</font>"
         htmlinprogress += "<br />"
+    i = 0
     for data in closed:
+        if i > 10:
+            break
         htmlclosed += parse_old_html(data)
         htmlclosed += "<br />"
+        i += 1
     for data in maitenance:
         htmlmaitenance += parse_old_html(data)
         htmlmaitenance += "<br />"
