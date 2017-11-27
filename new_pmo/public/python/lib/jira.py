@@ -1,6 +1,7 @@
 import json
 import re
 import requests
+import requests_cache
 from dateutil import parser
 from time import sleep
 
@@ -31,15 +32,16 @@ class JiraProject(object):
         #    print("Nie ma takiego projektu")
         #    return
         self.start_date = self.project_data.get("customfield_12232")
+        self.created = self.project_data.get("created")
         self.project_code = self.project_data.get("customfield_12243")
         self.deploy_date = self.project_data.get("customfield_12234")
         self.deploy_lbe = self.project_data.get("customfield_12233")
         self.end_date = self.project_data.get("customfield_12228")
         self.description = self.project_data.get("description")
-        self.pm = self.project_data.get("assignee")
-        self.cost_lbe = self.project_data.get("customfield_12223")
-        self.cost_planned = self.project_data.get("customfield_12222")
-        self.cost_current = self.project_data.get("customfield_12238")
+        self.pm = self.project_data.get("assignee", "NIMROD")
+        self.cost_lbe = self.project_data.get("customfield_12223", 0)
+        self.cost_planned = self.project_data.get("customfield_12222", 0)
+        self.cost_current = self.project_data.get("customfield_12238", 0)
         self.milestones = []
         self.sprints = self.project_data.get("customfield_10800", ())
         if self.sprints is None:
@@ -51,7 +53,7 @@ class JiraProject(object):
         except Exception as msg:
             self.po = None
             self.team = None
-            print("nie chcialo mi sie tego parsowac:P")
+            #print("nie chcialo mi sie tego parsowac:P")
 
 
 class JiraTimeSpent (object):
@@ -70,14 +72,21 @@ class Jira (object):
         self.username = username
         self.password = password
 
-    def search(self, jql_search, result_key=None):
+    def search(self, jql_search, result_key=None, cache=False):
         """ Generic search method."""
+        cache = 60*60*24
+        if cache:
+            try:
+                requests_cache.install_cache('project_cache', backend='sqlite', expire_after=cache)
+            except:
+                requests_cache.install_cache('project_cache', backend='sqlite', expire_after=60*60*24)
         try:
             try:
+                #requests_cache.install_cache('project_cache', backend='sqlite', expire_after=86400)
                 out = requests.get(self.url + jql_search, auth=(self.username, self.password))
             except requests.exceptions.ConnectionError as msg:
                 print("The connection to jira has just been timeouted")
-            sleep(3)
+            #sleep(3)
             results = json.loads(out.content.decode())
             if result_key is not None:
                 return results.get(result_key)
@@ -114,14 +123,14 @@ class Jira (object):
             print("problem z pobraniem identyfikatora sprintu")
             print(msg)
 
-    def get_project_data(self, project_name):
+    def get_project_data(self, project_name, cache=False):
         """ Gets project general data from Jira. """
         try:
-            project_data = self._get_all_project_batch(project_name)
+            project_data = self._get_all_project_batch(project_name, cache)
             try:
                 query_data = project_data["issues"][0]["fields"]
             except Exception as msg:
-                print("Nie ma takiego projektu")
+                #print("Nie ma takiego projektu")
                 return
             project = JiraProject(project_name, query_data)
             sprints = self._get_sprints_for_project(project_name)
@@ -222,7 +231,7 @@ class Jira (object):
         #query += "&expand=changelog&startAt=" + str(start_at)
         return self.search(query)
 
-    def _get_all_project_batch(self, project_name):
+    def _get_all_project_batch(self, project_name, cache=False):
         """ Gets all issues within project - one 50-elem batch.
         Custom fields codes:
         customfield_12237 - Inititative status

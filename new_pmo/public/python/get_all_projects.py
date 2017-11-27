@@ -52,6 +52,8 @@ def _get_all_projects(user):
     project_dict_full = eval(project_data)
     project_dict_my = [x for x in project_dict_full if (x["lead"]["name"] == user )]
     project_dict_my = sorted(project_dict_my, key=itemgetter("id"), reverse=True)
+    if project_dict_my == []:
+        return "<h1>no data for the user %s</h1>" % user
 
     inprogress = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="PROJEKTY W TOKU")]
     closed= [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="Zamknięte")]
@@ -77,9 +79,18 @@ def _get_all_projects(user):
         #outtmphtml += ' Portfolio: n/a ' + " <small>(" + pr.get("projectCategory", {}).get("name", "n/a") + ")</small> "
         return outtmphtml
 
+    def parse_old_html(pr):
+        outtmphtml = pr['id'] + " \t <a href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr['name'] + "'>"
+        outtmphtml += pr['name']
+        outtmphtml += '</a>'
+        outtmphtml += '>> ' + " <small>(" + pr.get("projectCategory", {}).get("name", "n/a") + ")</small> "
+        return outtmphtml
+
     def parse_extras(pr):
         project = jira.get_project_data(pr["name"])
+        #print("Pobieram dane z: %s" % pr["name"])
         if project is None:
+            #print("Brak danych w portfolio")
             outtmphtml = "<b><a href='http://jira.grupa.onet/secure/RapidBoard.jspa?rapidView=297'>Uzupełnij portfolio!</a></b>"
         else:
             if project.cost_planned is None:
@@ -119,16 +130,16 @@ def _get_all_projects(user):
             htmlinprogress += "<font color='red'>Jakiś problem z połączeniem z jirą. Sprawdź, czy jesteś zalogowany</font>"
         htmlinprogress += "<br />"
     for data in closed:
-        htmlclosed += parse_html(data)
+        htmlclosed += parse_old_html(data)
         htmlclosed += "<br />"
     for data in maitenance:
-        htmlmaitenance += parse_html(data)
+        htmlmaitenance += parse_old_html(data)
         htmlmaitenance += "<br />"
     for data in backlog:
-        htmlbacklog += parse_html(data)
+        htmlbacklog += parse_old_html(data)
         htmlbacklog += "<br />"
     for data in rest:
-        htmlrest += parse_html(data)
+        htmlrest += parse_old_html(data)
         htmlrest += "<br />"
 
     htmlout += htmlinprogress
