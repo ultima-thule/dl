@@ -412,12 +412,12 @@ if __name__ == '__main__':
 
             page_tree = get_page_tree(confl, page)
 
-            if "karta projektu" in title or "kp" in title:
-                pages_structure["project_card"] = page_tree
-            elif "sprint" in title:
+            if "sprint" in title:
                 pages_structure["sprint_cards"].append(page_tree)
             elif "zakończenie projektu" in title:
                 pages_structure["project_close"] = page_tree
+            elif "karta projektu" in title or "kp" in title:
+                pages_structure["project_card"] = page_tree
 
         # iterate pages and generate doc
         # project card
