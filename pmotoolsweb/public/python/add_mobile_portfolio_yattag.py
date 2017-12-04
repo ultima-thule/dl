@@ -61,7 +61,7 @@ def program_info_to_html(portfolio):
     last_status = ""
 
     status_map = {'ToDo': 'Faza: Nierozpoczęte', 'In Progress': 'Faza: W trakcie',
-                  'Roadmap': 'Faza: Roadmapa', 'Cancelled': 'Faza: Anulowane', 'Closed': 'Faza: Zamknięte'}
+                  'roadmap': 'Faza: Roadmapa', 'Cancelled': 'Faza: Anulowane', 'Closed': 'Faza: Zamknięte'}
 
     risk_map = {'medium risk': "<ac:macro ac:name=\"status\"><ac:parameter ac:name=\"colour\">Yellow</ac:parameter><ac:parameter ac:name=\"title\">Średnie ryzyko</ac:parameter></ac:macro> ",
                 'high risk': "<ac:macro ac:name=\"status\"><ac:parameter ac:name=\"colour\">Red</ac:parameter><ac:parameter ac:name=\"title\">Wysokie ryzyko</ac:parameter></ac:macro> ",
