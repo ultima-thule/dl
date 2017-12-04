@@ -67,6 +67,7 @@ def program_info_to_html(portfolio):
                 'high risk': "<ac:macro ac:name=\"status\"><ac:parameter ac:name=\"colour\">Red</ac:parameter><ac:parameter ac:name=\"title\">Wysokie ryzyko</ac:parameter></ac:macro> ",
                 'on track': "<ac:macro ac:name=\"status\"><ac:parameter ac:name=\"colour\">Green</ac:parameter>""<ac:parameter ac:name=\"title\">W toku</ac:parameter></ac:macro> ",
                 'other': "<ac:macro ac:name=\"status\"><ac:parameter ac:name=\"title\">inny</ac:parameter></ac:macro>",
+                'not set': "<ac:macro ac:name=\"status\"><ac:parameter ac:name=\"title\">inny</ac:parameter></ac:macro>",
                 'stopped': "<ac:macro ac:name=\"status\"><ac:parameter ac:name=\"title\">zakończony</ac:parameter></ac:macro>"}
 
 
