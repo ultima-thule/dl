@@ -47,6 +47,8 @@ jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 #    out = requests.post(jira_api, auth=HTTPBasicAuth(user_jira, pwd_jira), headers=headers, data = input_json)
 
 def _get_all_projects(user):
+
+
     with open('projects.json', 'r') as f:
         project_data = f.read()
     project_data = project_data.replace("false", "False").replace("true", "True").replace("Null", "None")
@@ -60,17 +62,46 @@ def _get_all_projects(user):
     closed= [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="Zamknięte")]
     maitenance = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="ROZWÓJ")]
     backlog = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="BACKLOG")]
+    supported = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="POMOCNICZY")]
     rest = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a") not in ("PROJEKTY W TOKU", "BACKLOG", "ROZWÓJ", "Zamknięte"))]
+
+    try:
+        onepager = jira.get_onepager_data(user)["issues"]
+    except Exception as msg:
+        print(msg)
+    try:
+        onepager_projects = [x for x in onepager if x.get("fields", {}).get('issuetype')['id'] == "7" ]
+    except Exception as msg:
+        print(msg)
+        onepager_projects = []
+
+    try:
+        onepager_tasks = {}
+        for tsk in onepager:
+            onepager_tasks = {k: onepager_tasks.get(k, []) + [v] for k, v in tsk.items()}
+           #onepager_tasks = { [x for x in onepager if x.get("fields", {}).get('issuetype')['id'] == "5" ]}
+        #print(onepager_tasks)
+    except Exception as msg:
+        print(msg)
+        onepager_tasks = []
 
     htmlout = '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>'
     htmlout += '<h1><img src="' + project_dict_my[0]["lead"]["avatarUrls"]["32x32"] + '"/>'
     htmlout += ' ' + project_dict_my[0]["lead"]["displayName"]
     htmlout += "- projekty</h1> (Uwaga- lista odświeża się co 24h)"
+    htmlonepager = "<h2>Uruchomione One Pagery </h2>"
     htmlinprogress = "<h2> Projekty w toku </h2>"
     htmlclosed = "<h2> Projekty zamknięte </h2>"
     htmlmaitenance = "<h2> Utrzymaniowe </h2>"
     htmlbacklog = "<h2>Kody backlogowe</h2>"
+    htmlsupported = "<h2>Kody pomocnicze</h2>"
     htmlrest = "<h2>Pozostałe </h2>"
+
+    def parse_onepager(pr):
+        outtmphtml = pr['key'] + " \t <a href = 'http://doc.grupa.onet/browse/" + pr['key'] + "'>"
+        outtmphtml += pr['fields']['summary']
+        outtmphtml += "</a><br />"
+        return outtmphtml
 
     def parse_html(pr):
         outtmphtml = pr['id'] + " \t <a href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr['name'] + "'>"
@@ -126,6 +157,9 @@ def _get_all_projects(user):
             outtmphtml += "</p>"
         return outtmphtml
 
+    for data in onepager_projects:
+        htmlonepager += parse_onepager(data)
+
     for data in inprogress:
         htmlinprogress += parse_html(data)
         try:
@@ -150,11 +184,17 @@ def _get_all_projects(user):
     for data in rest:
         htmlrest += parse_old_html(data)
         htmlrest += "<br />"
+    for data in supported:
+        htmlsupported += parse_old_html(data)
+        htmlsupported += "<br />"
 
+    #print(check_onepager_status(user))
+    htmlout += htmlonepager
     htmlout += htmlinprogress
     htmlout += htmlclosed
     htmlout += htmlmaitenance
     htmlout += htmlbacklog
+    #htmlout += htmlsupported
     htmlout += htmlrest
     return htmlout
 
