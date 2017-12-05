@@ -75,6 +75,7 @@ class Jira (object):
     def search(self, jql_search, result_key=None, cache=False):
         """ Generic search method."""
         cache = 60*60*24
+        out = ""
         if cache:
             try:
                 requests_cache.install_cache('project_cache', backend='sqlite', expire_after=cache)
@@ -85,14 +86,14 @@ class Jira (object):
                 #requests_cache.install_cache('project_cache', backend='sqlite', expire_after=86400)
                 out = requests.get(self.url + jql_search, auth=(self.username, self.password))
             except requests.exceptions.ConnectionError as msg:
-                print("The connection to jira has just been timeouted")
-            #sleep(3)
+                print("Check the jql or jira request: ")
+                print(msg)
             results = json.loads(out.content.decode())
             if result_key is not None:
                 return results.get(result_key)
             return results
         except Exception as msg:
-            print("Problem z pobraniem danych z jiry")
+            print("Problem z pobraniem danych z jiry: ")
             print(msg)
 
     def _search_in_batches(self, func, *args):
@@ -180,6 +181,10 @@ class Jira (object):
         except Exception as msg:
             print("Problem z pobraniem taskow ze sprintu")
             print(msg)
+
+    def get_onepager_data(self, user):
+        query = "/rest/api/2/search?jql=project=ONEPAGER AND creator=%s" % user
+        return self.search(query)
 
     def _get_issues_in_sprint_batch(self, project_name, sprint, start_at):
         """ Gets all issues within project and sprint - one 50-elem batch. """
