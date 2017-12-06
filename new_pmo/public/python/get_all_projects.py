@@ -27,24 +27,34 @@ project_dict = {}
 
 user_jira = credentials.loginJira['consumer_secret']
 pwd_jira = credentials.loginJira['password']
+
+user_jira_tr = "xxx"
+pwd_jira_tr = "xxx"
 jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 
-def _create_card(summary, descriptioni, project_code):
+def update_onepager(task_id, state="run"):
+    """
+        @run- assigne owner and the team
+        @cancel- move to "resolved" (fast track)
+    """
 
-    jira_api = "http://jira.grupa.onet/rest/api/2/issue/"
+    jira_api = "http://jira.grupa.onet/rest/api/2/issue/%s" % str(task_id)
     headers = {"Content-Type": "application/json",
             "User-Agent": "Chrome"
             }
-    input_params = {"fields": {
-                        "project": { "key" :"PORT"},
-                        "issuetype": 'Initiative',
-                        "summary" : summary,
-                        "description": description,
-                        "customfield_12243": project_code,
-                    }
+    if state == "cancel":
+        input_params = {"fields": {
+                            "status": "Resolved",
+                        }
             }
+    elif state == "run":
+        print("GO!")
+        pass
+
     input_json = json.dumps(input_params)
-    out = requests.post(jira_api, auth=HTTPBasicAuth(user_jira, pwd_jira), headers=headers, data = input_json)
+    #out = requests.put(jira_api, auth=(user_jira_tr, pwd_jira_tr), headers=headers, data = input_json)
+    #return out
+    return "test"
 
 def _get_all_projects(user):
 
@@ -241,8 +251,9 @@ def _get_all_projects(user):
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         exit("Usage: " + sys.argv[0] + " user [args]")
-
-    print(_get_all_projects(sys.argv[1]))
+    task_id = "ONEPAGER-1933"
+    print(update_onepager(task_id).text)
+    #print(_get_all_projects(sys.argv[1]))
     #_get_all_projects(sys.argv[1])
     exit(0)
 
