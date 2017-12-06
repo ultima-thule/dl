@@ -115,7 +115,9 @@ def _get_all_projects(user):
                 color = "red"
                 parent_id = "1"
                 step = "1"
-                butt += '\t<button onclick="window.location=\'' + "http://pmo.cloud.onet/api/onepager/%s/%s/%s" % (parent_id, step, type)+ '\'">Wystartuj</button> \t'
+                typ = "run"
+                butt += '\t<button onclick="window.location=\'' + "http://pmo.cloud.onet/api/onepager/%s/%s/%s" % (parent_id, step, typ)+ '\'">Wystartuj</button> \t'
+                typ = "cancel"
                 butt += '\t<button onclick="window.location=\'' + "http://pmo/cloud.onet/api/onepager/" + '\'">Przeskocz</button> \t'
             elif i["fields"]["status"]["name"] in ("Resolved", "Close"):
                 color = "green"
