@@ -29,22 +29,22 @@ user_jira = credentials.loginJira['consumer_secret']
 pwd_jira = credentials.loginJira['password']
 jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 
-#def _create_portfolio_card(summary, descriptioni, project_code):
-#
-#    jira_api = "http://jira.grupa.onet/rest/api/2/issue/"
-#    headers = {"Content-Type": "application/json",
-#            "User-Agent": "Chrome"
-#            }
-#    input_params = {"fields": {
-#                        "project": { "key" :"PORT"},
-#                        "issuetype": 'Initiative',
-#                        "summary" : summary,
-#                        "description": description,
-#                        "customfield_12243": project_code,
-#                    }
-#            }
-#    input_json = json.dumps(input_params)
-#    out = requests.post(jira_api, auth=HTTPBasicAuth(user_jira, pwd_jira), headers=headers, data = input_json)
+def _create_card(summary, descriptioni, project_code):
+
+    jira_api = "http://jira.grupa.onet/rest/api/2/issue/"
+    headers = {"Content-Type": "application/json",
+            "User-Agent": "Chrome"
+            }
+    input_params = {"fields": {
+                        "project": { "key" :"PORT"},
+                        "issuetype": 'Initiative',
+                        "summary" : summary,
+                        "description": description,
+                        "customfield_12243": project_code,
+                    }
+            }
+    input_json = json.dumps(input_params)
+    out = requests.post(jira_api, auth=HTTPBasicAuth(user_jira, pwd_jira), headers=headers, data = input_json)
 
 def _get_all_projects(user):
 
@@ -75,17 +75,34 @@ def _get_all_projects(user):
         print(msg)
         onepager_projects = []
 
+    onepager_tasks = {}
     try:
-        onepager_tasks = {}
         for tsk in onepager:
-            onepager_tasks = {k: onepager_tasks.get(k, []) + [v] for k, v in tsk.items()}
-           #onepager_tasks = { [x for x in onepager if x.get("fields", {}).get('issuetype')['id'] == "5" ]}
-        #print(onepager_tasks)
+            if tsk.get("fields", {}).get('issuetype')['id'] != "7" :
+                tmp = onepager_tasks.get(tsk["fields"]["parent"]["key"], [])
+                tmp.append(tsk)
+                onepager_tasks.update({tsk["fields"]["parent"]["key"]: tmp})
     except Exception as msg:
+        print("bug: ")
         print(msg)
         onepager_tasks = []
 
     htmlout = '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>'
+    htmlout += '<style>'
+    htmlout += """
+    .column {
+        float: left;
+            width: 50%;
+            }
+
+            /* Clear floats after the columns */
+            .row:after {
+                        content: "";
+                            display: table;
+                                clear: both;
+                                }
+    """
+    htmlout += '</style>'
     htmlout += '<h1><img src="' + project_dict_my[0]["lead"]["avatarUrls"]["32x32"] + '"/>'
     htmlout += ' ' + project_dict_my[0]["lead"]["displayName"]
     htmlout += "- projekty</h1> (Uwaga- lista odświeża się co 24h)"
@@ -97,10 +114,27 @@ def _get_all_projects(user):
     htmlsupported = "<h2>Kody pomocnicze</h2>"
     htmlrest = "<h2>Pozostałe </h2>"
 
-    def parse_onepager(pr):
-        outtmphtml = pr['key'] + " \t <a href = 'http://doc.grupa.onet/browse/" + pr['key'] + "'>"
+    def parse_onepager(pr, tsk):
+        outtmphtml = pr['key'] + " \t <a href = 'http://jira.grupa.onet/browse/" + pr['key'] + "'>"
         outtmphtml += pr['fields']['summary']
         outtmphtml += "</a><br />"
+        outtmphtml += "<ul>"
+        for i in tsk[pr['key']]:
+            color = ""
+            if i["fields"]["status"]["name"] in ("Waiting", "InProgress"):
+                color = "blue"
+            elif i["fields"]["status"]["name"] in ("ToDo"):
+                color = "red"
+            elif i["fields"]["status"]["name"] in ("Resolved", "Close"):
+                color = "green"
+
+            outtmphtml += "<li><font size='3px' color='"
+            outtmphtml += "%s'>" % color
+            outtmphtml += i["fields"]["status"]["name"]
+            outtmphtml += ": "
+            outtmphtml += i["fields"]["summary"]
+            outtmphtml += "</font></li>"
+        outtmphtml += "</ul>"
         return outtmphtml
 
     def parse_html(pr):
@@ -158,7 +192,7 @@ def _get_all_projects(user):
         return outtmphtml
 
     for data in onepager_projects:
-        htmlonepager += parse_onepager(data)
+        htmlonepager += parse_onepager(data, onepager_tasks)
 
     for data in inprogress:
         htmlinprogress += parse_html(data)
@@ -188,14 +222,19 @@ def _get_all_projects(user):
         htmlsupported += parse_old_html(data)
         htmlsupported += "<br />"
 
-    #print(check_onepager_status(user))
-    htmlout += htmlonepager
+    htmlout += "<div class='row'>"
+    htmlout += "<div class='column'>"
     htmlout += htmlinprogress
     htmlout += htmlclosed
     htmlout += htmlmaitenance
     htmlout += htmlbacklog
-    #htmlout += htmlsupported
     htmlout += htmlrest
+    htmlout += "</div>"
+    #htmlout += htmlsupported
+    htmlout += "<div class='column'>"
+    htmlout += htmlonepager
+    htmlout += "</div>"
+    htmlout += "</div>"
     return htmlout
 
 
