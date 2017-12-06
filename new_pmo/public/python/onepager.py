@@ -58,9 +58,25 @@ def update_onepager(task_id, state="run"):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        exit("Usage: " + sys.argv[0] + " user [args]")
-    task_id = "ONEPAGER-1933"
-    print(update_onepager(task_id).text)
+    if len(sys.argv) < 3:
+        exit("Usage: " + sys.argv[0] + " parent step")
+    parent_id = sys.argv[1]
+    step = sys.argv[2]
+    if int(step) > 14:
+        print("Nie ma takiego kroku!")
+        exit(0)
+    out = """
+    <head><script type="text/javascript">
+    setTimeout(
+    function ( )
+    {
+      self.close();
+      }, 1000 );
+      </script></head>
+    """
+    #print(update_onepager(task_id).text)
     #_get_all_projects(sys.argv[1])
+    print(out)
+    print(parent_id)
+    print(step)
     exit(0)
