@@ -28,11 +28,11 @@ project_dict = {}
 user_jira = credentials.loginJira['consumer_secret']
 pwd_jira = credentials.loginJira['password']
 
-user_jira_tr = "trozanski"
-pwd_jira_tr = "Bordeaux32"
+user_jira_tr = "xxx"
+pwd_jira_tr = "xxx"
 jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 
-def update_onepager(task_id, state="run"):
+def update_onepager(task_id, step, state="run"):
     """
         @run- assigne owner and the team
         @cancel- move to "resolved" (fast track)
@@ -58,10 +58,11 @@ def update_onepager(task_id, state="run"):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 4:
         exit("Usage: " + sys.argv[0] + " parent step")
     parent_id = sys.argv[1]
     step = sys.argv[2]
+    typ = sys.argv[3]
     if int(step) > 14:
         print("Nie ma takiego kroku!")
         exit(0)
@@ -74,9 +75,10 @@ if __name__ == '__main__':
       }, 1000 );
       </script></head>
     """
-    #print(update_onepager(task_id).text)
+    #print(update_onepager(task_id, step, typ).text)
     #_get_all_projects(sys.argv[1])
     print(out)
     print(parent_id)
     print(step)
+    print(typ)
     exit(0)
