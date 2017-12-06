@@ -28,33 +28,8 @@ project_dict = {}
 user_jira = credentials.loginJira['consumer_secret']
 pwd_jira = credentials.loginJira['password']
 
-user_jira_tr = "xxx"
-pwd_jira_tr = "xxx"
 jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 
-def update_onepager(task_id, state="run"):
-    """
-        @run- assigne owner and the team
-        @cancel- move to "resolved" (fast track)
-    """
-
-    jira_api = "http://jira.grupa.onet/rest/api/2/issue/%s" % str(task_id)
-    headers = {"Content-Type": "application/json",
-            "User-Agent": "Chrome"
-            }
-    if state == "cancel":
-        input_params = {"fields": {
-                            "status": "Resolved",
-                        }
-            }
-    elif state == "run":
-        print("GO!")
-        pass
-
-    input_json = json.dumps(input_params)
-    #out = requests.put(jira_api, auth=(user_jira_tr, pwd_jira_tr), headers=headers, data = input_json)
-    #return out
-    return "test"
 
 def _get_all_projects(user):
 
@@ -97,7 +72,9 @@ def _get_all_projects(user):
         print(msg)
         onepager_tasks = []
 
-    htmlout = '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>'
+    htmlout = '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'
+    htmlout += '<title> Centrum Sterowania </title>'
+    htmlout += '</head>'
     htmlout += '<style>'
     htmlout += """
     .column {
@@ -130,11 +107,16 @@ def _get_all_projects(user):
         outtmphtml += "</a><br />"
         outtmphtml += "<ul>"
         for i in tsk[pr['key']]:
+            butt = ""
             color = ""
             if i["fields"]["status"]["name"] in ("Waiting", "InProgress"):
                 color = "blue"
             elif i["fields"]["status"]["name"] in ("ToDo"):
                 color = "red"
+                parent_id = "1"
+                step = "1"
+                butt += '\t<button onclick="window.location=\'' + "http://pmo.cloud.onet/api/onepager/%s/%s/%s" % (parent_id, step, type)+ '\'">Wystartuj</button> \t'
+                butt += '\t<button onclick="window.location=\'' + "http://pmo/cloud.onet/api/onepager/" + '\'">Przeskocz</button> \t'
             elif i["fields"]["status"]["name"] in ("Resolved", "Close"):
                 color = "green"
 
@@ -143,6 +125,7 @@ def _get_all_projects(user):
             outtmphtml += i["fields"]["status"]["name"]
             outtmphtml += ": "
             outtmphtml += i["fields"]["summary"]
+            outtmphtml += butt
             outtmphtml += "</font></li>"
         outtmphtml += "</ul>"
         return outtmphtml
@@ -251,9 +234,7 @@ def _get_all_projects(user):
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         exit("Usage: " + sys.argv[0] + " user [args]")
-    task_id = "ONEPAGER-1933"
-    print(update_onepager(task_id).text)
-    #print(_get_all_projects(sys.argv[1]))
+    print(_get_all_projects(sys.argv[1]))
     #_get_all_projects(sys.argv[1])
     exit(0)
 
