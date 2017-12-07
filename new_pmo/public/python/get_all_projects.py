@@ -93,7 +93,7 @@ def _get_all_projects(user):
     htmlout += '<h1><img src="' + project_dict_my[0]["lead"]["avatarUrls"]["32x32"] + '"/>'
     htmlout += ' ' + project_dict_my[0]["lead"]["displayName"]
     htmlout += "- projekty</h1> (Uwaga- lista odświeża się co 24h)"
-    htmlonepager = "<h2>Uruchomione One Pagery </h2>"
+    htmlonepager = "<h2>Uruchomione <a href='http://doc.grupa.onet/display/METRYKI/OnePager%3A+Opis%2C+Instrukcja%2C+Dane+kontaktowe'>One Pagery</a> </h2>"
     htmlinprogress = "<h2> Projekty w toku </h2>"
     htmlclosed = "<h2> Projekty zamknięte </h2>"
     htmlmaitenance = "<h2> Utrzymaniowe </h2>"
@@ -116,19 +116,20 @@ def _get_all_projects(user):
                 parent_id = "1"
                 step = "1"
                 typ = "run"
-                butt += '\t<button onclick="window.location=\'' + "http://pmo.cloud.onet/api/onepager/%s/%s/%s" % (parent_id, step, typ)+ '\'">Wystartuj</button> \t'
+                butt += '\t<button onclick="window.location=\'' + "http://pmo.cloud.onet/api/onepager/%s/%s" % (i["key"], typ)+ '\'">Wystartuj</button> \t'
                 typ = "cancel"
-                butt += '\t<button onclick="window.location=\'' + "http://pmo/cloud.onet/api/onepager/" + '\'">Przeskocz</button> \t'
+                butt += '\t<button onclick="window.location=\'' + "http://pmo.cloud.onet/api/onepager/%s/%s" % (i["key"], typ) + '\'">Przeskocz</button> \t'
             elif i["fields"]["status"]["name"] in ("Resolved", "Close"):
                 color = "green"
 
             outtmphtml += "<li><font size='3px' color='"
             outtmphtml += "%s'>" % color
+            outtmphtml += butt
             outtmphtml += i["fields"]["status"]["name"]
             outtmphtml += ": "
             outtmphtml += i["fields"]["summary"]
-            outtmphtml += butt
             outtmphtml += "</font></li>"
+            #print(i["fields"]["parent"]["fields"]["summary"])
         outtmphtml += "</ul>"
         return outtmphtml
 
@@ -153,34 +154,41 @@ def _get_all_projects(user):
         if project is None:
             #print("Brak danych w portfolio")
             outtmphtml = "<b><a href='http://jira.grupa.onet/secure/RapidBoard.jspa?rapidView=297'>Uzupełnij portfolio!</a></b>"
+            color="orange"
         else:
+            color = "black"
             if project.cost_planned is None:
                 project.cost_planned = 1
+                color = "orange"
             if project.cost_lbe is None:
                 project.cost_lbe = project.cost_planned
             if project.cost_current is None:
                 project.cost_current = 0
-            color = "black"
             if project.cost_lbe - project.cost_current < 0:
                 color = "red"
+
             outtmphtml = "<p><font color = '"+color+"'>Aktualny koszt: " + str(project.cost_current) + "/" + str(project.cost_lbe) + " (" + str(round(project.cost_current/project.cost_lbe*100, 2)) + "%)</font><br />"
-            if project.cost_lbe == 1:
-                outtmphtml += "<b><a href='http://jira.grupa.onet/secure/RapidBoard.jspa?rapidView=297'>Uzupełnij estymowany koszt</a></b><br />"
+            #if project.cost_lbe == 1:
+            #    outtmphtml += "<b><a href='http://jira.grupa.onet/secure/RapidBoard.jspa?rapidView=297'>Uzupełnij estymowany koszt</a></b><br />"
             outtmphtml += "Koszt zmieniony o: " + str(project.cost_lbe - project.cost_planned) + "<br />"
             outtmphtml += "Z budżetu zostało: " + str((project.cost_lbe - project.cost_current)*107) + "PLN + vat <br />"
             if project.start_date is None:
                 project.start_date = project.created
             if project.end_date is None:
                 project.end_date = 0
+                color = "orange"
             if project.deploy_date is None:
                 project.deploy_date = project.end_date
-            outtmphtml += "Projekt trwa od: " + str(project.start_date) + " do: " + str(project.end_date) + "<br />"
+            outtmphtml += "<font color = '"+color+"'>Projekt trwa od: " + str(project.start_date) + " do: " + str(project.end_date) + "</font><br />"
             try:
                 curdate = parser.parse(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-                deploy = parser.parse(project.deploy_date) - curdate
+                deploy = parser.parse(project.deploy_lbe) - curdate
                 endofproject = parser.parse(project.end_date) - curdate
-                outtmphtml += "Do wdrożenia ostatecznej wersji pozostało: " + str(deploy) + " dni <br />"
-                outtmphtml += "Do końca projektu pozostało: " + str(endofproject) + "  dni <br />"
+                color = "black"
+                if (deploy.days <0 or endofproject.days<0):
+                    color = "red"
+                outtmphtml += "<font color = '"+color+"'>Do wdrożenia ostatecznej wersji pozostało: " + str(deploy) + " dni <br />"
+                outtmphtml += "Do końca projektu pozostało: " + str(endofproject) + " dni </font><br />"
             except Exception as msg:
                 outtmphtml += "Ustaw datę zakończenia projektui <br />"
             outtmphtml += "</p>"
