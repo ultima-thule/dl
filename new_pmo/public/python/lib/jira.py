@@ -80,7 +80,7 @@ class Jira (object):
             try:
                 requests_cache.install_cache('project_cache', backend='sqlite', expire_after=cache)
             except:
-                requests_cache.install_cache('project_cache', backend='sqlite', expire_after=60*60*24)
+                requests_cache.install_cache('project_cache', backend='sqlite', expire_after=3600)
         try:
             try:
                 #requests_cache.install_cache('project_cache', backend='sqlite', expire_after=86400)
