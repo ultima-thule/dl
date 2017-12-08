@@ -52,23 +52,24 @@ def update_onepager(task_id, state="run"):
 
     identyfication_name = re.search("\[.*\]", parent.replace("[OnePager]", "")).group(0)[1:-1]
     new_summary = result["fields"]["summary"].replace("Nazwa Identyfikująca", identyfication_name).replace("CLONE - ", "")
+    new_summary = new_summary.replace("Nazwa identyfikująca", identyfication_name).replace("CLONE - ", "")
     procedure_owner = result["fields"]["creator"]["name"]
     step = int(re.search("\d+", new_summary).group(0))
     steps_assigment = {
-        1: [procedure_owner, ""],
-        2: [procedure_owner, ""],
+        1: [procedure_owner, "Brak"],
+        2: [procedure_owner, "Brak"],
         3: ["nlojewska", "Zespół Produktu Reklamowego"],
         4: ["akomedera", "Zespół Analiz Rynkowych"],
         5: ["mbocian", "Zespół Traffic Intelligence"],
         6: ["mbocian", "Zespół Traffic Intelligence"],
         7: ["nlojewska", "Zespół Produktu Reklamowego"],
-        8: [procedure_owner, ""],
+        8: [procedure_owner, "Brak"],
         9: ["sszczerbowski", "Zespół Quality Assurance Services"],
         10: ["mbocian", "Zespół Traffic Intelligence"],
         11: ["akomedera", "Zespół Analiz Rynkowych"],
         12: ["mkapturkiewicz", "Zespół Data Analytics Platforms"],
         13: ["nlojewska", "Zespół Produktu Reklamowego"],
-        14: [procedure_owner, ""],
+        14: [procedure_owner, "Brak"],
         }
 
     metric_meta = parent_id.split("-")
@@ -103,18 +104,18 @@ def update_onepager(task_id, state="run"):
                     "fields" : {
                         "summary": new_summary,
                         "description" : new_description,
-                        "customfield_12204": {"value": steps_assigment.get(step)[1]},
+                        #"customfield_12204": {"value": steps_assigment.get(step)[1]},
                         "assignee": {"name": steps_assigment.get(step)[0]},
                         }
                 }
-
+    if step not in (1,2, 8, 14):
+        input_params["fields"]["customfield_12204"] = {"value": steps_assigment.get(step)[1]}
     input_json = json.dumps(input_params)
-    print(input_json)
-    #return input_json
-    out = requests.put(jira_api+"/transitions", auth=(user_jira_tr, pwd_jira_tr), headers=headers, data = input_json)
+    #print(input_json)
+    out = requests.put(jira_api, auth=(user_jira_tr, pwd_jira_tr), headers=headers, data = input_json)
     #out = requests.get(jira_api+"/transitions", auth=(user_jira_tr, pwd_jira_tr), headers=headers)
     print(out.content.decode())
-    return out.status_code()
+    return out.content.decode()
 
 
 if __name__ == '__main__':
