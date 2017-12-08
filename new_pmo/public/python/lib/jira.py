@@ -185,7 +185,7 @@ class Jira (object):
 
     def get_onepager_data(self, user):
         #query = "/rest/api/2/search?jql=project=ONEPAGER AND creator=%s AND resolution='Unresolved'\\u003bmaxResults=100" % user
-        query = "/rest/api/2/search?jql=project=ONEPAGER AND creator=%s " % user
+        query = "/rest/api/2/search?jql=project=ONEPAGER AND creator=%s AND resolution=Unresolved" % user
         data = self.search(query, cache=False)
         return data
 
