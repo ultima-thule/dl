@@ -157,8 +157,10 @@ def _get_all_projects(user):
     def parse_html(pr):
         outtmphtml = pr['id'] + " \t <a target='_blank' href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr['name'] + "'>"
         outtmphtml += pr['name']
-        outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updateall/' + pr['name'] + '\'">Generuj doc (AC)</button> \t'
-        outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updatealldesc/' + pr['name'] + '\'">Generuj doc (Desc)</button> \t'
+        outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updateall/' + pr['name'] + '\'">Generuj sprinty (AC)</button> \t'
+        outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updatealldesc/' + pr['name'] + '\'">Generuj sprinty (Desc)</button> \t'
+        outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/genscope/' + pr['name'] + '\'">Generuj Worda</button> \t'
+        outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/genestimate2/' + pr['name'] + '\'">Generuj Excella</button> \t'
         #outtmphtml += ' Portfolio: n/a ' + " <small>(" + pr.get("projectCategory", {}).get("name", "n/a") + ")</small> "
         return outtmphtml
 
