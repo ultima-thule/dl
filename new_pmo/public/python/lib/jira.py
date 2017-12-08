@@ -74,7 +74,7 @@ class Jira (object):
 
     def search(self, jql_search, result_key=None, cache=False):
         """ Generic search method."""
-        cache = 60*60*24
+        #cache = 60*60*24
         out = ""
         if cache:
             try:
@@ -86,6 +86,7 @@ class Jira (object):
                 #requests_cache.install_cache('project_cache', backend='sqlite', expire_after=86400)
                 out = requests.get(self.url + jql_search, auth=(self.username, self.password))
             except requests.exceptions.ConnectionError as msg:
+                print("test")
                 print("Check the jql or jira request: ")
                 print(msg)
             results = json.loads(out.content.decode())
@@ -183,8 +184,10 @@ class Jira (object):
             print(msg)
 
     def get_onepager_data(self, user):
-        query = "/rest/api/2/search?jql=project=ONEPAGER AND creator=%s" % user
-        return self.search(query)
+        #query = "/rest/api/2/search?jql=project=ONEPAGER AND creator=%s AND resolution='Unresolved'\\u003bmaxResults=100" % user
+        query = "/rest/api/2/search?jql=project=ONEPAGER AND creator=%s " % user
+        data = self.search(query, cache=False)
+        return data
 
     def _get_issues_in_sprint_batch(self, project_name, sprint, start_at):
         """ Gets all issues within project and sprint - one 50-elem batch. """
