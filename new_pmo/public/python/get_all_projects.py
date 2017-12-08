@@ -94,7 +94,7 @@ def _get_all_projects(user):
     htmlout += '<h1><img src="' + project_dict_my[0]["lead"]["avatarUrls"]["32x32"] + '"/>'
     htmlout += ' ' + project_dict_my[0]["lead"]["displayName"]
     htmlout += "- projekty</h1> (Uwaga- lista odświeża się co 24h)"
-    htmlonepager = "<h2>Uruchomione <a href='http://doc.grupa.onet/display/METRYKI/OnePager%3A+Opis%2C+Instrukcja%2C+Dane+kontaktowe'>One Pagery</a> </h2>"
+    htmlonepager = "<h2>Uruchomione <a target='_blank' href='http://doc.grupa.onet/display/METRYKI/OnePager%3A+Opis%2C+Instrukcja%2C+Dane+kontaktowe'>One Pagery</a> </h2>"
     htmlinprogress = "<h2> Projekty w toku </h2>"
     htmlclosed = "<h2> Projekty zamknięte </h2>"
     htmlmaitenance = "<h2> Utrzymaniowe </h2>"
@@ -103,7 +103,7 @@ def _get_all_projects(user):
     htmlrest = "<h2>Pozostałe </h2>"
 
     def parse_onepager(pr, tsk):
-        outtmphtml = pr['key'] + " \t <a href = 'http://jira.grupa.onet/browse/" + pr['key'] + "'>"
+        outtmphtml = pr['key'] + " \t <a target='_blank' href = 'http://jira.grupa.onet/browse/" + pr['key'] + "'>"
         outtmphtml += pr['fields']['summary']
         outtmphtml += "</a><br />"
         outtmphtml += "<ul>"
@@ -124,22 +124,30 @@ def _get_all_projects(user):
             elif i["fields"]["status"]["name"] in ("Resolved", "Close"):
                 color = "green"
 
-            outtmphtml += "<li><font size='3px' color='"
-            outtmphtml += "%s'>" % color
+            jira_comment = "http://jira.grupa.onet/rest/api/2/issue/%s/comment" % str(i["key"])
+            comment = requests.get(jira_comment, auth=(user_jira, pwd_jira)).content.decode()
+            com_result = json.loads(comment)
+            try:
+                title = com_result["comments"][-1]["body"]
+            except:
+                title = "brak komentarzy"
+            outtmphtml += "<li><font size='3px' color='%s'>" % color
             outtmphtml += butt
             outtmphtml += i["fields"]["status"]["name"]
             outtmphtml += ": "
             outtmphtml += i["fields"]["summary"]
-            outtmphtml += "<a href='http://jira.grupa.onet/browse/"
+            outtmphtml += "<a target='_blank' href='http://jira.grupa.onet/browse/"
             outtmphtml += i["key"]
-            outtmphtml += "'> przejdź--></a>"
+            outtmphtml += "'> (przejdź)</a>"
             outtmphtml += "</font></li>"
+            if title != "brak komentarzy":
+                outtmphtml += "<font title='%s' size='2px'>Zobacz komentarz</font>" % title
             #print(i["fields"]["parent"]["fields"]["summary"])
         outtmphtml += "</ul>"
         return outtmphtml
 
     def parse_html(pr):
-        outtmphtml = pr['id'] + " \t <a href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr['name'] + "'>"
+        outtmphtml = pr['id'] + " \t <a target='_blank' href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr['name'] + "'>"
         outtmphtml += pr['name']
         outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updateall/' + pr['name'] + '\'">Generuj doc (AC)</button> \t'
         outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updatealldesc/' + pr['name'] + '\'">Generuj doc (Desc)</button> \t'
@@ -147,7 +155,7 @@ def _get_all_projects(user):
         return outtmphtml
 
     def parse_old_html(pr):
-        outtmphtml = pr['id'] + " \t <a href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr['name'] + "'>"
+        outtmphtml = pr['id'] + " \t <a target='blank' href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr['name'] + "'>"
         outtmphtml += pr['name']
         outtmphtml += '</a>'
         outtmphtml += '>> ' + " <small>(" + pr.get("projectCategory", {}).get("name", "n/a") + ")</small> "
@@ -158,7 +166,7 @@ def _get_all_projects(user):
         #print("Pobieram dane z: %s" % pr["name"])
         if project is None:
             #print("Brak danych w portfolio")
-            outtmphtml = "<b><a href='http://jira.grupa.onet/secure/RapidBoard.jspa?rapidView=297'>Uzupełnij portfolio!</a></b>"
+            outtmphtml = "<b><a target='_blank' href='http://jira.grupa.onet/secure/RapidBoard.jspa?rapidView=297'>Uzupełnij portfolio!</a></b>"
             color="orange"
         else:
             color = "black"
@@ -173,8 +181,6 @@ def _get_all_projects(user):
                 color = "red"
 
             outtmphtml = "<p><font color = '"+color+"'>Aktualny koszt: " + str(project.cost_current) + "/" + str(project.cost_lbe) + " (" + str(round(project.cost_current/project.cost_lbe*100, 2)) + "%)</font><br />"
-            #if project.cost_lbe == 1:
-            #    outtmphtml += "<b><a href='http://jira.grupa.onet/secure/RapidBoard.jspa?rapidView=297'>Uzupełnij estymowany koszt</a></b><br />"
             outtmphtml += "Koszt zmieniony o: " + str(project.cost_lbe - project.cost_planned) + "<br />"
             outtmphtml += "Z budżetu zostało: " + str((project.cost_lbe - project.cost_current)*107) + "PLN + vat <br />"
             if project.start_date is None:
