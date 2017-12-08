@@ -7,6 +7,7 @@ import json
 import requests
 from requests.auth import HTTPBasicAuth
 import sys
+import re
 
 import xmlrpc.client
 ########################### PYTHON 3.5 modules ##################
@@ -114,11 +115,12 @@ def _get_all_projects(user):
             elif i["fields"]["status"]["name"] in ("ToDo"):
                 color = "red"
                 parent_id = "1"
-                step = "1"
-                typ = "run"
-                butt += '\t<button onclick="window.location=\'' + "http://pmo.cloud.onet/api/onepager/%s/%s" % (i["key"], typ)+ '\'">Wystartuj</button> \t'
-                typ = "cancel"
-                butt += '\t<button onclick="window.location=\'' + "http://pmo.cloud.onet/api/onepager/%s/%s" % (i["key"], typ) + '\'">Przeskocz</button> \t'
+                step = int(re.search("\d+", i["fields"]["summary"]).group(0))
+                if step not in (1,2):
+                    typ = "run"
+                    butt += '\t<button onclick="window.location=\'' + "http://pmo.cloud.onet/api/onepager/%s/%s" % (i["key"], typ)+ '\'">Wystartuj</button> \t'
+                    typ = "cancel"
+                    butt += '\t<button onclick="window.location=\'' + "http://pmo.cloud.onet/api/onepager/%s/%s" % (i["key"], typ) + '\'">Przeskocz</button> \t'
             elif i["fields"]["status"]["name"] in ("Resolved", "Close"):
                 color = "green"
 
@@ -128,6 +130,9 @@ def _get_all_projects(user):
             outtmphtml += i["fields"]["status"]["name"]
             outtmphtml += ": "
             outtmphtml += i["fields"]["summary"]
+            outtmphtml += "<a href='http://jira.grupa.onet/browse/"
+            outtmphtml += i["key"]
+            outtmphtml += "'> przejdź--></a>"
             outtmphtml += "</font></li>"
             #print(i["fields"]["parent"]["fields"]["summary"])
         outtmphtml += "</ul>"
@@ -188,7 +193,7 @@ def _get_all_projects(user):
                 if (deploy.days <0 or endofproject.days<0):
                     color = "red"
                 outtmphtml += "<font color = '"+color+"'>Do wdrożenia ostatecznej wersji pozostało: " + str(deploy) + " dni <br />"
-                outtmphtml += "Do końca projektu pozostało: " + str(endofproject) + " dni </font><br />"
+                outtmphtml += "Do końca projektu pozostało: " + str(endofproject) + " </font><br />"
             except Exception as msg:
                 outtmphtml += "Ustaw datę zakończenia projektui <br />"
             outtmphtml += "</p>"
