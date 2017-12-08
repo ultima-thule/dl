@@ -51,14 +51,21 @@ def _get_all_projects(user):
     supported = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="POMOCNICZY")]
     rest = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a") not in ("PROJEKTY W TOKU", "BACKLOG", "ROZWÓJ", "Zamknięte"))]
 
+    #print("test")
+    #onepager = jira.get_onepager_data(user)
+    #print(onepager)
     try:
         onepager = jira.get_onepager_data(user)["issues"]
     except Exception as msg:
         print(msg)
+    #for x in onepager:
+    #    if x.get("fields", {}).get('issuetype')['id'] != "7":
+    #        print(x["fields"]["summary"])
     try:
         onepager_projects = [x for x in onepager if x.get("fields", {}).get('issuetype')['id'] == "7" ]
     except Exception as msg:
-        print(msg)
+        print("cos nie tak")
+        #print(msg)
         onepager_projects = []
 
     onepager_tasks = {}
@@ -69,8 +76,8 @@ def _get_all_projects(user):
                 tmp.append(tsk)
                 onepager_tasks.update({tsk["fields"]["parent"]["key"]: tmp})
     except Exception as msg:
-        print("bug: ")
-        print(msg)
+        #print("bug: ")
+        #print(msg)
         onepager_tasks = []
 
     htmlout = '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'
@@ -139,9 +146,10 @@ def _get_all_projects(user):
             outtmphtml += "<a target='_blank' href='http://jira.grupa.onet/browse/"
             outtmphtml += i["key"]
             outtmphtml += "'> (przejdź)</a>"
-            outtmphtml += "</font></li>"
+            outtmphtml += "</font>"
             if title != "brak komentarzy":
-                outtmphtml += "<font title='%s' size='2px'>Zobacz komentarz</font>" % title
+                outtmphtml += "<font title='%s' size='2px'>Zobacz ostatni komentarz</font>" % title
+            outtmphtml += "</li>"
             #print(i["fields"]["parent"]["fields"]["summary"])
         outtmphtml += "</ul>"
         return outtmphtml
@@ -206,7 +214,10 @@ def _get_all_projects(user):
         return outtmphtml
 
     for data in onepager_projects:
-        htmlonepager += parse_onepager(data, onepager_tasks)
+        try:
+            htmlonepager += parse_onepager(data, onepager_tasks)
+        except Exception as msg:
+            htmlonepager += "Brak One Pagerow"
 
     for data in inprogress:
         htmlinprogress += parse_html(data)
