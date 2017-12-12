@@ -307,6 +307,7 @@ function sprintCriteriaGen() {
         create = $.ajax({
             url: apiUrl,
             cache: false,
+            timeout: 60000,
             beforeSend: function() {
                 document.getElementById('formMessage').innerHTML = "";
                 $('#loader').show();
@@ -316,8 +317,8 @@ function sprintCriteriaGen() {
                     $('#loader').hide();
                     document.getElementById('formMessage').innerHTML = "";
                     $("#formMessage").append('Żądanie wygenerowania strony sprintu zostało wysłane.');
-                }, 1500);
-            }
+                }, 1000);
+            }         
         }); 
     }
     
@@ -344,6 +345,7 @@ function sprintDescGen() {
         create = $.ajax({
             url: apiUrl,
             cache: false,
+            timeout: 60000,
             beforeSend: function() {
                 document.getElementById('formMessage').innerHTML = "";
                 $('#loader').show();
@@ -353,7 +355,7 @@ function sprintDescGen() {
                     $('#loader').hide();
                     document.getElementById('formMessage').innerHTML = "";
                     $("#formMessage").append('Żądanie wygenerowania strony sprintu zostało wysłane.');
-                }, 1500);
+                }, 1000);
             }
         });
     }
@@ -424,6 +426,7 @@ function fullGenCriteria() {
         create = $.ajax({
             url: apiUrl,
             cache: false,
+            timeout: 60000,
             beforeSend: function() {
                 document.getElementById('formMessage').innerHTML = "";
                 $('#loader').show();
@@ -433,7 +436,7 @@ function fullGenCriteria() {
                     $('#loader').hide();
                     document.getElementById('formMessage').innerHTML = "";
                     $("#formMessage").append('Żądanie wygenerowania dokumentacji projektu zostało wysłane.');
-                }, 1500);
+                }, 1000);
             }
         });   
     }
@@ -460,6 +463,7 @@ function fullGenDesc() {
         create = $.ajax({
             url: apiUrl,
             cache: false,
+            timeout: 60000,
             beforeSend: function() {
                 document.getElementById('formMessage').innerHTML = "";
                 $('#loader').show();
@@ -469,7 +473,7 @@ function fullGenDesc() {
                     $('#loader').hide();
                     document.getElementById('formMessage').innerHTML = "";
                     $("#formMessage").append('Żądanie wygenerowania dokumentacji projektu zostało wysłane.');
-                }, 1500);
+                }, 1000);
             }
         });
     }
