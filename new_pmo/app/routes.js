@@ -234,18 +234,13 @@ try{
         // update project main page from PW with script
         app.get('/api/createproject/:prname', function(req, res) {
     
-            var python = require('child_process').spawn('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/add_project_page_yattag.py', req.params.prname]);
+            var python = require('child_process').spawnSync('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/add_project_page_yattag.py', req.params.prname]);
     
-            var output = "";
-            python.stderr.on('data', function(data){ console.log(uint8arrayToString(data)) });
-            python.stdout.on('data', function(data){ console.log(uint8arrayToString(data)); output += data });
-            //python.stdout.on('data', function(data){ output += data });
-            python.on('close', function(code)
-            {
-                if (code !== 0) {  console.log("code ", code); }
-                //return res.send(200)
-            });
-            //return res.send(200)
+            var output = python.output[1];
+            console.log(uint8arrayToString(python.stderr));
+            console.log(uint8arrayToString(python.output[1]));
+            //return res.sendStatus(200)
+            setTimeout(function(){return res.send(200, uint8arrayToString(python.output[1]))}, 1000);
         });
     
         // update all sprint pages with script
@@ -338,8 +333,8 @@ try{
             setTimeout(function(){return res.send(200, output)}, 1000);
         });
 
-        app.get('/api/onepager/:parentid/:step/:type', function(req, res) {
-            var python = require('child_process').spawnSync('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/onepager.py', req.params.parentid, req.params.step, req.params.type], {encoding: 'utf-8'});
+        app.get('/api/onepager/:taskid/:type', function(req, res) {
+            var python = require('child_process').spawnSync('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/onepager.py', req.params.taskid, req.params.type], {encoding: 'utf-8'});
             var output = python.output[1];
             console.log(python.stderr);
             //console.log(python.output[1]);
