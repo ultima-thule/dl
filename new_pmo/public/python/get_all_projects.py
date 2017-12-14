@@ -14,6 +14,7 @@ import xmlrpc.client
 from dateutil import parser
 import credentials
 import lib.jira
+import lib.confluence
 #################################################################
 import getpass
 from datetime import datetime, timedelta
@@ -31,6 +32,15 @@ pwd_jira = credentials.loginJira['password']
 
 jira = lib.jira.Jira('http://jira.grupa.onet', user_jira, pwd_jira)
 
+def _check_cfl_projects(project):
+    user_cf = credentials.loginConfluence['consumer_secret']
+    pwd_cf = credentials.loginConfluence['password']
+
+    # CONSOLERUN: uncomment on console
+
+    url = "http://doc.grupa.onet/rpc/xmlrpc"
+    confl = lib.confluence.Confluence(url, user_cf, pwd_cf, "PROJEKTY")
+    return confl.get_page(project)
 
 def _get_all_projects(user):
 
@@ -60,7 +70,8 @@ def _get_all_projects(user):
         print(msg)
     #for x in onepager:
     #    if x.get("fields", {}).get('issuetype')['id'] != "7":
-    #        print(x["fields"]["summary"])
+    #        print(x["fields"]["parent"])
+    #        print("<br>")
     try:
         onepager_projects = [x for x in onepager if x.get("fields", {}).get('issuetype')['id'] == "7" ]
     except Exception as msg:
@@ -76,9 +87,10 @@ def _get_all_projects(user):
                 tmp.append(tsk)
                 onepager_tasks.update({tsk["fields"]["parent"]["key"]: tmp})
     except Exception as msg:
+        pass
         #print("bug: ")
         #print(msg)
-        onepager_tasks = []
+        #onepager_tasks = {}
 
     htmlout = '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'
     htmlout += '<title> Centrum Sterowania </title>'
@@ -155,12 +167,23 @@ def _get_all_projects(user):
         return outtmphtml
 
     def parse_html(pr):
+        page = _check_cfl_projects(pr['name'])
+        content = page.get("content")
+        if page is not None:
+            parent = page.get("parentId", "0")
         outtmphtml = pr['id'] + " \t <a target='_blank' href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr['name'] + "'>"
         outtmphtml += pr['name']
+        if parent == "57114800":
+            outtmphtml += " (projekt internaitonal)"
+        elif parent == "41629680":
+            outtmphtml += " (projekt social)"
+        else:
+            outtmphtml += " (projekt z zespołu X)"
         outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updateall/' + pr['name'] + '\'">Generuj sprinty (AC)</button> \t'
         outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updatealldesc/' + pr['name'] + '\'">Generuj sprinty (Desc)</button> \t'
         outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/genscope/' + pr['name'] + '\'">Generuj Worda</button> \t'
         outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/genestimate2/' + pr['name'] + '\'">Generuj Excella</button> \t'
+        outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/createproject/' + pr['name'] + '\'">Update witrynki</button> \t'
         #outtmphtml += ' Portfolio: n/a ' + " <small>(" + pr.get("projectCategory", {}).get("name", "n/a") + ")</small> "
         return outtmphtml
 
@@ -211,7 +234,12 @@ def _get_all_projects(user):
                 outtmphtml += "<font color = '"+color+"'>Do wdrożenia ostatecznej wersji pozostało: " + str(deploy) + " dni <br />"
                 outtmphtml += "Do końca projektu pozostało: " + str(endofproject) + " </font><br />"
             except Exception as msg:
-                outtmphtml += "Ustaw datę zakończenia projektui <br />"
+                outtmphtml += "Ustaw datę zakończenia projektu <br />"
+            outtmphtml += "status projektu: "
+            try:
+                outtmphtml += project.status
+            except Exception as msg:
+                print("brak danych w portfolio")
             outtmphtml += "</p>"
         return outtmphtml
 
