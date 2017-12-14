@@ -238,7 +238,7 @@ try{
     
             var output = python.output[1];
             console.log(uint8arrayToString(python.stderr));
-            console.log(uint8arrayToString(python.output[1]));
+            //console.log(uint8arrayToString(python.output[1]));
             //return res.sendStatus(200)
             setTimeout(function(){return res.send(200, uint8arrayToString(python.output[1]))}, 1000);
         });
