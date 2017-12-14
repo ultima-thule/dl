@@ -38,7 +38,7 @@ class JiraProject(object):
         self.deploy_lbe = self.project_data.get("customfield_12233")
         self.end_date = self.project_data.get("customfield_12228")
         self.description = self.project_data.get("description")
-        self.pm = self.project_data.get("assignee", "NIMROD")
+        self.pm = self.project_data.get("assignee", "NIMROD")["displayName"]
         self.cost_lbe = self.project_data.get("customfield_12223", 0)
         self.cost_planned = self.project_data.get("customfield_12222", 0)
         self.cost_current = self.project_data.get("customfield_12238", 0)
