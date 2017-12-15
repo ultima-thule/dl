@@ -168,9 +168,10 @@ def _get_all_projects(user):
 
     def parse_html(pr):
         page = _check_cfl_projects(pr['name'])
-        content = page.get("content")
+        parent = 0
         if page is not None:
             parent = page.get("parentId", "0")
+            #content = page.get("content")
         outtmphtml = pr['id'] + " \t <a target='_blank' href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr['name'] + "'>"
         outtmphtml += pr['name']
         if parent == "57114800":
@@ -183,15 +184,21 @@ def _get_all_projects(user):
         outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updatealldesc/' + pr['name'] + '\'">Generuj sprinty (Desc)</button> \t'
         outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/genscope/' + pr['name'] + '\'">Generuj Worda</button> \t'
         outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/genestimate2/' + pr['name'] + '\'">Generuj Excella</button> \t'
-        outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/createproject/' + pr['name'] + '\'">Update witrynki</button> \t'
+        if page["creator"] == page["modifier"]:
+            outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/createproject/' + pr['name'] + '\'">Update witrynki</button> \t'
         #outtmphtml += ' Portfolio: n/a ' + " <small>(" + pr.get("projectCategory", {}).get("name", "n/a") + ")</small> "
         return outtmphtml
 
     def parse_old_html(pr):
+        #page = _check_cfl_projects(pr['name'])
+        #if page is not None:
+        #    parent = page.get("parentId", "0")
         outtmphtml = pr['id'] + " \t <a target='blank' href = 'http://doc.grupa.onet/display/PROJEKTY/" + pr['name'] + "'>"
         outtmphtml += pr['name']
         outtmphtml += '</a>'
         outtmphtml += '>> ' + " <small>(" + pr.get("projectCategory", {}).get("name", "n/a") + ")</small> "
+        #if page is not None and page["creator"] == page["modifier"]:
+        #    outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/createproject/' + pr['name'] + '\'">Update witrynki</button> \t'
         return outtmphtml
 
     def parse_extras(pr):
