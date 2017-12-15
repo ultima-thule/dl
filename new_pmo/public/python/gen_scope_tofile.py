@@ -122,7 +122,7 @@ def generate_pw_last_page(document):
         document.add_heading("Uwagi dot. harmonogramu i kosztorysu", 1)
         txt = "Zlecający biorąc aktywny udział w wycenach poszczególnych zadań w projekcie "
         txt += "zobowiązuje się do akceptacji lub odrzucenia wyceny zadań zgodnie ze współczynnikiem wydajności "
-        txt += "określanym podczas ww.spotkań, najdalej w następnym dniu "
+        txt += "określanym podczas ww. spotkań, najdalej w następnym dniu "
         txt += "po spotkaniu. Prace postępować będą w trybie dwutygodniowych sprintów."
         add_simple_par(document, txt, gl_font_size, align=docx.enum.text.WD_ALIGN_PARAGRAPH.JUSTIFY)
 
