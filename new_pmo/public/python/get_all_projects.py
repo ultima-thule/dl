@@ -184,8 +184,9 @@ def _get_all_projects(user):
         outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/updatealldesc/' + pr['name'] + '\'">Generuj sprinty (Desc)</button> \t'
         outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/genscope/' + pr['name'] + '\'">Generuj Worda</button> \t'
         outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/genestimate2/' + pr['name'] + '\'">Generuj Excella</button> \t'
-        if page["creator"] == page["modifier"]:
-            outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/createproject/' + pr['name'] + '\'">Update witrynki</button> \t'
+        if page is not None:
+            if page["creator"] == page["modifier"]:
+                outtmphtml += '</a> \t <button onclick="window.location=\'http://pmo.cloud.onet/api/createproject/' + pr['name'] + '\'">Update witrynki</button> \t'
         #outtmphtml += ' Portfolio: n/a ' + " <small>(" + pr.get("projectCategory", {}).get("name", "n/a") + ")</small> "
         return outtmphtml
 
