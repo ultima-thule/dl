@@ -31,18 +31,17 @@ function addButtons() {
         menu_val += '<li onClick="hideMe(pmoMenu.teams)" title="Filtrowanie zespołów na liście witrynek projektowych" class="teams">';
         menu_val += '<i class="fa fa-male"></i>Pokaż moje teamy</li>';
         menu_val += '<li onClick="pwGen()" title="Generowanie dokumentu porozumienia wykonawczego (Word) na podstawie zawartości Confluence">Generuj zakres</li>';
-
         menu_val += '<li title="Generowanie podstrony sprintu w ramach danego projektu">Generuj stronę sprintu <i class="fa fa-angle-down"></i>  ';
         menu_val += '<ul><li onClick="sprintGen(\'withCriteria\')">Strona sprintu (kryteria akceptacji)</li>';
         menu_val += '<li onClick="sprintGen(\'withDescription\')">Strona sprintu (opis)</li>';
         menu_val += '</ul></li>';
-
         menu_val += '<li title="Generowanie kosztorysu dla projektu">Generuj kosztorys <i class="fa fa-angle-down"></i> ';
         menu_val += '<ul><li onClick="costGenGeneral(\'withoutSubtasks\')">Kosztorys bez subtasków</li>  ';
         menu_val += '<li onClick="costGenGeneral(\'withSubtasks\')">Kosztorys z subtaskami</li> </ul>  </li> ';
         menu_val += '<li title="Generowanie awaryjne kompletnej dokumentacji całego projektu"><b>EMERGENCY</b> <i class="fa fa-angle-down"></i> ';
         menu_val += '<ul><li onClick="fullGen(\'withCriteria\')">Dokumentacja projektu (kryteria akceptacji)</li> ';
         menu_val += '<li onClick="fullGen(\'withDescription\')">Dokumentacja projektu (opis)</li> </ul> </li> ';
+        menu_val += '<li onClick="projectpageGen()" title="Generowanie danych na witrynce projektowej na podstawie Jira portfolio">Uzupełnij witrynkę</li>';
         menu_val += '<li onClick="pmoMenuClose()" class="pmoMenuClose"><i class="fa fa-window-close-o fa-2"></i></li> ';
         menu_val += '<li title="Dokumentacja PMO Menu na Confluence" class="external"><a href="http://doc.grupa.onet/display/AG/PMO+Menu" target="_blank"><i class="fa fa-info"></i>Dokumentacja</a></li>';
         menu_val += '</ul></div></div>';
@@ -479,6 +478,91 @@ function fullGenDesc() {
     }
 };
 
+// UZUPEŁNIJ WITRYNKĘ
+
+// main function for filling in data in confluence project page (Uzupełnij witrynkę), starting layer with proper data
+function projectpageGen() {
+
+    // taking project code from jira/confluence
+    var projectCode = $(".ghx-project")[0] === undefined ? $("#title-text > a").text() : $(".ghx-project")[0].textContent;
+    
+    // starting layer with default elements
+    pmoMenuLayer();
+    
+    // adding styles for specific elements
+    $("head").append('<style>#projectpageProjectCode {display: inline-block; box-sizing: border-box; margin: 2em 2em 0 0; color: #00000; background: #afe3e9; border: 0 none; padding: 10px 10px; outline: 0; width: 400px; -webkit-appearance: none; -moz-appearance: none;}</style>');
+    
+    // adding specific html elements
+    $("#formWrapper").prepend('<input id="projectpageProjectCode" name="projectpageProjectCode" type="text" placeholder="Wprowadź kod projektu."><button onclick="projectpageGenSecond()" id="projectpageGenGenerate" class="generateButton" type="submit" value="Uzupelnij">UZUPEŁNIJ</button>');
+    
+    // adding proper title/header
+    $("#pmoMenuTitle").prepend('Uzupełnij witrynkę');
+    
+    // putting project code to the input (if it was taken from jira/confluence)
+    document.getElementById("projectpageProjectCode").setAttribute('value', projectCode);
+
+}
+
+// second step function to warn user if he really want to execute this
+function projectpageGenSecond() {
+    
+    projectCode = $('#projectpageProjectCode').val();
+    // checking if necessary inputs are fulfilled
+    if (projectCode === null || projectCode == "") {
+        // errors
+        document.getElementById('formMessage').innerHTML = "";
+        $("#formMessage").append('Błąd: brak kodu projektu. Sprawdź ponownie wprowadzane dane.');
+    }
+
+    else { 
+        
+        // clean unnecessary html elements / forms
+        document.getElementById('projectpageProjectCode').style.display = "none";
+        document.getElementById('projectpageGenGenerate').style.display = "none";
+        
+        // adding specific html elements
+        $("#formWrapper").prepend('<button onclick="projectpageGenContinue()" id="projectpageGenYes" class="generateButton" type="submit" value="Tak">TAK, ROZUMIEM</button><button onclick="pmoMenuLayerClose()" id="projectpageGenNo" class="generateButton" type="submit" value="Nie" style="margin-left: 2em;">NIE, REZYGNUJĘ</button>');
+        
+        // warning message
+        document.getElementById('formMessage').innerHTML = "";
+        $("#formMessage").append('<strong>UWAGA!</strong> Uzupełnienie zakresu działa poprawnie tylko dla pierwszej aktualizacji po utworzeniu witrynki. Kolejne zmiany na witrynce projektowej powinny być realizowane ręcznie z poziomu Confluence. <strong>Czy nadal chcesz uzupełnić witrynkę?</strong>');
+    
+    }
+    
+}
+
+// exact function to launch fill in data in confluence project page
+function projectpageGenContinue() {
+
+    // clean unnecessary html elements (buttons yes/no) and render previous form
+    document.getElementById('projectpageGenYes').style.display = "none";
+    document.getElementById('projectpageGenNo').style.display = "none";
+    
+    // coming back to main form
+    $("#formWrapper").prepend('<input id="projectpageProjectCode" name="projectpageProjectCode" type="text" placeholder="Wprowadź kod projektu."><button onclick="projectpageGenSecond()" id="projectpageGenGenerate" class="generateButton" type="submit" value="Uzupelnij">UZUPEŁNIJ</button>');    
+    
+    // success
+    // configuring api
+    var apiUrl = "http://pmo.cloud.onet/api/createproject/" + projectCode;
+
+    // api request
+    create = $.ajax({
+        url: apiUrl,
+        cache: false,
+        timeout: 60000,
+        beforeSend: function() {
+            document.getElementById('formMessage').innerHTML = "";
+            $('#loader').show();
+        },
+        complete: function(){
+            setTimeout(function() {
+                $('#loader').hide();
+                document.getElementById('formMessage').innerHTML = "";
+                $("#formMessage").append('Żądanie uzupełnienia witrynki projektowej zostało wysłane.');
+            }, 1000);
+        }
+    });
+} 
 
 // OTHER, OLD OR NOT READY STUFF
 
