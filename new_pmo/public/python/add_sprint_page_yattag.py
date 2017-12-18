@@ -256,7 +256,7 @@ if __name__ == '__main__':
     doc.asis(sprint_costs_to_html(project_name, gl_tsd))    #Second table - sprint costs
     doc.asis(planHTML)    #Third table - story list
     #doc.asis(sprint_external_to_html(project_name))    #Fourth table - items for external team
-    #doc.asis(sprint_not_done_to_html(project_name))    #Fifth table - items not done in sprint
+    doc.asis(sprint_not_done_to_html(project_name))    #Fifth table - items not done in sprint
     #doc.asis(sprint_extra_done_to_html(project_name))    #Sixth table - extra items in sprint
 
     #====================================================
