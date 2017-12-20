@@ -20,6 +20,8 @@ var _ = require('lodash');
 var fs = require('fs');
 var PythonShell = require('python-shell');
 var timeout         = require('connect-timeout'); //express v4
+var exphbs = require("express-handlebars");
+var express = require("express");
 
 var jiraAuth = 'readonly_pmo:CbobBsps?!';
 
@@ -46,8 +48,16 @@ try{
                 res.redirect('/login?' + query.stringify(params));
             }
         };
-    
+        
+        app.engine('handlebars', exphbs({defaultLayout: 'main'})); 
+        app.set('view engine', 'handlebars');
+        app.use('/static', express.static('public/test'));
+        app.get('/home', function(req, res){
+            res.render("home", {test: "Testowa templatka"})
+        });
+
         app.use(timeout(120000000));
+
         app.get('/api/test', function(req, res) {
             res.json({ message: 'hooray! welcome to our api!' });   
         });
@@ -318,11 +328,9 @@ try{
         });
     
         app.get('/api/getprojects/:user', function(req, res) {
-            var python = require('child_process').spawnSync('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/get_all_projects.py', req.params.user], {encoding: 'utf-8'});
-            var output = python.output[1];
-            console.log(python.stderr);
-            //console.log(python.output[1]);
-            setTimeout(function(){return res.send(200, output)}, 1000);
+            var python = require('child_process').spawnSync('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/get_all_projects_tmp.py', req.params.user], {encoding: 'utf-8'});
+            var jsonObject = JSON.parse(python.output[1]);
+            res.render("home", {test: req.params.user, json: jsonObject})
         });
         
         app.get('/api/myprojects/:user', function(req, res) {
