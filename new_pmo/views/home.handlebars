@@ -21,14 +21,13 @@
                     <p class="card-text">Data otwarcia projektu: {{start_date}}</p>
                     <p class="card-text">Zakończenie projektu {{end_date}}</p>
                     <p class="card-text">pozostało {{endofproject}} dni</p>
-                    <p class="card-text">overlap {{cost_overlap}} dni</p>
                 </div>
                 {{/extras}}
                 <div class="card-footer bg-transparent border-info" align="right">
-                    <a href="http://pmo.cloud.onet/api/updateall/{{name}}" class="btn btn-danger btn-lg">Karta sprintu (KA)</a>
-                    <a href="http://pmo.cloud.onet/api/updatealldesc/{{name}}" class="btn btn-warning btn-lg">Karta sprintu (DESC)</a>     
-                    <a href="http://pmo.cloud.onet/api/genscope/{{name}}" class="btn btn-primary btn-lg">Zakres (DOC)</a>
-                    <a href="http://pmo.cloud.onet/api/genestimate2/{{name}}" class="btn btn-success btn-lg">Kosztorys (XLS)</a>            
+                    <a href="http://pmo.cloud.onet/api/updateall/{{name}}" class="btn btn-danger btn-sm">Karta sprintu (KA)</a>
+                    <a href="http://pmo.cloud.onet/api/updatealldesc/{{name}}" class="btn btn-warning btn-sm">Karta sprintu (DESC)</a>     
+                    <a href="http://pmo.cloud.onet/api/genscope/{{name}}" class="btn btn-primary btn-sm">Zakres (DOC)</a>
+                    <a href="http://pmo.cloud.onet/api/genestimate2/{{name}}" class="btn btn-success btn-sm">Kosztorys (XLS)</a>            
                </div>
 
         {{/inprogress}}</div>
