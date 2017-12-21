@@ -329,6 +329,9 @@ try{
     
         app.get('/api/getprojects/:user', function(req, res) {
             var python = require('child_process').spawnSync('/usr/bin/python3.4', ['/home/httpd/dl/new_pmo/public/python/get_all_projects_tmp.py', req.params.user], {encoding: 'utf-8'});
+            //var jsonObject = python.output[1];
+            console.log("bug: ", python.stderr);
+            //console.log("data: ", python.output[1]);
             var jsonObject = JSON.parse(python.output[1]);
             res.render("home", {test: req.params.user, json: jsonObject})
         });
