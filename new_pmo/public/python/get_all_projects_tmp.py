@@ -100,7 +100,10 @@ def _get_all_projects(user):
     rest = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a") not in ("PROJEKTY W TOKU", "BACKLOG", "ROZWÓJ", "Zamknięte"))]
 
     for tsk in inprogress:
-       tsk["extras"] = get_extras(tsk["name"])
+        try:
+            tsk["extras"] = get_extras(tsk["name"])
+        except Exception as msg:
+            tsk["extras"] = {}
 
     try:
         onepager = jira.get_onepager_data(user)["issues"]
