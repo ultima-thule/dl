@@ -42,6 +42,42 @@ def _check_cfl_projects(project):
     confl = lib.confluence.Confluence(url, user_cf, pwd_cf, "PROJEKTY")
     return confl.get_page(project)
 
+def get_extras(pr_name):
+     project = jira.get_project_data(pr_name)
+     err = ""
+     if project is None:
+         err =  "<a target='_blank' href='http://jira.grupa.onet/secure/RapidBoard.jspa?rapidView=297'>Uzupełnij portfolio!</a>"
+     else:
+         if project.cost_planned is None:
+             project.cost_planned = 1
+         if project.cost_lbe is None:
+             project.cost_lbe = project.cost_planned
+         if project.cost_current is None:
+             project.cost_current = 0
+         if project.start_date is None:
+             project.start_date = project.created
+         if project.end_date is None:
+             project.end_date = 0
+         if project.deploy_date is None:
+             project.deploy_date = project.end_date
+         try:
+             curdate = parser.parse(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+             endofproject = parser.parse(project.end_date) - curdate
+         except Exception as msg:
+             err = "Ustaw datę zakończenia projektu"
+     ret = {"cost_current": project.cost_current,
+             "cost_lbe": project.cost_lbe,
+             "cost_planned" : project.cost_planned,
+             "cost_burned": (project.cost_lbe - project.cost_current)/100,
+             "start_date": project.start_date,
+             "end_date": project.end_date,
+             "curdate": str(curdate),
+             "endofproject": str(endofproject),
+             "description": project.description,
+             "team": project.team
+             }
+     return ret
+
 def _get_all_projects(user):
 
     with open('projects.json', 'r') as f:
@@ -54,12 +90,15 @@ def _get_all_projects(user):
     if project_dict_my == []:
         return project_dict_my
 
-    inprogress = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="PROJEKTY W TOKU")]
+    inprogress = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="PROJEKTY W TOKU")][:3]
     closed= [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="Zamknięte")]
     maitenance = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="ROZWÓJ")]
     backlog = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="BACKLOG")]
     supported = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a")=="POMOCNICZY")]
     rest = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a") not in ("PROJEKTY W TOKU", "BACKLOG", "ROZWÓJ", "Zamknięte"))]
+
+    for tsk in inprogress:
+       tsk["extras"] = get_extras(tsk["name"])
 
     try:
         onepager = jira.get_onepager_data(user)["issues"]
@@ -81,6 +120,7 @@ def _get_all_projects(user):
                 onepager_tasks.update({tsk["fields"]["parent"]["key"]: tmp})
     except Exception as msg:
         pass
+
     user_full = {
             'avatar': project_dict_my[0]["lead"]["avatarUrls"]["48x48"],
             'name': project_dict_my[0]["lead"]["displayName"],
@@ -94,6 +134,7 @@ def _get_all_projects(user):
             'backlog': backlog,
             'supported': supported,
             'rest': rest,
+            'onepager': onepager_tasks,
             'user': user_full,
             }
     rr = json.dumps(ret_json).replace("'", "\"")
