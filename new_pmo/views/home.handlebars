@@ -12,7 +12,11 @@
                         <div  class="progress-bar bg-success " role="progressbar" style="width: {{cost_burned}}%" aria-valuenow="{{cost_burned}}" aria-valuemin="0" aria-valuemax="100">{{cost_current}} / {{cost_lbe}}</div>
                    </div>
                 <div class="card-body">
-                    <p class="card-text">Test danych: {{cost_burned}}</p>
+                    <p class="card-text">Spalonego budżetu: {{cost_burned}} %</p>
+                    <p class="card-text">Godzinowo: {{cost_current}} / {{cost_planned}}</p>
+                    <p class="card-text">Data otwarcia projektu: {{start_date}}</p>
+                    <p class="card-text">Zakończenie projektu {{end_date}}</p>
+                    <p class="card-text">pozostało {{endofproject}} dni</p>
                 </div>
                 {{/extras}}
                 <div class="card-footer bg-transparent border-info" align="right">
