@@ -69,6 +69,8 @@ def get_extras(pr_name):
              "cost_lbe": project.cost_lbe,
              "cost_planned" : project.cost_planned,
              "cost_burned": round(100 * (project.cost_lbe - project.cost_current)/project.cost_lbe),
+             "cost_overlap": (project.cost_lbe - project.cost_current) < 0,
+             "cost_rest": round(100 * (project.cost_current)/project.cost_lbe),
              "start_date": project.start_date,
              "end_date": project.end_date,
              "curdate": str(curdate),
