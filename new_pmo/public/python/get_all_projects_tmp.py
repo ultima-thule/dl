@@ -46,8 +46,9 @@ def _get_all_projects(user):
 
     with open('projects.json', 'r') as f:
         project_data = f.read()
-    project_data = project_data.replace("false", "False").replace("true", "True").replace("Null", "None")
-    project_dict_full = eval(project_data)
+    #project_data = project_data.replace("false", "False").replace("true", "True").replace("Null", "None")
+    project_dict_full = json.loads(project_data)
+    #project_dict_full = eval(project_data)
     project_dict_my = [x for x in project_dict_full if (x["lead"]["name"] == user )]
     project_dict_my = sorted(project_dict_my, key=itemgetter("id"), reverse=True)
     if project_dict_my == []:
@@ -81,7 +82,7 @@ def _get_all_projects(user):
     except Exception as msg:
         pass
     user_full = {
-            'avatar': project_dict_my[0]["lead"]["avatarUrls"]["32x32"],
+            'avatar': project_dict_my[0]["lead"]["avatarUrls"]["48x48"],
             'name': project_dict_my[0]["lead"]["displayName"],
             'user': user,
             }
@@ -95,9 +96,8 @@ def _get_all_projects(user):
             'rest': rest,
             'user': user_full,
             }
-    rr = json.dump(ret_json).replace("False", "false").replace("True", "true").replace("None", "Null")
-    print(rr)
-    return rr
+    rr = json.dumps(ret_json).replace("'", "\"")
+    return  rr
 
 
 if __name__ == '__main__':
