@@ -68,7 +68,7 @@ def get_extras(pr_name):
      ret = {"cost_current": project.cost_current,
              "cost_lbe": project.cost_lbe,
              "cost_planned" : project.cost_planned,
-             "cost_burned": (project.cost_lbe - project.cost_current)/100,
+             "cost_burned": round(100 * (project.cost_lbe - project.cost_current)/project.cost_lbe),
              "start_date": project.start_date,
              "end_date": project.end_date,
              "curdate": str(curdate),
