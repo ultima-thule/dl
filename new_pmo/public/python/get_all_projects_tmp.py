@@ -66,6 +66,7 @@ def get_extras(pr_name):
          except Exception as msg:
              err = "Ustaw datę zakończenia projektu"
      ret = {"cost_current": project.cost_current,
+             "current_cost_pln": int(project.cost_current)*107,
              "cost_lbe": project.cost_lbe,
              "cost_planned" : project.cost_planned,
              "cost_burned": round(100 * (project.cost_lbe - project.cost_current)/project.cost_lbe),
