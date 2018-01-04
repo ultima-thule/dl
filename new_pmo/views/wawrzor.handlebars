@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  {{#json}}
+  <body>
+    {{#inprogress}}
+    <br />
+    <div class="card" style="width:48rem">
+        <!--card header-->
+        <div class="card-header card-inverse p-0 mb-2" style="color:white; background-color: rgb(68, 76, 90); border-color: #333;">
+            <div class="d-flex flex-row">  
+                <div class="p-2"><a target="_blank" class="badge" style="color: white; background-color: rgb(68, 76, 90); border-color: rgb(68, 76, 90);" href="http://doc.grupa.onet/display/PROJEKTY/{{name}}"><h5>{{name}}</h5></a></div>
+                <div class="p-2"><a target="_blank" class="badge" style="color: white; background-color: rgb(68, 76, 90); border-color: rgb(68, 76, 90);" href="http://doc.grupa.onet/display/PROJEKTY/{{#extras}}{{team}}{{/extras}}"><h5 >({{#extras}}{{team}}{{/extras}})</h5></a></div>     
+            </div>          
+        </div>        
+
+        <!--card body-->
+        {{#extras}}
+        <div class="card-body px-0 py-0">
+            <div class="d-flex flex-row ">
+                <div class="p-2">         
+                    <table class="table table-sm ">
+                        <tbody>
+                            <tr>
+                                <td width="25%" class="table-default"><b>Spalony budżet: </td>
+                                <td width="25%" class="table-default">{{cost_burned}} %</td>
+                            </tr>
+                            <tr>
+                                <td width="25%" class="table-default"><b>Budżet godzinowo: </b></td>
+                                <td width="25%" class="table-default">{{cost_current}} / {{cost_lbe}}</td>
+                            </tr>
+                            <tr>
+                                <td width="25%" class="table-default"><b>Aktualny koszt: </b></td>
+                                <td width="25%" class="table-default">{{current_cost_pln}} PLN netto</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>      
+                <div class="p-2">          
+                    <table class="table table-sm ">
+                        <tbody>
+                            <tr>
+                                <td width="25%" class="table-default"><b>Data otwarcia: </b></td>
+                                <td width="25%" class="table-default">{{start_date}}</td>
+                            </tr>
+                            <tr>
+                                <td width="25%" class="table-default"><b>Zakończenie: </b></td>
+                                <td width="25%" class="table-default">{{end_date}}</td>
+                            </tr>
+                            <tr>
+                                <td width="25%" class="table-default"><b>Pozostały czas: </b></td>
+                                <td width="25%" class="table-default">{{endofproject}} dni</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>    
+
+                 <!--progress circle-->                   
+                <div class="ml-auto p-2">
+                    <div class="c100 {{#unless cost_overlap}}p{{cost_burned}}{{else}}p100{{/unless}} {{#unless cost_overlap}}green{{else}}orange{{/unless}}">
+                        <span>{{cost_burned}} %</span>
+                        <div class="slice">
+                            <div class="bar"></div>
+                            <div class="fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/extras}}
+
+         <!--card footer - buttons-->
+  
+        <div class="card-footer"  style="color: white; background-color: rgb(228, 228, 230);" align="right">
+            <a href="http://pmo.cloud.onet/api/updateall/{{name}}" class="btn btn-sm" style="color:black; background-color: rgb(250, 188, 116); border-color: #333;">Karta sprintu (KA)</a>
+            <a href="http://pmo.cloud.onet/api/updatealldesc/{{name}}" class="btn btn-sm" style="color:black; background-color: rgb(250, 188, 116); border-color: #333;">Karta sprintu (DESC)</a>     
+            <a href="http://pmo.cloud.onet/api/genscope/{{name}}" class="btn btn-sm" style="color:white; background-color: rgb(83, 123, 199); border-color: #333;">Zakres (DOC)</a>
+            <a href="http://pmo.cloud.onet/api/genestimate2/{{name}}" class="btn btn-sm" style="color:white; background-color: rgb(74, 148, 74); border-color: #333;">Kosztorys (XLS)</a>            
+        </div>  
+    </div>
+    {{/inprogress}}  
+  </body>
+  {{/json}}
+</html>
+
