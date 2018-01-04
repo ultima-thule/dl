@@ -75,7 +75,7 @@ def get_extras(pr_name):
              "start_date": project.start_date,
              "end_date": project.end_date,
              "curdate": str(curdate),
-             "endofproject": str(endofproject),
+             "endofproject": str(endofproject).split(" ")[0],
              "description": project.description,
              "team": project.team
              }
