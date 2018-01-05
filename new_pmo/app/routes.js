@@ -333,7 +333,7 @@ try{
             console.log("bug: ", python.stderr);
             //console.log("data: ", python.output[1]);
             var jsonObject = JSON.parse(python.output[1]);
-            res.render("home", {test: req.params.user, json: jsonObject})
+            res.render("wawrzor", {test: req.params.user, json: jsonObject})
         });
         
         app.get('/api/myprojects/:user', function(req, res) {
