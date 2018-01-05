@@ -60,10 +60,11 @@ def get_extras(pr_name):
              project.end_date = 0
          if project.deploy_date is None:
              project.deploy_date = project.end_date
+         curdate = parser.parse(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
          try:
-             curdate = parser.parse(strftime("%Y-%m-%d %H:%M:%S", gmtime()))
              endofproject = parser.parse(project.end_date) - curdate
          except Exception as msg:
+             endofproject = "BRAK"
              err = "Ustaw datę zakończenia projektu"
      ret = {"cost_current": project.cost_current,
             "current_cost_pln": int(project.cost_current)*107,
@@ -101,10 +102,11 @@ def _get_all_projects(user):
     rest = [x for x in project_dict_my if (x.get("projectCategory", {}).get("name", "n/a") not in ("PROJEKTY W TOKU", "BACKLOG", "ROZWÓJ", "Zamknięte"))]
 
     for tsk in inprogress:
-        try:
+        #try:
+        if 1:
             tsk["extras"] = get_extras(tsk["name"])
-        except Exception as msg:
-            tsk["extras"] = {}
+        #except Exception as msg:
+        #    tsk["extras"] = {}
 
     try:
         onepager = jira.get_onepager_data(user)["issues"]
