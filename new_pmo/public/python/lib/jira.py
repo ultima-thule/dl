@@ -22,7 +22,7 @@ class JiraSprint(object):
 
 class JiraProject(object):
     """ Simple holder for the project data."""
-    def __init__(self, project_name, query_result):
+    def __init__(self, project_name, query_result={}):
         self.name = project_name
         self.project_data = query_result
         #try:
@@ -38,9 +38,9 @@ class JiraProject(object):
         self.deploy_lbe = self.project_data.get("customfield_12233")
         self.end_date = self.project_data.get("customfield_12228")
         self.description = self.project_data.get("description")
-        self.pm = self.project_data.get("assignee", "NIMROD")["displayName"]
-        self.cost_lbe = self.project_data.get("customfield_12223", 0)
-        self.cost_planned = self.project_data.get("customfield_12222", 0)
+        self.pm = self.project_data.get("assignee", {}).get("displayName")
+        self.cost_lbe = self.project_data.get("customfield_12223", 1)
+        self.cost_planned = self.project_data.get("customfield_12222", 1)
         self.cost_current = self.project_data.get("customfield_12238", 0)
         self.milestones = []
         self.sprints = self.project_data.get("customfield_10800", ())
@@ -133,7 +133,7 @@ class Jira (object):
                 query_data = project_data["issues"][0]["fields"]
             except Exception as msg:
                 #print("Nie ma takiego projektu")
-                return
+                return JiraProject(project_name)
             project = JiraProject(project_name, query_data)
             sprints = self._get_sprints_for_project(project_name)
             sp = []
@@ -148,6 +148,7 @@ class Jira (object):
         except Exception as msg:
             print("Jakas dupa z projektem %s" % project_name)
             print(msg)
+            return JiraProject(project_name)
 
     def get_portfolio_data(self):
         """ Gets current project portfolio general data from Jira. """
