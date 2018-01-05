@@ -66,18 +66,18 @@ def get_extras(pr_name):
          except Exception as msg:
              err = "Ustaw datę zakończenia projektu"
      ret = {"cost_current": project.cost_current,
-             "current_cost_pln": int(project.cost_current)*107,
-             "cost_lbe": project.cost_lbe,
-             "cost_planned" : project.cost_planned,
-             "cost_burned": round(100 * (project.cost_lbe - project.cost_current)/project.cost_lbe),
-             "cost_overlap": (project.cost_lbe - project.cost_current) < 0,
-             "cost_rest": round(100 * (project.cost_current)/project.cost_lbe),
-             "start_date": project.start_date,
-             "end_date": project.end_date,
-             "curdate": str(curdate),
-             "endofproject": str(endofproject).split(" ")[0],
-             "description": project.description,
-             "team": project.team
+            "current_cost_pln": int(project.cost_current)*107,
+            "cost_lbe": project.cost_lbe,
+            "cost_planned" : project.cost_planned,
+            "cost_burned": round(100 * (project.cost_lbe - project.cost_current)/project.cost_lbe),
+            "cost_overlap": (project.cost_lbe - project.cost_current) < 0,
+            "cost_rest": round(100 * (project.cost_current)/project.cost_lbe),
+            "start_date": project.start_date,
+            "end_date": project.end_date,
+            "curdate": str(curdate),
+            "endofproject": str(endofproject).split(" ")[0],
+            #"description": project.description,
+            "team": project.team
              }
      return ret
 
